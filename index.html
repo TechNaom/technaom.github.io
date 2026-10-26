@@ -447,6 +447,17 @@ function card(r) {
     ? `<a class="work" href="https://github.com/TechNaom/${repo}" target="_blank" rel="noopener"><b>${title}</b><span>${what}</span><small>github.com/TechNaom/${repo}</small>${tags}</a>`
     : `<div class="work"><b>${title}</b><span>${what}</span><small>Private build</small>${tags}</div>`;
 }
+// Workforce teams and lab notebook (restored: their render code was dropped in 3f51762, which
+// left both sections empty on the live site).
+document.getElementById("teams").innerHTML = TEAMS.map(t => `
+  <article class="team">
+    <header><h3>${t.name}</h3><span class="shift">${t.shift}</span></header>
+    <span class="duty">On duty</span>
+    <p>${t.about}</p>
+    <ul class="crew">${t.crew.map(c => `<li><span>${c[0]}</span><span>${c[1]}</span></li>`).join("")}</ul>
+  </article>`).join("");
+document.getElementById("log").innerHTML = LOG.map(e => `
+  <li><time>${e.d}</time><h3>${e.t}</h3><p>${e.p}</p>${e.c ? `<span class="chip ${e.c === "Preliminary" ? "pre" : ""}">${e.c}</span>` : ""}</li>`).join("");
 function renderRepos() {
   document.getElementById("filters").innerHTML = CATS.map(c => {
     const n = c === "All" ? REPOS.length : REPOS.filter(r => r[3] === c).length;
