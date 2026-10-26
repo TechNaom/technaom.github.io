@@ -129,6 +129,21 @@ h2 { margin: 0; font: 800 clamp(34px, 6vw, 60px)/.95 var(--display); text-transf
 .work .tagx.priv { border-color: var(--gold-deep); color: var(--gold); }
 div.work { cursor: default; }
 
+/* story + experience */
+.story { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 70ch; }
+.story p { margin: 0; font-size: 17.5px; line-height: 1.7; color: var(--text); }
+.story p:first-child::first-letter { font: 900 3.4em/.8 var(--display); color: var(--gold); float: left; padding: 6px 10px 0 0; }
+.story .pull { font: 800 clamp(24px, 3.6vw, 34px)/1.15 var(--display); text-transform: uppercase; color: var(--gold); border-left: 3px solid var(--ember); padding-left: 16px; }
+.jobs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
+.jobs li { display: grid; grid-template-columns: minmax(130px, 190px) minmax(0, 1fr); gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--rule); }
+.jobs .when { font: 500 12px/1.5 var(--mono); color: var(--gold); letter-spacing: .04em; }
+.jobs .when span { display: block; color: var(--muted); }
+.jobs h3 { margin: 0; font: 800 26px/1.05 var(--display); text-transform: uppercase; }
+.jobs .role { margin: 4px 0 10px; color: var(--ember); font-weight: 600; font-size: 15px; }
+.jobs ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 15px; }
+.jobs ul b { color: var(--text); font-weight: 600; }
+.jobs .now { display: inline-flex; margin-left: 8px; vertical-align: middle; }
+@media (max-width: 560px) { .jobs li { grid-template-columns: minmax(0, 1fr); } }
 /* record */
 .record { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
 .record div { padding: 20px 16px 20px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
@@ -204,16 +219,61 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <div class="works" id="works"></div>
   </section>
 
-  <section class="sec" id="record">
-    <span class="reel">Reel 4 · Track record</span>
-    <h2>Before the lab</h2>
-    <p class="lede">Ten years of automation and AI inside large enterprises: banking, insurance and cloud. Now leading an agentic GenAI team on AWS.</p>
-    <div class="record">
-      <div><b>14,300</b><span>engineer-hours a year saved through GenAI and automation at a global bank</span></div>
-      <div><b>20</b><span>agent incident-management programme delivered in 6–8 months instead of 2 years</span></div>
-      <div><b>28</b><span>awards, including a Platinum award for GenAI leadership</span></div>
-      <div><b>500+</b><span>engineers trained as an independent trainer</span></div>
+  <section class="sec" id="story">
+    <span class="reel">Reel 4 · The journey</span>
+    <h2>From the classroom to a digital workforce</h2>
+    <div class="story">
+      <p>Teaching has always been part of my work. As an independent trainer I have taught more than 500 engineers, and the habit stuck: everything I learn, I turn into something others can learn from.</p>
+      <p>The engineering years came first: Java and Spring services, then big-data pipelines in Spark and Scala on AWS EMR for publishing and insurance clients. That is where I learned how real systems behave, and how much engineering time goes into repetitive work.</p>
+      <p>At Bank of America I spent five years turning that repetitive work into automation. I led SRE and DevOps work, then GenAI and automation, founded the prompt-engineering team, and helped save around 14,300 engineer-hours a year. The work earned 28 awards, including a Platinum award for GenAI leadership.</p>
+      <p class="pull">The question changed from "can AI help an engineer?" to "can AI do the job, reliably, every day?"</p>
+      <p>At ValueMomentum I answered it at scale: an agent factory that delivered a 20-agent incident-management programme in 6 to 8 months instead of 2 years. Today at Minfy I lead a team building agentic GenAI solutions on AWS.</p>
+      <p>Alongside the day job, I run this lab. Digital employees that research, write, check and publish on their own schedule. Open research on making open models reliable agents. Free courses so anyone can follow. The goal is 200 digital employees within a year, each one measured like any other colleague.</p>
     </div>
+
+    <h2 style="font-size:clamp(28px,4.5vw,42px);margin-top:12px">Experience</h2>
+    <ol class="jobs">
+      <li>
+        <div class="when">Oct 2026 – present<span>Hyderabad</span></div>
+        <div><h3>Minfy <span class="duty now">Now</span></h3><p class="role">AI Developer – Lead</p>
+          <ul><li>Lead a team of four engineers building <b>agentic GenAI solutions on AWS Bedrock</b> for AWS Marketplace.</li>
+              <li>Own the build: environments, scope, architecture and delivery of the first solutions.</li></ul></div>
+      </li>
+      <li>
+        <div class="when">Aug 2026 – Oct 2026</div>
+        <div><h3>ValueMomentum</h3><p class="role">GenAI Solution Architect · AI Senior Lead</p>
+          <ul><li>Built an <b>agent factory</b> on Copilot Studio that delivered a client's <b>20-agent incident-management programme in 6–8 months</b> instead of 2 years.</li>
+              <li>Flagship root-cause-analysis agent: response time from <b>~30 s to under 5 s</b>, <b>1,506+ incidents per run</b>, zero infrastructure cost.</li>
+              <li>Raised evaluation consistency from <b>~25% to ~80%</b> with a CI and regression harness for low-code agents.</li></ul></div>
+      </li>
+      <li>
+        <div class="when">Apr 2021 – Jul 2026</div>
+        <div><h3>Bank of America</h3><p class="role">AVP · GenAI &amp; Automation Lead · SRE/DevOps Lead</p>
+          <ul><li><b>~14,300 engineer-hours a year saved</b> across 28,600+ change reviews and 10,000+ prompts.</li>
+              <li><b>Founded the prompt-engineering team</b>; 100+ automations (20+ built, 80+ mentored).</li>
+              <li>Drove Copilot adoption for 100–150 engineers; LLMOps with LangSmith and Galileo.</li>
+              <li><b>28 awards</b>, including a Platinum award for GenAI leadership.</li></ul></div>
+      </li>
+      <li>
+        <div class="when">Earlier</div>
+        <div><h3>Virtusa · Pyramid Softsol · MoSys</h3><p class="role">Software and data engineer</p>
+          <ul><li>Spark and Scala data platforms on AWS EMR for publishing and insurance clients.</li>
+              <li>Java and Spring services.</li></ul></div>
+      </li>
+      <li>
+        <div class="when">Alongside</div>
+        <div><h3>Independent trainer</h3><p class="role">Teaching engineers</p>
+          <ul><li><b>500+ engineers trained.</b> Today the same habit runs a free "For Everyone" course series.</li></ul></div>
+      </li>
+    </ol>
+
+    <div class="record">
+      <div><b>10+</b><span>years building software, data platforms, automation and AI</span></div>
+      <div><b>14,300</b><span>engineer-hours a year saved at Bank of America</span></div>
+      <div><b>28</b><span>awards, including Platinum for GenAI leadership</span></div>
+      <div><b>500+</b><span>engineers trained</span></div>
+    </div>
+    <p class="lede" style="font-size:14px">MCA · Cisco Certified Python Professional · GenAI programme at IIT Patna (in progress) · Claude Certified Architect – Professional (preparing)</p>
   </section>
 
   <section class="sec" id="back">
