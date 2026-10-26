@@ -130,8 +130,10 @@ h2 { margin: 0; font: 600 clamp(30px, 5vw, 48px)/1.1 var(--display); letter-spac
 .shift { font: 500 12px/1 var(--mono); color: var(--gold); white-space: nowrap; }
 .team p { margin: 0; color: var(--muted); font-size: 14.5px; }
 .crew { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
-.crew li { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 9px 0; border-top: 1px dashed var(--rule); font-size: 14.5px; }
-.crew li span:last-child { font: 400 12px var(--mono); color: var(--muted); text-align: right; }
+.crew li { display: grid; grid-template-columns: 128px minmax(0, 1fr); gap: 4px 14px; align-items: baseline; padding: 9px 0; border-top: 1px solid var(--rule); font-size: 14.5px; line-height: 1.45; }
+.crew li span:first-child { font-weight: 600; color: var(--text); }
+.crew li span:last-child { color: var(--muted); }
+@media (max-width: 420px) { .crew li { grid-template-columns: minmax(0, 1fr); } }
 .duty { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 var(--mono); color: var(--live); letter-spacing: .08em; text-transform: uppercase; }
 .duty::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 0 rgba(87,214,141,.6); animation: pulse 2s infinite; }
 @keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(87,214,141,0); } 100% { box-shadow: 0 0 0 0 rgba(87,214,141,0); } }
@@ -225,7 +227,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     </div>
   </div>
   <div class="ticker">
-    <div><b>12</b><span>digital employees on duty</span></div>
+    <div><b>13</b><span>digital employees on duty</span></div>
     <div><b>4</b><span>agent teams posting daily, unattended</span></div>
     <div><b>68</b><span>tasks in the Gemma 4 agent study</span></div>
     <div><b>10+</b><span>years building software, data platforms and AI</span></div>
@@ -382,16 +384,48 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 
 <script>
 const TEAMS = [
-  { name: "Morning motivation", shift: "08:00 IST · daily", about: "True stories, verified quotes and life lessons from every field, with a card designed to match.",
-    crew: [["Planner", "picks the day's story, quote or lesson"], ["Quote scout", "searches Wikiquote and the web"], ["Verifier", "proves the quote is real"], ["Writer", "writes from verified facts only"], ["Card maker", "builds the matching visual"], ["Critic", "rejects anything generic or unproven"]] },
-  { name: "Tech learning", shift: "10:00 IST · daily", about: "Tier lists, comparisons and explainers researched from the last month's sources.",
-    crew: [["Planner", "chooses topic and format"], ["Researcher", "collects fresh sources"], ["Writer", "writes only from those sources"], ["Carousel maker", "turns the post into slides"], ["Critic", "checks tiers, claims and consistency"]] },
-  { name: "Inspiring news", shift: "12:00 IST · when worthy", about: "Good news confirmed by two outlets, non-political. If no story is strong enough, the healer finds another.",
-    crew: [["News scout", "finds and scores the story"], ["Writer", "tells it plainly"], ["Card maker", "builds the visual"], ["Critic", "final check before posting"]] },
-  { name: "AI news digest", shift: "16:00 IST · daily", about: "The day's top AI updates in one post. Every claim is traced to a source link before it goes out. The team's longest-serving crew.",
-    crew: [["News collector", "pulls the top 10 AI updates, skips repeats"], ["Writer", "drafts the digest in my voice"], ["Quality gate", "fact-checks every claim against its source, rewrites once or skips"]] },
-  { name: "Comment copilot", shift: "On call", about: "Drafts a short, a medium and a long comment in my own voice on posts in my feed. I choose, edit and post.",
-    crew: [["Comment drafter", "short, medium and long versions, never gushing"]] },
+  { name: "Morning motivation", shift: "08:00 IST · Daily",
+    about: "True stories, verified quotes and life lessons from every field, each with a card designed to match.",
+    crew: [
+      ["Planner", "Chooses the day's story, quote or lesson."],
+      ["Quote scout", "Searches Wikiquote and the web for candidates."],
+      ["Verifier", "Proves every quote is real before it is used."],
+      ["Writer", "Writes only from verified facts."],
+      ["Card maker", "Designs the matching visual."],
+      ["Critic", "Rejects anything generic or unproven."],
+      ["Healer", "Finds the root cause of a missed post and fixes it within minutes."],
+    ] },
+  { name: "Tech learning", shift: "10:00 IST · Daily",
+    about: "Tier lists, comparisons and explainers, researched from the last month's sources.",
+    crew: [
+      ["Planner", "Chooses the topic and the format."],
+      ["Researcher", "Collects fresh, independent sources."],
+      ["Writer", "Writes only from those sources."],
+      ["Carousel maker", "Turns the post into slides."],
+      ["Critic", "Checks tiers, claims and consistency."],
+      ["Healer", "Finds the root cause of a missed post and fixes it within minutes."],
+    ] },
+  { name: "Inspiring news", shift: "12:00 IST · Daily",
+    about: "Good news confirmed by two independent outlets, never political.",
+    crew: [
+      ["News scout", "Finds the strongest story and scores it."],
+      ["Writer", "Tells it plainly, from the reports alone."],
+      ["Card maker", "Designs the visual."],
+      ["Critic", "Fact-checks the post before it goes out."],
+      ["Healer", "Finds another story if none is strong enough."],
+    ] },
+  { name: "AI news digest", shift: "16:00 IST · Daily",
+    about: "The day's top AI updates in one post, every claim traced to its source. The longest-serving team.",
+    crew: [
+      ["News collector", "Gathers the top ten AI updates and drops repeats."],
+      ["Writer", "Drafts the digest in my voice."],
+      ["Quality gate", "Checks every claim against its source and rewrites once if needed."],
+    ] },
+  { name: "Comment copilot", shift: "On call",
+    about: "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
+    crew: [
+      ["Comment drafter", "Offers a short, a medium and a long version, never gushing."],
+    ] },
 ];
 const LOG = [
   { d: "27 Oct 2026", t: "A cost controller joins the team", p: "Every morning at 09:00 IST it reads token usage from both Langfuse accounts and reports spend per workflow and per model. First report: the whole workforce cost about one US dollar for the month so far.", c: "Shipped" },
@@ -514,7 +548,7 @@ const DIAGRAMS = [
     ],
     xcut: ["Langfuse trace for every agent", "Watchdog and alerts", "Daily token caps", "Kill switch"] },
   { title: "One shift, step by step: morning motivation at 08:00",
-    about: "Six digital employees hand the work along. Two loops keep quality up: an unverified quote sends the scout back, and a weak draft gets one rewrite before the post is dropped.",
+    about: "Six digital employees hand the work along. Two loops keep quality up: an unverified quote sends the scout back, and a weak draft gets one rewrite; if a post still misses its slot, the healer fixes the cause and posts.",
     nodes: [
       ["clock", "Planner", ["Picks story, quote or lessons", "Chooses the theme"]],
       ["search", "Quote scout", ["Searches with tools", "Collects candidates"]],
