@@ -42,19 +42,19 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-
 #fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .title { position: relative; z-index: 2; padding: clamp(56px, 12vw, 120px) 16px clamp(40px, 8vw, 80px); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .billing { font: 500 12px/1 var(--mono); letter-spacing: .38em; text-transform: uppercase; color: var(--muted); animation: fadeUp .8s ease-out both; animation-delay: .1s; }
-.name { margin: 0; font: 900 clamp(64px, 17vw, 200px)/.82 var(--display); letter-spacing: .02em; display: flex; justify-content: center; flex-wrap: wrap; }
-.name span {
+.name { margin: 0; font: 900 clamp(56px, 15vw, 180px)/.84 var(--display); letter-spacing: .02em; display: flex; flex-direction: column; align-items: center; gap: .04em; }
+.name .word { display: flex; justify-content: center; }
+.name .word span {
   display: inline-block;
   background: linear-gradient(180deg, #fff3cf 0%, var(--gold) 38%, var(--gold-deep) 62%, #ffe08a 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
   filter: drop-shadow(0 0 18px rgba(242, 193, 78, .35));
   animation: slam .7s cubic-bezier(.2, .9, .2, 1) both;
 }
-.surname { margin: 0; font: 800 clamp(22px, 5vw, 46px)/1 var(--display); letter-spacing: .42em; padding-left: .42em; color: var(--text); animation: fadeUp .9s ease-out both; animation-delay: 2.15s; }
-.tag { margin: 18px 0 0; font: 800 clamp(20px, 4.4vw, 40px)/1.05 var(--display); text-transform: uppercase; letter-spacing: .06em; animation: fadeUp .9s ease-out both; animation-delay: 2.55s; }
+.tag { margin: 18px 0 0; font: 800 clamp(20px, 4.4vw, 40px)/1.05 var(--display); text-transform: uppercase; letter-spacing: .06em; animation: fadeUp .9s ease-out both; animation-delay: 3.25s; }
 .tag em { font-style: normal; color: var(--ember); }
-.sub { margin: 0; max-width: 56ch; color: var(--muted); animation: fadeUp .9s ease-out both; animation-delay: 2.85s; }
-.cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; animation: fadeUp .9s ease-out both; animation-delay: 3.1s; }
+.sub { margin: 0; max-width: 56ch; color: var(--muted); animation: fadeUp .9s ease-out both; animation-delay: 3.55s; }
+.cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; animation: fadeUp .9s ease-out both; animation-delay: 3.8s; }
 button, .btn { font: 600 14px/1 var(--body); border-radius: 999px; padding: 12px 18px; cursor: pointer; border: 1px solid var(--gold); background: transparent; color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
 .btn.solid { background: var(--gold); color: var(--night); }
 @keyframes slam {
@@ -63,7 +63,7 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 999px; padding: 12px
   100% { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 0 18px rgba(242,193,78,.35)); }
 }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
-.replaying .name span, .replaying .surname, .replaying .tag, .replaying .sub, .replaying .cta-row, .replaying .billing { animation: none; }
+.replaying .name .word span, .replaying .tag, .replaying .sub, .replaying .cta-row, .replaying .billing { animation: none; }
 
 .ticker { position: relative; z-index: 2; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .ticker div { padding: 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
@@ -131,7 +131,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 .concept { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ember); }
 
 @media (prefers-reduced-motion: reduce) {
-  .name span, .surname, .tag, .sub, .cta-row, .billing { animation: none !important; }
+  .name .word span, .tag, .sub, .cta-row, .billing { animation: none !important; }
   .duty::before { animation: none; }
 }
 </style>
@@ -141,8 +141,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <canvas id="fx" aria-hidden="true"></canvas>
   <div class="title" id="title">
     <span class="billing">An independent AI R&amp;D lab presents</span>
-    <h1 class="name" id="name" aria-label="Manohar"></h1>
-    <p class="surname">PAPASANI</p>
+    <h1 class="name" id="name" aria-label="Manohar Papasani"></h1>
     <p class="tag">The man who hires <em>digital employees</em></p>
     <p class="sub">I build AI agents that do real jobs on a schedule, check their own work, and get measured like any other employee. This is the lab: who is on duty, what we are researching, and what ships next.</p>
     <div class="cta-row">
@@ -263,10 +262,12 @@ document.getElementById("works").innerHTML = WORKS.map(w => `
   <a class="work" href="https://github.com/TechNaom/${w[2]}" target="_blank" rel="noopener"><b>${w[0]}</b><span>${w[1]}</span><small>github.com/TechNaom/${w[2]}</small></a>`).join("");
 
 // ---------- the title sequence ----------
-const NAME = "MANOHAR", STEP = 0.24, START = 0.35;
+const WORDS = ["MANOHAR", "PAPASANI"], STEP = 0.17, START = 0.35;
+const LETTERS = WORDS.join("").length;
 const nameEl = document.getElementById("name");
 function buildName() {
-  nameEl.innerHTML = [...NAME].map((ch, i) => `<span aria-hidden="true" style="animation-delay:${(START + i * STEP).toFixed(2)}s">${ch}</span>`).join("");
+  let k = 0;
+  nameEl.innerHTML = WORDS.map(w => `<span class="word" aria-hidden="true">${[...w].map(ch => `<span style="animation-delay:${(START + (k++) * STEP).toFixed(2)}s">${ch}</span>`).join("")}</span>`).join("");
 }
 buildName();
 
@@ -284,14 +285,14 @@ function burst(x, y, n, big) {
 }
 function scheduleBursts(withSound) {
   const host = cvs.getBoundingClientRect();
-  [...nameEl.children].forEach((el, i) => {
+  nameEl.querySelectorAll(".word span").forEach((el, i) => {
     setTimeout(() => {
       const r = el.getBoundingClientRect();
       burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 34, false);
-      if (withSound) hit(i === NAME.length - 1);
+      if (withSound) hit(i === LETTERS - 1);
     }, (START + i * STEP + 0.38) * 1000);
   });
-  setTimeout(() => { const r = nameEl.getBoundingClientRect(); burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 160, true); if (withSound) chord(); }, (START + NAME.length * STEP + 0.5) * 1000);
+  setTimeout(() => { const r = nameEl.getBoundingClientRect(); burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 160, true); if (withSound) chord(); }, (START + LETTERS * STEP + 0.5) * 1000);
 }
 
 function frame(now) {
