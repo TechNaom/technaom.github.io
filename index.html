@@ -13,23 +13,26 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307080c'/%3E%3Ctext x='32' y='45' font-family='Impact,Arial Narrow,sans-serif' font-size='38' font-weight='900' text-anchor='middle' fill='%23f2c14e'%3EMP%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Noto+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a film-title opening on a dark stage, then a studio "call sheet": workforce roster, lab notebook, open work, record, backers */
+/* Layout: cloud-platform look. Dark navy title stage, then light product-style sections: workforce, architecture, notebook, repos, journey, backers */
 :root {
-  --night: #07080c;
-  --stage: #0e1017;
-  --rule: #242836;
-  --text: #ece6d9;
-  --muted: #9d978b;
-  --gold: #f2c14e;
-  --gold-deep: #b5852a;
-  --ember: #ff6a2b;
-  --live: #57d68d;
-  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
-  --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
-  color-scheme: dark;
+  --night: #f5f8fc;
+  --stage: #ffffff;
+  --rule: #dde4ee;
+  --text: #1b1f24;
+  --muted: #5a6472;
+  --gold: #0078d4;
+  --gold-deep: #005a9e;
+  --ember: #7a49c9;
+  --live: #107c10;
+  --navy: #0a1a33;
+  --cyan: #50e6ff;
+  --display: "Segoe UI Variable Display", "Segoe UI", "Noto Sans", system-ui, -apple-system, sans-serif;
+  --cine: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Segoe UI Variable Text", "Segoe UI", "Noto Sans", system-ui, -apple-system, sans-serif;
+  --mono: "Cascadia Code", "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
 }
 * { box-sizing: border-box; }
 html { background: var(--night); }
@@ -38,29 +41,30 @@ a { color: var(--gold); text-decoration-thickness: 1px; text-underline-offset: 3
 a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
 /* ---------- opening title ---------- */
-.stage { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 50% 40%, #161a26 0%, var(--night) 70%); border-bottom: 1px solid var(--rule); }
+.stage, .back { --text: #ffffff; --muted: #b8c6db; --rule: rgba(255,255,255,.16); --gold: #50e6ff; --gold-deep: #0078d4; --ember: #50e6ff; --night: #0a1a33; color: var(--text); color-scheme: dark; }
+.stage { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #0f3c7a 0%, #0a1a33 55%, #050c1a 100%); }
 #fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .title { position: relative; z-index: 2; padding: clamp(56px, 12vw, 120px) 16px clamp(40px, 8vw, 80px); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .billing { font: 500 12px/1 var(--mono); letter-spacing: .38em; text-transform: uppercase; color: var(--muted); animation: fadeUp .8s ease-out both; animation-delay: .1s; }
-.name { margin: 0; font: 900 clamp(56px, 15vw, 180px)/.84 var(--display); letter-spacing: .02em; display: flex; flex-direction: column; align-items: center; gap: .04em; }
+.name { margin: 0; font: 900 clamp(56px, 15vw, 180px)/.84 var(--cine); letter-spacing: .02em; display: flex; flex-direction: column; align-items: center; gap: .04em; }
 .name .word { display: flex; justify-content: center; }
 .name .word span {
   display: inline-block;
-  background: linear-gradient(180deg, #fff3cf 0%, var(--gold) 38%, var(--gold-deep) 62%, #ffe08a 100%);
+  background: linear-gradient(180deg, #ffffff 0%, #c9f6ff 34%, #50e6ff 62%, #2b8fe0 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;
-  filter: drop-shadow(0 0 18px rgba(242, 193, 78, .35));
+  filter: drop-shadow(0 0 18px rgba(80, 230, 255, .35));
   animation: slam .7s cubic-bezier(.2, .9, .2, 1) both;
 }
-.tag { margin: 18px 0 0; font: 800 clamp(20px, 4.4vw, 40px)/1.05 var(--display); text-transform: uppercase; letter-spacing: .06em; animation: fadeUp .9s ease-out both; animation-delay: 3.25s; }
+.tag { margin: 18px 0 0; font: 600 clamp(20px, 4vw, 36px)/1.15 var(--display); letter-spacing: -.01em; animation: fadeUp .9s ease-out both; animation-delay: 3.25s; }
 .tag em { font-style: normal; color: var(--ember); }
 .sub { margin: 0; max-width: 56ch; color: var(--muted); animation: fadeUp .9s ease-out both; animation-delay: 3.55s; }
 .cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; animation: fadeUp .9s ease-out both; animation-delay: 3.8s; }
-button, .btn { font: 600 14px/1 var(--body); border-radius: 999px; padding: 12px 18px; cursor: pointer; border: 1px solid var(--gold); background: transparent; color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 18px; cursor: pointer; border: 1px solid var(--gold); background: transparent; color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
 .btn.solid { background: var(--gold); color: var(--night); }
 @keyframes slam {
-  0% { opacity: 0; transform: scale(3.4) translateY(-6%); filter: blur(16px) drop-shadow(0 0 0 rgba(242,193,78,0)); }
-  55% { opacity: 1; transform: scale(.94); filter: blur(0) drop-shadow(0 0 40px rgba(255,214,120,.95)); }
-  100% { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 0 18px rgba(242,193,78,.35)); }
+  0% { opacity: 0; transform: scale(3.4) translateY(-6%); filter: blur(16px) drop-shadow(0 0 0 rgba(80,230,255,0)); }
+  55% { opacity: 1; transform: scale(.94); filter: blur(0) drop-shadow(0 0 40px rgba(170,240,255,.95)); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 0 18px rgba(80,230,255,.35)); }
 }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .replaying .name .word span, .replaying .tag, .replaying .sub, .replaying .cta-row, .replaying .billing { animation: none; }
@@ -68,14 +72,49 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 999px; padding: 12px
 .ticker { position: relative; z-index: 2; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .ticker div { padding: 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .ticker div:last-child { border-right: 0; }
-.ticker b { font: 800 clamp(26px, 4vw, 34px)/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.ticker b { font: 700 clamp(26px, 4vw, 34px)/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
 .ticker span { font: 400 12px/1.35 var(--mono); color: var(--muted); }
+
+
+/* top nav */
+.topnav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: rgba(255,255,255,.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--rule); padding-inline: 16px; }
+.topnav .in { max-width: 1080px; margin: 0 auto; display: flex; align-items: center; gap: 18px; min-height: 52px; overflow-x: auto; scrollbar-width: none; }
+.topnav .brand { font: 600 15px/1 var(--display); color: var(--text); text-decoration: none; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; }
+.topnav .brand i { width: 22px; height: 22px; border-radius: 4px; background: linear-gradient(135deg, #0078d4, #50e6ff); display: inline-block; }
+.topnav nav { display: flex; gap: 16px; margin-left: auto; }
+.topnav nav a { color: var(--muted); text-decoration: none; font-size: 14px; white-space: nowrap; }
+.topnav nav a:hover { color: var(--gold); }
+
+/* architecture diagrams */
+.diagram { background: var(--stage); border: 1px solid var(--rule); border-radius: 8px; padding: clamp(16px, 3vw, 24px); display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 3px rgba(16,24,40,.06); }
+.diagram h3 { margin: 0; font: 600 20px/1.25 var(--display); }
+.diagram > p { margin: 0; color: var(--muted); font-size: 15px; max-width: 70ch; }
+.flow { display: flex; align-items: stretch; gap: 0; }
+.node { flex: 1 1 0; min-width: 0; border: 1px solid var(--rule); border-top: 3px solid var(--gold); border-radius: 6px; padding: 12px; background: #f9fbfe; display: flex; flex-direction: column; gap: 8px; }
+.node.gate { border-top-color: var(--ember); }
+.node.out { border-top-color: var(--live); }
+.node .hd { display: flex; align-items: center; gap: 8px; font: 600 14px/1.2 var(--display); }
+.node .hd svg { width: 22px; height: 22px; flex: none; color: var(--gold); }
+.node.gate .hd svg { color: var(--ember); }
+.node.out .hd svg { color: var(--live); }
+.node ul { margin: 0; padding-left: 16px; font-size: 13px; color: var(--muted); display: flex; flex-direction: column; gap: 3px; }
+.arrow { flex: 0 0 22px; display: grid; place-items: center; color: var(--gold); }
+.arrow svg { width: 16px; height: 16px; }
+.xcut { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; border: 1px dashed var(--gold); border-radius: 6px; padding: 10px 12px; font-size: 13px; color: var(--muted); }
+.xcut b { color: var(--gold); font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; margin-right: 4px; }
+.xcut span { border: 1px solid var(--rule); border-radius: 4px; padding: 4px 8px; background: #f9fbfe; }
+.loops { display: flex; flex-wrap: wrap; gap: 8px 20px; font-size: 13px; color: var(--muted); }
+.loops span::before { content: "\21BB  "; color: var(--ember); font-weight: 700; }
+@media (max-width: 760px) {
+  .flow { flex-direction: column; }
+  .arrow { flex-basis: 22px; transform: rotate(90deg); }
+}
 
 /* ---------- sections ---------- */
 main { padding-inline: 16px; padding-block: 0 64px; }
 .sec { max-width: 1080px; margin: 0 auto; padding-block: clamp(48px, 8vw, 88px) 0; display: flex; flex-direction: column; gap: 22px; }
-.reel { font: 500 12px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; color: var(--ember); }
-h2 { margin: 0; font: 800 clamp(34px, 6vw, 60px)/.95 var(--display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.reel { font: 600 12px/1 var(--mono); letter-spacing: .22em; text-transform: uppercase; color: var(--gold); }
+h2 { margin: 0; font: 600 clamp(30px, 5vw, 48px)/1.1 var(--display); letter-spacing: -.015em; text-wrap: balance; }
 .lede { margin: 0; max-width: 64ch; color: var(--muted); font-size: 17px; }
 
 /* workforce */
@@ -85,9 +124,9 @@ h2 { margin: 0; font: 800 clamp(34px, 6vw, 60px)/.95 var(--display); text-transf
 .meter { height: 10px; background: var(--stage); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
 .meter i { display: block; height: 100%; width: 12%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
 .teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
-.team { background: var(--stage); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.team { background: var(--stage); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 1px 3px rgba(16,24,40,.06); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .team header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
-.team h3 { margin: 0; font: 800 26px/1 var(--display); text-transform: uppercase; }
+.team h3 { margin: 0; font: 600 21px/1.2 var(--display); }
 .shift { font: 500 12px/1 var(--mono); color: var(--gold); white-space: nowrap; }
 .team p { margin: 0; color: var(--muted); font-size: 14.5px; }
 .crew { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
@@ -111,13 +150,13 @@ h2 { margin: 0; font: 800 clamp(34px, 6vw, 60px)/.95 var(--display); text-transf
 .works { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
 .work { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--rule); border-radius: 10px; text-decoration: none; color: var(--text); background: var(--stage); min-width: 0; }
 .work:hover { border-color: var(--gold); }
-.work b { font: 800 21px/1.05 var(--display); text-transform: uppercase; color: var(--text); }
+.work b { font: 600 17px/1.25 var(--display); color: var(--text); }
 .work span { font-size: 14px; color: var(--muted); }
 .work small { font: 400 12px var(--mono); color: var(--gold); }
 .arsenal { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
 .arsenal div { padding: 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .arsenal div:last-child { border-right: 0; }
-.arsenal b { font: 900 clamp(38px, 6vw, 58px)/.9 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.arsenal b { font: 700 clamp(34px, 5vw, 50px)/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
 .arsenal span { font: 400 12px/1.35 var(--mono); color: var(--muted); }
 .filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .filters button { padding: 9px 14px; font-size: 13px; border-color: var(--rule); color: var(--text); }
@@ -132,13 +171,13 @@ div.work { cursor: default; }
 /* story + experience */
 .story { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 70ch; }
 .story p { margin: 0; font-size: 17.5px; line-height: 1.7; color: var(--text); }
-.story p:first-child::first-letter { font: 900 3.4em/.8 var(--display); color: var(--gold); float: left; padding: 6px 10px 0 0; }
-.story .pull { font: 800 clamp(24px, 3.6vw, 34px)/1.15 var(--display); text-transform: uppercase; color: var(--gold); border-left: 3px solid var(--ember); padding-left: 16px; }
+.story p:first-child::first-letter { font: 700 3.2em/.8 var(--display); color: var(--gold); float: left; padding: 6px 10px 0 0; }
+.story .pull { font: 600 clamp(22px, 3.2vw, 30px)/1.25 var(--display); color: var(--gold); border-left: 3px solid var(--ember); padding-left: 16px; }
 .jobs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
 .jobs li { display: grid; grid-template-columns: minmax(130px, 190px) minmax(0, 1fr); gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--rule); }
 .jobs .when { font: 500 12px/1.5 var(--mono); color: var(--gold); letter-spacing: .04em; }
 .jobs .when span { display: block; color: var(--muted); }
-.jobs h3 { margin: 0; font: 800 26px/1.05 var(--display); text-transform: uppercase; }
+.jobs h3 { margin: 0; font: 600 21px/1.2 var(--display); }
 .jobs .role { margin: 4px 0 10px; color: var(--ember); font-weight: 600; font-size: 15px; }
 .jobs ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: 15px; }
 .jobs ul b { color: var(--text); font-weight: 600; }
@@ -147,11 +186,11 @@ div.work { cursor: default; }
 /* record */
 .record { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
 .record div { padding: 20px 16px 20px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-.record b { font: 900 clamp(40px, 6vw, 56px)/.9 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.record b { font: 700 clamp(34px, 5vw, 48px)/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
 .record span { font-size: 14.5px; color: var(--muted); max-width: 30ch; }
 
 /* backers */
-.back { background: linear-gradient(135deg, #1a1408 0%, var(--stage) 60%); border: 1px solid var(--gold-deep); border-radius: 14px; padding: clamp(22px, 4vw, 40px); display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+.back { background: linear-gradient(135deg, #0a1a33 0%, #0f3c7a 55%, #0078d4 100%); border: 0; border-radius: 14px; padding: clamp(22px, 4vw, 40px); display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
 .back h2 { font-size: clamp(32px, 5vw, 52px); }
 .back ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; color: var(--text); }
 .back li span { color: var(--muted); }
@@ -166,7 +205,8 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 </style>
 </head>
 <body>
-<section class="stage" aria-label="Opening title">
+<header class="topnav"><div class="in"><a class="brand" href="#top"><i aria-hidden="true"></i>Manohar Papasani</a><nav aria-label="Sections"><a href="#workforce">Workforce</a><a href="#architecture">Architecture</a><a href="#notebook">Lab notebook</a><a href="#open">Repositories</a><a href="#story">Journey</a><a href="#back">Contact</a></nav></div></header>
+<section class="stage" id="top" aria-label="Opening title">
   <canvas id="fx" aria-hidden="true"></canvas>
   <div class="title" id="title">
     <span class="billing">An independent AI R&amp;D lab presents</span>
@@ -198,15 +238,22 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <div class="teams" id="teams"></div>
   </section>
 
+  <section class="sec" id="architecture">
+    <span class="reel">Reel 2 · Architecture</span>
+    <h2>How the digital workforce runs</h2>
+    <p class="lede">The systems behind the work: what triggers each shift, which models and tools the agents use, where quality is checked, and how every step is traced.</p>
+    <div id="diagrams" style="display:flex;flex-direction:column;gap:18px"></div>
+  </section>
+
   <section class="sec" id="notebook">
-    <span class="reel">Reel 2 · Lab notebook</span>
+    <span class="reel">Reel 3 · Lab notebook</span>
     <h2>What we found this month</h2>
     <p class="lede">Dated entries from the lab. Results marked preliminary are still being run or written up.</p>
     <ol class="log" id="log"></ol>
   </section>
 
   <section class="sec" id="open">
-    <span class="reel">Reel 3 · The arsenal</span>
+    <span class="reel">Reel 4 · The arsenal</span>
     <h2>46 repositories. One builder.</h2>
     <p class="lede">Research, production agent systems, free courses anyone can take, and open-source contributions. Public ones link to the code; private ones run real workloads and stay closed.</p>
     <div class="arsenal">
@@ -220,7 +267,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   </section>
 
   <section class="sec" id="story">
-    <span class="reel">Reel 4 · The journey</span>
+    <span class="reel">Reel 5 · The journey</span>
     <h2>From a farming village to a digital workforce</h2>
     <div class="story">
       <p>I build software that does real work. For more than ten years that has meant automation, data platforms and production systems. Today it means AI agents: digital employees that research, write, check and publish on their own, and enterprise agent programmes that cut years of delivery down to months.</p>
@@ -339,7 +386,9 @@ const TEAMS = [
     crew: [["Comment drafter", "insight, question or new angle"]] },
 ];
 const LOG = [
-  { d: "27 Oct 2026", t: "Claude Architect Professional: hands-on prep begins", p: "Ten labs, one per exam domain, each ending in a measured result. Mock exams are set harder than the real one." },
+  { d: "27 Oct 2026", t: "This site goes live", p: "A public home for the lab: the workforce, architecture, research notebook, all 46 repositories and the full journey. From today it is updated with every piece of R&D.", c: "Shipped" },
+  { d: "27 Oct 2026", t: "Claude Architect Professional: hands-on prep begins", p: "Ten labs, one per exam domain, each ending in a measured result. First hard practice exam: 26 of 30. Practice exams are set harder than the real one." },
+  { d: "25 Oct 2026", t: "Full run on 68 tasks: the baseline agent resolves half", p: "Gemma 4 with the standard tools resolved 34 of 68 real software tasks (50%, 95% CI 38–62%). The 10-task pilot had suggested 80%, a reminder to never trust the set you tuned on.", c: "Preliminary" },
   { d: "25 Oct 2026", t: "The content team goes fully autonomous", p: "Three agent teams now research, write, check and publish on schedule from the cloud, with a watchdog, cost caps and a trace of every step.", c: "Shipped" },
   { d: "25 Oct 2026", t: "Agents ignore tools they are not told to use", p: "Across 33 software-engineering tasks, an agent given optional code-graph tools called them zero times. Resolution matched the agent without them.", c: "Preliminary" },
   { d: "24 Oct 2026", t: "First post written entirely by agents", p: "A verified Marcus Aurelius quote and a licensed photo, picked, checked and published by the agent team. The critic sent the first draft back as generic.", c: "Shipped" },
@@ -409,6 +458,67 @@ renderRepos();
 document.getElementById("nCourses").textContent = REPOS.filter(r => r[3] === "Free courses").length;
 document.getElementById("nLive").textContent = REPOS.filter(r => r[5] === "Live").length;
 
+
+// ---------- architecture diagrams ----------
+const ICON = {
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+  graph: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5l3.5 8.5M17 7.5l-3.5 8.5M7.5 6h9"/></svg>',
+  chip: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg>',
+  db: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5.5" rx="7" ry="2.5"/><path d="M5 5.5v13c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5v-13M5 12c0 1.4 3.1 2.5 7 2.5s7-1.1 7-2.5"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>',
+  send: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 11l18-8-8 18-2-8z"/></svg>',
+  term: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9l3 3-3 3M12 15h5"/></svg>',
+  flask: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6M10 3v6l-5 9a2 2 0 0 0 1.8 3h10.4a2 2 0 0 0 1.8-3l-5-9V3"/><path d="M7.5 15h9"/></svg>',
+  search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>',
+  pen: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20l4-1 11-11-3-3L5 16z"/></svg>',
+  image: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>',
+  chart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></svg>',
+};
+const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h11M9 4l4 4-4 4"/></svg>';
+const DIAGRAMS = [
+  { title: "The digital workforce platform",
+    about: "Every team runs on the same platform. A timer starts the shift, the agents work through a graph of steps, and nothing is published until it passes the gates.",
+    nodes: [
+      ["clock", "Schedule", ["Cloudflare cron at 08:00, 10:00, 12:00 IST", "GitHub Actions runners", "One run per shift"]],
+      ["graph", "Agent teams", ["LangGraph state graphs", "Planner, scouts, writer, critic", "Checkpoints in Postgres, resumable"]],
+      ["chip", "Models", ["Open models on Groq (Qwen, gpt-oss)", "Any provider per role, by config"]],
+      ["db", "Tools and memory", ["Tavily web search", "Wikiquote, Wikipedia, Wikimedia Commons", "Neon Postgres + pgvector memory"]],
+      ["shield", "Quality gates", ["Quote verified by 2 sources", "Critic: facts, style, no clichés", "One rewrite, otherwise skip"], "gate"],
+      ["send", "Publish", ["LinkedIn API: post, card, carousel", "Review record on GitHub"], "out"],
+    ],
+    xcut: ["Langfuse trace for every agent", "Watchdog and alerts", "Daily token caps", "Kill switch"] },
+  { title: "One shift, step by step: morning motivation at 08:00",
+    about: "Six digital employees hand the work along. Two loops keep quality up: an unverified quote sends the scout back, and a weak draft gets one rewrite before the post is dropped.",
+    nodes: [
+      ["clock", "Planner", ["Picks story, quote or lessons", "Chooses the theme"]],
+      ["search", "Quote scout", ["Searches with tools", "Collects candidates"]],
+      ["shield", "Verifier", ["Wikiquote or 2 independent sources", "No political figures"], "gate"],
+      ["pen", "Writer", ["Writes from verified facts only"]],
+      ["image", "Card maker", ["Builds the matching visual"]],
+      ["shield", "Critic", ["Checks facts, tone, hashtags"], "gate"],
+      ["send", "Publish", ["Posts to LinkedIn"], "out"],
+    ],
+    loops: ["Not verified: scout searches again", "Critic rejects: one rewrite, then skip the day"] },
+  { title: "Research harness: Gemma 4 as a coding agent",
+    about: "The setup behind the Gemma 4 study. A real software task goes in, the agent works inside a sandbox, and a test suite decides whether the fix is real. A second track plants bugs to test the tester.",
+    nodes: [
+      ["chip", "Model server", ["Gemma 4 31B, 4-bit, on vLLM", "4 × NVIDIA L4 on Kaggle"]],
+      ["graph", "Agent", ["Google ADK agent", "9 tools, incl. code-graph tools", "Configs k0–k5, n1–n5"]],
+      ["term", "Sandbox", ["Task repository in a container", "Agent reads, edits, runs commands"]],
+      ["shield", "Verifier", ["pytest on the task's tests", "JUnit results parsed"], "gate"],
+      ["chart", "Analysis", ["Wilson confidence intervals", "Exact McNemar tests", "Task × config grid"], "out"],
+    ],
+    xcut: ["Bug planting: 7 mutation operators test whether the verifier can be fooled", "Every run recorded for replay"] },
+];
+document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
+  <figure class="diagram" style="margin:0">
+    <h3>${d.title}</h3>
+    <p>${d.about}</p>
+    <div class="flow">${d.nodes.map((n, i) => `${i ? `<div class="arrow" aria-hidden="true">${ARROW}</div>` : ""}<div class="node ${n[3] || ""}"><div class="hd">${ICON[n[0]]}${n[1]}</div><ul>${n[2].map(x => `<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>
+    ${d.xcut ? `<div class="xcut"><b>Across every step</b>${d.xcut.map(x => `<span>${x}</span>`).join("")}</div>` : ""}
+    ${d.loops ? `<div class="loops">${d.loops.map(x => `<span>${x}</span>`).join("")}</div>` : ""}
+  </figure>`).join("");
+
 // ---------- the title sequence ----------
 const WORDS = ["MANOHAR", "PAPASANI"], STEP = 0.17, START = 0.35;
 const LETTERS = WORDS.join("").length;
@@ -428,7 +538,7 @@ addEventListener("resize", size); size();
 function burst(x, y, n, big) {
   for (let i = 0; i < n; i++) {
     const a = Math.random() * Math.PI * 2, s = (big ? 3 : 1.6) + Math.random() * (big ? 7 : 4);
-    sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.2, life: 1, hue: Math.random() < .7 ? 42 : 18 });
+    sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.2, life: 1, hue: Math.random() < .7 ? 190 : 210 });
   }
 }
 function scheduleBursts(withSound) {
@@ -452,14 +562,14 @@ function frame(now) {
   for (let i = 0; i < 14; i++) {
     ctx.rotate(Math.PI * 2 / 14);
     const g = ctx.createLinearGradient(0, 0, R, 0);
-    g.addColorStop(0, "rgba(242,193,78,0.10)"); g.addColorStop(1, "rgba(242,193,78,0)");
+    g.addColorStop(0, "rgba(80,230,255,0.10)"); g.addColorStop(1, "rgba(80,230,255,0)");
     ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(R, -R * 0.07); ctx.lineTo(R, R * 0.07); ctx.closePath(); ctx.fill();
   }
   ctx.restore();
   // drifting embers
   for (let i = 0; i < 40; i++) {
     const x = (i * 97.3 + t * 12 * (1 + (i % 3))) % W, y = H - ((i * 53.1 + t * 22 * (1 + (i % 4) * .4)) % H);
-    ctx.fillStyle = `rgba(255,${120 + (i % 5) * 20},60,${0.15 + (i % 4) * 0.08})`;
+    ctx.fillStyle = `rgba(${60 + (i % 5) * 20},${180 + (i % 4) * 15},255,${0.15 + (i % 4) * 0.08})`;
     ctx.fillRect(x, y, 2, 2);
   }
   // sparks
