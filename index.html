@@ -114,6 +114,20 @@ h2 { margin: 0; font: 800 clamp(34px, 6vw, 60px)/.95 var(--display); text-transf
 .work b { font: 800 21px/1.05 var(--display); text-transform: uppercase; color: var(--text); }
 .work span { font-size: 14px; color: var(--muted); }
 .work small { font: 400 12px var(--mono); color: var(--gold); }
+.arsenal { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; }
+.arsenal div { padding: 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.arsenal div:last-child { border-right: 0; }
+.arsenal b { font: 900 clamp(38px, 6vw, 58px)/.9 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.arsenal span { font: 400 12px/1.35 var(--mono); color: var(--muted); }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { padding: 9px 14px; font-size: 13px; border-color: var(--rule); color: var(--text); }
+.filters button[aria-pressed="true"] { background: var(--gold); color: var(--night); border-color: var(--gold); }
+.filters button i { font-style: normal; font-family: var(--mono); opacity: .7; margin-left: 4px; }
+.work .meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; padding-top: 6px; }
+.work .tagx { font: 500 11px/1 var(--mono); padding: 5px 7px; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); }
+.work .tagx.live { border-color: var(--live); color: var(--live); }
+.work .tagx.priv { border-color: var(--gold-deep); color: var(--gold); }
+div.work { cursor: default; }
 
 /* record */
 .record { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
@@ -177,9 +191,16 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   </section>
 
   <section class="sec" id="open">
-    <span class="reel">Reel 3 · Open work</span>
-    <h2>Built in public</h2>
-    <p class="lede">Research code, free courses and field guides anyone can use.</p>
+    <span class="reel">Reel 3 · The arsenal</span>
+    <h2>46 repositories. One builder.</h2>
+    <p class="lede">Research, production agent systems, free courses anyone can take, and open-source contributions. Public ones link to the code; private ones run real workloads and stay closed.</p>
+    <div class="arsenal">
+      <div><b>46</b><span>repositories on GitHub</span></div>
+      <div><b>29</b><span>public, open to anyone</span></div>
+      <div><b id="nCourses">0</b><span>free courses for everyone</span></div>
+      <div><b id="nLive">0</b><span>systems running live</span></div>
+    </div>
+    <div class="filters" id="filters" role="toolbar" aria-label="Filter repositories"></div>
     <div class="works" id="works"></div>
   </section>
 
@@ -242,26 +263,68 @@ const LOG = [
   { d: "23 Oct 2026", t: "The test checker can be fooled", p: "Planting bugs into correct fixes shows a share of them still pass the benchmark's tests, so some 'solved' results are not real.", c: "Preliminary" },
   { d: "15 Oct 2026", t: "Gemma 4 agent study starts", p: "Can an open model on one accelerator become a reliable coding agent? A record-and-replay harness, a bug-planting check and a tool ablation, run on Kaggle GPUs.", c: "Research" },
 ];
-const WORKS = [
-  ["Gemma 4 agentic SWE", "Open research on turning Gemma 4 into a reliable coding agent", "gemma4-agentic-swe"],
-  ["Autonomous AI workflow field guide", "Shipping an AI workflow to production: reliability, cost, security", "autonomous-ai-workflow-field-guide"],
-  ["MCP for Everyone", "Free course: build and secure MCP servers", "mcp-for-everyone"],
-  ["LLM Evaluation for Everyone", "Measuring, testing and trusting LLM systems", "llm-evaluation-for-everyone"],
-  ["Agentic AI for Everyone", "Visual, engineering-first agent course", "agentic-ai-for-everyone"],
-  ["GenAI for Everyone", "7 weeks, 40 live sessions, job-ready", "genai-for-everyone"],
+// [repo, title, what it is, category, visibility, status]
+const REPOS = [
+  ["gemma4-agentic-swe", "Gemma 4 agentic SWE", "Can an open model on one accelerator become a reliable coding agent? Harness, bug-planting check and tool ablation on Kaggle GPUs.", "Research", "public", "Research"],
+  ["ace-review-bench", "AI code-review bench", "Three commercial AI code reviewers tested on real bugs taken from my own agent code.", "Research", "private", "Research"],
+  ["agentic-content-engine-design", "Agent engine design", "Design of a multi-agent content engine on open-weight models, measured against a production workflow.", "Research", "public", "Design"],
+  ["autonomous-ai-workflow-field-guide", "Autonomous AI field guide", "Shipping an AI workflow to production: reliability, observability, cost, security, governance, evaluation.", "Research", "public", "Guide"],
+  ["linkedin-branding-engine", "AI news digest engine", "The 4 PM crew: collects the day's AI news, writes, fact-checks every claim and publishes.", "Agent systems", "private", "Live"],
+  ["agentic-content-engine", "Agentic content engine", "LangGraph agent teams for motivation, tech learning and good news, fully autonomous with a watchdog and cost caps.", "Agent systems", "private", "Live"],
+  ["ai-agent-platform", "AI agent platform", "Multi-agent and multi-RAG platform with evaluation and observability built in.", "Agent systems", "private", "Build"],
+  ["healthcare-interop-platform", "Healthcare interop platform", "HIPAA-aligned HL7 v2 and FHIR (R4/R5) interoperability platform.", "Agent systems", "private", "Build"],
+  ["enterprise-knowledge-assistant", "Enterprise knowledge assistant", "Advanced RAG over company documents: hybrid retrieval, RRF, LLM re-ranking, MMR, conversation memory.", "Agent systems", "public", "Build"],
+  ["rag-projects", "RAG from scratch", "End-to-end RAG over a banking policy corpus: chunking, retrieval, generation and evaluation.", "Agent systems", "public", "Build"],
+  ["manohar-genai-lab", "GenAI lab", "Production-grade automation tools built with Python, LLMs and prompt engineering.", "Agent systems", "public", "Build"],
+  ["linkedin-news-agent", "News agent v1", "The first news agent: Tavily search, multi-LLM routing, automatic LinkedIn posting.", "Agent systems", "private", "Archive"],
+  ["ai-news-linkedin-integration", "Slack-to-LinkedIn on Lambda", "The very first version: AI news from Slack to LinkedIn on AWS Lambda.", "Agent systems", "private", "Archive"],
+  ["github-repo-observability", "Repo observability", "Traffic, stars, forks and trends across all my public repositories.", "Agent systems", "private", "Design"],
+  ["repo-to-youtube-pipeline", "Repo to YouTube", "Agents that turn course chapters into short videos and publish them.", "Agent systems", "private", "Design"],
+  ["content-promotion-engine", "Content promotion engine", "Multi-channel distribution with tracking and human-approved engagement.", "Agent systems", "private", "Design"],
+  ["genai-for-everyone", "GenAI for Everyone", "7 weeks, 40 live sessions: LLMs, prompting, RAG, agents, evaluation, safety and deployment.", "Free courses", "public", "Course"],
+  ["genai-live-sessions", "GenAI live sessions", "Day-by-day recaps and the exact live-build prompts from every session.", "Free courses", "public", "Course"],
+  ["python-for-everyone", "Python for Everyone", "Interactive Python from zero to job-ready, with instant-check quizzes and projects.", "Free courses", "public", "Course"],
+  ["rag-for-everyone", "RAG for Everyone", "Retrieval-augmented generation, taught visually and hands-on.", "Free courses", "public", "Course"],
+  ["agentic-ai-for-everyone", "Agentic AI for Everyone", "Visual, engineering-first course on building agents.", "Free courses", "public", "Course"],
+  ["mcp-for-everyone", "MCP for Everyone", "Build and secure MCP servers and clients, and think like an architect.", "Free courses", "public", "Course"],
+  ["ai-coding-agents-for-everyone", "AI Coding Agents for Everyone", "Claude Code, Cursor and Copilot in practice, then build your own with the Agent SDK and MCP.", "Free courses", "public", "Course"],
+  ["llm-evaluation-for-everyone", "LLM Evaluation for Everyone", "Measuring, testing and trusting LLM systems.", "Free courses", "public", "Course"],
+  ["ai-engineering-for-everyone", "AI Engineering for Everyone", "The production-engineering discipline for LLM systems.", "Free courses", "public", "Course"],
+  ["context-engineering-for-everyone", "Context Engineering for Everyone", "Getting the right information into the model at the right time.", "Free courses", "public", "Course"],
+  ["ai-security-for-everyone", "AI Security for Everyone", "Prompt injection, data leaks and how to defend AI systems.", "Free courses", "public", "Course"],
+  ["devops-for-everyone", "DevOps for Everyone", "CI/CD, containers and cloud for people new to DevOps.", "Free courses", "public", "Course"],
+  ["git-actually", "Git, Actually", "Practise real git, GitHub and CI/CD in your own repo, with a bot that checks your work.", "Free courses", "public", "Course"],
+  ["open-source-contributions", "Open-source log", "User stories, architecture notes and PR status for my open-source work, starting with Langfuse.", "Open source", "public", "Live"],
+  ["langfuse", "Langfuse (fork)", "Working fork of the open-source LLM observability platform.", "Open source", "public", "Fork"],
+  ["langfuse-python", "Langfuse Python SDK (fork)", "Working fork of the Langfuse Python SDK.", "Open source", "public", "Fork"],
+  ["docker-k8s-terraform-poc", "Docker, K8s and Terraform", "One small API through Docker, Kubernetes and Terraform, free in a Codespace.", "Builds", "public", "Build"],
+  ["tap-duel", "Tap Duel", "Kohli vs Rohit two-player tap race in Flutter, live on the web and Android.", "Builds", "public", "Live"],
 ];
-
-document.getElementById("teams").innerHTML = TEAMS.map(t => `
-  <article class="team">
-    <header><h3>${t.name}</h3><span class="shift">${t.shift}</span></header>
-    <span class="duty">On duty</span>
-    <p>${t.about}</p>
-    <ul class="crew">${t.crew.map(c => `<li><span>${c[0]}</span><span>${c[1]}</span></li>`).join("")}</ul>
-  </article>`).join("");
-document.getElementById("log").innerHTML = LOG.map(e => `
-  <li><time>${e.d}</time><h3>${e.t}</h3><p>${e.p}</p>${e.c ? `<span class="chip ${e.c === "Preliminary" ? "pre" : ""}">${e.c}</span>` : ""}</li>`).join("");
-document.getElementById("works").innerHTML = WORKS.map(w => `
-  <a class="work" href="https://github.com/TechNaom/${w[2]}" target="_blank" rel="noopener"><b>${w[0]}</b><span>${w[1]}</span><small>github.com/TechNaom/${w[2]}</small></a>`).join("");
+const CATS = ["All", "Agent systems", "Research", "Free courses", "Open source", "Builds"];
+let cat = "All";
+function card(r) {
+  const [repo, title, what, , vis, status] = r;
+  const tags = `<div class="meta"><span class="tagx ${status === "Live" ? "live" : ""}">${status}</span>${vis === "private" ? '<span class="tagx priv">Private</span>' : ""}</div>`;
+  return vis === "public"
+    ? `<a class="work" href="https://github.com/TechNaom/${repo}" target="_blank" rel="noopener"><b>${title}</b><span>${what}</span><small>github.com/TechNaom/${repo}</small>${tags}</a>`
+    : `<div class="work"><b>${title}</b><span>${what}</span><small>Private build</small>${tags}</div>`;
+}
+function renderRepos() {
+  document.getElementById("filters").innerHTML = CATS.map(c => {
+    const n = c === "All" ? REPOS.length : REPOS.filter(r => r[3] === c).length;
+    return `<button type="button" data-cat="${c}" aria-pressed="${c === cat}">${c}<i>${n}</i></button>`;
+  }).join("");
+  document.getElementById("works").innerHTML = REPOS.filter(r => cat === "All" || r[3] === cat).map(card).join("");
+}
+document.getElementById("filters").addEventListener("click", e => {
+  const b = e.target.closest("button");
+  if (!b) return;
+  cat = b.dataset.cat;
+  renderRepos();
+});
+renderRepos();
+document.getElementById("nCourses").textContent = REPOS.filter(r => r[3] === "Free courses").length;
+document.getElementById("nLive").textContent = REPOS.filter(r => r[5] === "Live").length;
 
 // ---------- the title sequence ----------
 const WORDS = ["MANOHAR", "PAPASANI"], STEP = 0.17, START = 0.35;
