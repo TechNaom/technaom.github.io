@@ -1,0 +1,26 @@
+name: deploy-cloudflare
+
+# Publishes the site to https://manoharpapasani.pages.dev on every push to main.
+# GitHub Pages (technaom.github.io) keeps serving the same files.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Collect the site files
+        run: mkdir -p public && cp index.html public/
+
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy public --project-name=manoharpapasani --branch=main
