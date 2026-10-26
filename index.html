@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Manohar Papasani</title>
+<meta name="description" content="Manohar Papasani builds AI agents that do real jobs: a growing workforce of digital employees, open research and free courses.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Manohar Papasani · The man who hires digital employees">
+<meta property="og:description" content="An independent AI R&amp;D lab: agents on duty, research notebook, open work.">
+<meta property="og:url" content="https://technaom.github.io/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%2307080c'/%3E%3Ctext x='32' y='45' font-family='Impact,Arial Narrow,sans-serif' font-size='38' font-weight='900' text-anchor='middle' fill='%23f2c14e'%3EMP%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;800;900&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a film-title opening on a dark stage, then a studio "call sheet": workforce roster, lab notebook, open work, record, backers */
+:root {
+  --night: #07080c;
+  --stage: #0e1017;
+  --rule: #242836;
+  --text: #ece6d9;
+  --muted: #9d978b;
+  --gold: #f2c14e;
+  --gold-deep: #b5852a;
+  --ember: #ff6a2b;
+  --live: #57d68d;
+  --display: "Big Shoulders Display", "Arial Narrow", Impact, sans-serif;
+  --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { background: var(--night); }
+body { background: var(--night); color: var(--text); font: 16px/1.6 var(--body); margin: 0; }
+a { color: var(--gold); text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* ---------- opening title ---------- */
+.stage { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 50% 40%, #161a26 0%, var(--night) 70%); border-bottom: 1px solid var(--rule); }
+#fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.title { position: relative; z-index: 2; padding: clamp(56px, 12vw, 120px) 16px clamp(40px, 8vw, 80px); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
+.billing { font: 500 12px/1 var(--mono); letter-spacing: .38em; text-transform: uppercase; color: var(--muted); animation: fadeUp .8s ease-out both; animation-delay: .1s; }
+.name { margin: 0; font: 900 clamp(64px, 17vw, 200px)/.82 var(--display); letter-spacing: .02em; display: flex; justify-content: center; flex-wrap: wrap; }
+.name span {
+  display: inline-block;
+  background: linear-gradient(180deg, #fff3cf 0%, var(--gold) 38%, var(--gold-deep) 62%, #ffe08a 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 0 18px rgba(242, 193, 78, .35));
+  animation: slam .7s cubic-bezier(.2, .9, .2, 1) both;
+}
+.surname { margin: 0; font: 800 clamp(22px, 5vw, 46px)/1 var(--display); letter-spacing: .42em; padding-left: .42em; color: var(--text); animation: fadeUp .9s ease-out both; animation-delay: 2.15s; }
+.tag { margin: 18px 0 0; font: 800 clamp(20px, 4.4vw, 40px)/1.05 var(--display); text-transform: uppercase; letter-spacing: .06em; animation: fadeUp .9s ease-out both; animation-delay: 2.55s; }
+.tag em { font-style: normal; color: var(--ember); }
+.sub { margin: 0; max-width: 56ch; color: var(--muted); animation: fadeUp .9s ease-out both; animation-delay: 2.85s; }
+.cta-row { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 10px; animation: fadeUp .9s ease-out both; animation-delay: 3.1s; }
+button, .btn { font: 600 14px/1 var(--body); border-radius: 999px; padding: 12px 18px; cursor: pointer; border: 1px solid var(--gold); background: transparent; color: var(--gold); text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn.solid { background: var(--gold); color: var(--night); }
+@keyframes slam {
+  0% { opacity: 0; transform: scale(3.4) translateY(-6%); filter: blur(16px) drop-shadow(0 0 0 rgba(242,193,78,0)); }
+  55% { opacity: 1; transform: scale(.94); filter: blur(0) drop-shadow(0 0 40px rgba(255,214,120,.95)); }
+  100% { opacity: 1; transform: scale(1); filter: blur(0) drop-shadow(0 0 18px rgba(242,193,78,.35)); }
+}
+@keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.replaying .name span, .replaying .surname, .replaying .tag, .replaying .sub, .replaying .cta-row, .replaying .billing { animation: none; }
+
+.ticker { position: relative; z-index: 2; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
+.ticker div { padding: 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.ticker div:last-child { border-right: 0; }
+.ticker b { font: 800 clamp(26px, 4vw, 34px)/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.ticker span { font: 400 12px/1.35 var(--mono); color: var(--muted); }
+
+/* ---------- sections ---------- */
+main { padding-inline: 16px; padding-block: 0 64px; }
+.sec { max-width: 1080px; margin: 0 auto; padding-block: clamp(48px, 8vw, 88px) 0; display: flex; flex-direction: column; gap: 22px; }
+.reel { font: 500 12px/1 var(--mono); letter-spacing: .3em; text-transform: uppercase; color: var(--ember); }
+h2 { margin: 0; font: 800 clamp(34px, 6vw, 60px)/.95 var(--display); text-transform: uppercase; letter-spacing: .01em; text-wrap: balance; }
+.lede { margin: 0; max-width: 64ch; color: var(--muted); font-size: 17px; }
+
+/* workforce */
+.goal { display: flex; flex-direction: column; gap: 8px; max-width: 640px; }
+.goal .row { display: flex; justify-content: space-between; gap: 12px; font: 400 13px var(--mono); color: var(--muted); flex-wrap: wrap; }
+.goal .row b { color: var(--text); font-weight: 500; }
+.meter { height: 10px; background: var(--stage); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+.meter i { display: block; height: 100%; width: 9%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
+.teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.team { background: var(--stage); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.team header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.team h3 { margin: 0; font: 800 26px/1 var(--display); text-transform: uppercase; }
+.shift { font: 500 12px/1 var(--mono); color: var(--gold); white-space: nowrap; }
+.team p { margin: 0; color: var(--muted); font-size: 14.5px; }
+.crew { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.crew li { display: grid; grid-template-columns: 1fr auto; gap: 10px; padding: 9px 0; border-top: 1px dashed var(--rule); font-size: 14.5px; }
+.crew li span:last-child { font: 400 12px var(--mono); color: var(--muted); text-align: right; }
+.duty { display: inline-flex; align-items: center; gap: 6px; font: 500 11px/1 var(--mono); color: var(--live); letter-spacing: .08em; text-transform: uppercase; }
+.duty::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--live); box-shadow: 0 0 0 0 rgba(87,214,141,.6); animation: pulse 2s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(87,214,141,0); } 100% { box-shadow: 0 0 0 0 rgba(87,214,141,0); } }
+
+/* notebook */
+.log { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-left: 2px solid var(--rule); }
+.log li { position: relative; padding: 0 0 26px 24px; display: grid; gap: 4px; }
+.log li::before { content: ""; position: absolute; left: -7px; top: 6px; width: 12px; height: 12px; border-radius: 50%; background: var(--night); border: 2px solid var(--gold); }
+.log time { font: 500 12px/1.4 var(--mono); color: var(--gold); letter-spacing: .06em; }
+.log h3 { margin: 0; font: 600 18px/1.3 var(--body); }
+.log p { margin: 0; color: var(--muted); font-size: 15px; max-width: 70ch; }
+.chip { justify-self: start; font: 500 11px/1 var(--mono); padding: 5px 8px; border-radius: 999px; border: 1px solid var(--rule); color: var(--muted); }
+.chip.pre { border-color: var(--ember); color: var(--ember); }
+
+/* open work */
+.works { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.work { display: flex; flex-direction: column; gap: 6px; padding: 16px; border: 1px solid var(--rule); border-radius: 10px; text-decoration: none; color: var(--text); background: var(--stage); min-width: 0; }
+.work:hover { border-color: var(--gold); }
+.work b { font: 800 21px/1.05 var(--display); text-transform: uppercase; color: var(--text); }
+.work span { font-size: 14px; color: var(--muted); }
+.work small { font: 400 12px var(--mono); color: var(--gold); }
+
+/* record */
+.record { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+.record div { padding: 20px 16px 20px 0; border-bottom: 1px solid var(--rule); display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.record b { font: 900 clamp(40px, 6vw, 56px)/.9 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
+.record span { font-size: 14.5px; color: var(--muted); max-width: 30ch; }
+
+/* backers */
+.back { background: linear-gradient(135deg, #1a1408 0%, var(--stage) 60%); border: 1px solid var(--gold-deep); border-radius: 14px; padding: clamp(22px, 4vw, 40px); display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 28px; }
+.back h2 { font-size: clamp(32px, 5vw, 52px); }
+.back ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; color: var(--text); }
+.back li span { color: var(--muted); }
+.back .cta-row { justify-content: flex-start; animation: none; }
+footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 400 12px var(--mono); color: var(--muted); }
+.concept { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ember); }
+
+@media (prefers-reduced-motion: reduce) {
+  .name span, .surname, .tag, .sub, .cta-row, .billing { animation: none !important; }
+  .duty::before { animation: none; }
+}
+</style>
+</head>
+<body>
+<section class="stage" aria-label="Opening title">
+  <canvas id="fx" aria-hidden="true"></canvas>
+  <div class="title" id="title">
+    <span class="billing">An independent AI R&amp;D lab presents</span>
+    <h1 class="name" id="name" aria-label="Manohar"></h1>
+    <p class="surname">PAPASANI</p>
+    <p class="tag">The man who hires <em>digital employees</em></p>
+    <p class="sub">I build AI agents that do real jobs on a schedule, check their own work, and get measured like any other employee. This is the lab: who is on duty, what we are researching, and what ships next.</p>
+    <div class="cta-row">
+      <button id="replay" type="button">▶ Replay the title with sound</button>
+      <a class="btn solid" href="#workforce">Meet the workforce</a>
+    </div>
+  </div>
+  <div class="ticker">
+    <div><b>9</b><span>digital employees on duty</span></div>
+    <div><b>3</b><span>agent teams posting daily, unattended</span></div>
+    <div><b>68</b><span>tasks in the Gemma 4 agent study</span></div>
+    <div><b>10+</b><span>years building automation and AI</span></div>
+  </div>
+</section>
+
+<main>
+  <section class="sec" id="workforce">
+    <span class="reel">Reel 1 · The workforce</span>
+    <h2>Nobody here takes a day off</h2>
+    <p class="lede">Every agent below runs on its own schedule in the cloud, with a quality gate before anything goes out and a trace of every step. The goal is a hundred of them working together by the end of January.</p>
+    <div class="goal">
+      <div class="row"><span><b>9</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027</span></div>
+      <div class="meter" role="img" aria-label="9 of 100 agents"><i></i></div>
+    </div>
+    <div class="teams" id="teams"></div>
+  </section>
+
+  <section class="sec" id="notebook">
+    <span class="reel">Reel 2 · Lab notebook</span>
+    <h2>What we found this month</h2>
+    <p class="lede">Dated entries from the lab. Results marked preliminary are still being run or written up.</p>
+    <ol class="log" id="log"></ol>
+  </section>
+
+  <section class="sec" id="open">
+    <span class="reel">Reel 3 · Open work</span>
+    <h2>Built in public</h2>
+    <p class="lede">Research code, free courses and field guides anyone can use.</p>
+    <div class="works" id="works"></div>
+  </section>
+
+  <section class="sec" id="record">
+    <span class="reel">Reel 4 · Track record</span>
+    <h2>Before the lab</h2>
+    <p class="lede">Ten years of automation and AI inside large enterprises: banking, insurance and cloud. Now leading an agentic GenAI team on AWS.</p>
+    <div class="record">
+      <div><b>14,300</b><span>engineer-hours a year saved through GenAI and automation at a global bank</span></div>
+      <div><b>20</b><span>agent incident-management programme delivered in 6–8 months instead of 2 years</span></div>
+      <div><b>28</b><span>awards, including a Platinum award for GenAI leadership</span></div>
+      <div><b>500+</b><span>engineers trained as an independent trainer</span></div>
+    </div>
+  </section>
+
+  <section class="sec" id="back">
+    <div class="back">
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <span class="reel">Coming next</span>
+        <h2>Back the lab</h2>
+        <p class="lede" style="margin:0">Looking for partners, sponsors and early users for the next builds. Each one ships in public with measured results.</p>
+        <div class="cta-row">
+          <a class="btn solid" href="https://www.linkedin.com/in/manohar-p-b89916aa" target="_blank" rel="noopener">Talk to me on LinkedIn</a>
+          <a class="btn" href="https://github.com/TechNaom" target="_blank" rel="noopener">See the code</a>
+        </div>
+      </div>
+      <ul>
+        <li><b>Agent swarm</b> <span>· a factory that turns a short spec into a working agent, and a shared board where 100 agents coordinate</span></li>
+        <li><b>Guardrails agent</b> <span>· interviews a team, then enforces their rules across every agent</span></li>
+        <li><b>Competition autopilot</b> <span>· finds AI competitions worldwide, builds entries, fixes its own failures</span></li>
+        <li><b>ML inside agents</b> <span>· routers, rankers and guards that make agents cheaper and safer</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <footer>
+    <span>Manohar Papasani · Hyderabad</span>
+    <span>Updated 27 Oct 2026 · Built with my digital employees</span>
+  </footer>
+</main>
+
+<script>
+const TEAMS = [
+  { name: "Morning motivation", shift: "08:00 IST · daily", about: "True stories, verified quotes and life lessons from every field, with a card designed to match.",
+    crew: [["Planner", "picks the day's story, quote or lesson"], ["Quote scout", "searches Wikiquote and the web"], ["Verifier", "proves the quote is real"], ["Writer", "writes from verified facts only"], ["Card maker", "builds the matching visual"], ["Critic", "rejects anything generic or unproven"]] },
+  { name: "Tech learning", shift: "10:00 IST · daily", about: "Tier lists, comparisons and explainers researched from the last month's sources.",
+    crew: [["Planner", "chooses topic and format"], ["Researcher", "collects fresh sources"], ["Writer", "writes only from those sources"], ["Carousel maker", "turns the post into slides"], ["Critic", "checks tiers, claims and consistency"]] },
+  { name: "Inspiring news", shift: "12:00 IST · when worthy", about: "Good news confirmed by two outlets, non-political, or nothing at all that day.",
+    crew: [["News scout", "finds and scores the story"], ["Writer", "tells it plainly"], ["Card maker", "builds the visual"], ["Critic", "final check before posting"]] },
+  { name: "Comment copilot", shift: "On call", about: "Drafts three thoughtful comment options on posts in my feed. I choose and post; it learns my voice.",
+    crew: [["Comment drafter", "insight, question or new angle"]] },
+];
+const LOG = [
+  { d: "27 Oct 2026", t: "Claude Architect Professional: hands-on prep begins", p: "Ten labs, one per exam domain, each ending in a measured result. Mock exams are set harder than the real one." },
+  { d: "25 Oct 2026", t: "The content team goes fully autonomous", p: "Three agent teams now research, write, check and publish on schedule from the cloud, with a watchdog, cost caps and a trace of every step.", c: "Shipped" },
+  { d: "25 Oct 2026", t: "Agents ignore tools they are not told to use", p: "Across 33 software-engineering tasks, an agent given optional code-graph tools called them zero times. Resolution matched the agent without them.", c: "Preliminary" },
+  { d: "24 Oct 2026", t: "First post written entirely by agents", p: "A verified Marcus Aurelius quote and a licensed photo, picked, checked and published by the agent team. The critic sent the first draft back as generic.", c: "Shipped" },
+  { d: "23 Oct 2026", t: "The test checker can be fooled", p: "Planting bugs into correct fixes shows a share of them still pass the benchmark's tests, so some 'solved' results are not real.", c: "Preliminary" },
+  { d: "15 Oct 2026", t: "Gemma 4 agent study starts", p: "Can an open model on one accelerator become a reliable coding agent? A record-and-replay harness, a bug-planting check and a tool ablation, run on Kaggle GPUs.", c: "Research" },
+];
+const WORKS = [
+  ["Gemma 4 agentic SWE", "Open research on turning Gemma 4 into a reliable coding agent", "gemma4-agentic-swe"],
+  ["Autonomous AI workflow field guide", "Shipping an AI workflow to production: reliability, cost, security", "autonomous-ai-workflow-field-guide"],
+  ["MCP for Everyone", "Free course: build and secure MCP servers", "mcp-for-everyone"],
+  ["LLM Evaluation for Everyone", "Measuring, testing and trusting LLM systems", "llm-evaluation-for-everyone"],
+  ["Agentic AI for Everyone", "Visual, engineering-first agent course", "agentic-ai-for-everyone"],
+  ["GenAI for Everyone", "7 weeks, 40 live sessions, job-ready", "genai-for-everyone"],
+];
+
+document.getElementById("teams").innerHTML = TEAMS.map(t => `
+  <article class="team">
+    <header><h3>${t.name}</h3><span class="shift">${t.shift}</span></header>
+    <span class="duty">On duty</span>
+    <p>${t.about}</p>
+    <ul class="crew">${t.crew.map(c => `<li><span>${c[0]}</span><span>${c[1]}</span></li>`).join("")}</ul>
+  </article>`).join("");
+document.getElementById("log").innerHTML = LOG.map(e => `
+  <li><time>${e.d}</time><h3>${e.t}</h3><p>${e.p}</p>${e.c ? `<span class="chip ${e.c === "Preliminary" ? "pre" : ""}">${e.c}</span>` : ""}</li>`).join("");
+document.getElementById("works").innerHTML = WORKS.map(w => `
+  <a class="work" href="https://github.com/TechNaom/${w[2]}" target="_blank" rel="noopener"><b>${w[0]}</b><span>${w[1]}</span><small>github.com/TechNaom/${w[2]}</small></a>`).join("");
+
+// ---------- the title sequence ----------
+const NAME = "MANOHAR", STEP = 0.24, START = 0.35;
+const nameEl = document.getElementById("name");
+function buildName() {
+  nameEl.innerHTML = [...NAME].map((ch, i) => `<span aria-hidden="true" style="animation-delay:${(START + i * STEP).toFixed(2)}s">${ch}</span>`).join("");
+}
+buildName();
+
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const cvs = document.getElementById("fx"), ctx = cvs.getContext("2d");
+let W = 0, H = 0, sparks = [], t0 = performance.now();
+function size() { const r = cvs.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cvs.width = W * d; cvs.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
+addEventListener("resize", size); size();
+
+function burst(x, y, n, big) {
+  for (let i = 0; i < n; i++) {
+    const a = Math.random() * Math.PI * 2, s = (big ? 3 : 1.6) + Math.random() * (big ? 7 : 4);
+    sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.2, life: 1, hue: Math.random() < .7 ? 42 : 18 });
+  }
+}
+function scheduleBursts(withSound) {
+  const host = cvs.getBoundingClientRect();
+  [...nameEl.children].forEach((el, i) => {
+    setTimeout(() => {
+      const r = el.getBoundingClientRect();
+      burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 34, false);
+      if (withSound) hit(i === NAME.length - 1);
+    }, (START + i * STEP + 0.38) * 1000);
+  });
+  setTimeout(() => { const r = nameEl.getBoundingClientRect(); burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 160, true); if (withSound) chord(); }, (START + NAME.length * STEP + 0.5) * 1000);
+}
+
+function frame(now) {
+  const t = (now - t0) / 1000;
+  ctx.clearRect(0, 0, W, H);
+  // rotating searchlight rays behind the name
+  const cx = W / 2, cy = H * 0.36, R = Math.max(W, H) * 1.2;
+  ctx.save(); ctx.translate(cx, cy); ctx.rotate(t * 0.06);
+  for (let i = 0; i < 14; i++) {
+    ctx.rotate(Math.PI * 2 / 14);
+    const g = ctx.createLinearGradient(0, 0, R, 0);
+    g.addColorStop(0, "rgba(242,193,78,0.10)"); g.addColorStop(1, "rgba(242,193,78,0)");
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(R, -R * 0.07); ctx.lineTo(R, R * 0.07); ctx.closePath(); ctx.fill();
+  }
+  ctx.restore();
+  // drifting embers
+  for (let i = 0; i < 40; i++) {
+    const x = (i * 97.3 + t * 12 * (1 + (i % 3))) % W, y = H - ((i * 53.1 + t * 22 * (1 + (i % 4) * .4)) % H);
+    ctx.fillStyle = `rgba(255,${120 + (i % 5) * 20},60,${0.15 + (i % 4) * 0.08})`;
+    ctx.fillRect(x, y, 2, 2);
+  }
+  // sparks
+  sparks = sparks.filter(s => s.life > 0);
+  for (const s of sparks) {
+    s.x += s.vx; s.y += s.vy; s.vy += 0.12; s.vx *= 0.985; s.life -= 0.018;
+    ctx.fillStyle = `hsla(${s.hue},100%,${60 + s.life * 25}%,${s.life})`;
+    ctx.fillRect(s.x, s.y, 2.4, 2.4);
+  }
+  if (!reduce) requestAnimationFrame(frame);
+}
+if (!reduce) { requestAnimationFrame(frame); scheduleBursts(false); } else { frame(performance.now()); }
+
+// ---------- sound (only after a click) ----------
+let ac = null;
+function audio() { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); return ac; }
+function hit(last) {
+  const a = audio(), now = a.currentTime;
+  const o = a.createOscillator(), g = a.createGain();
+  o.type = "sine"; o.frequency.setValueAtTime(last ? 110 : 150, now); o.frequency.exponentialRampToValueAtTime(42, now + 0.35);
+  g.gain.setValueAtTime(0.9, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+  o.connect(g).connect(a.destination); o.start(now); o.stop(now + 0.55);
+  const len = a.sampleRate * 0.12, buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
+  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
+  const n = a.createBufferSource(), ng = a.createGain(); n.buffer = buf; ng.gain.value = 0.25; n.connect(ng).connect(a.destination); n.start(now);
+}
+function chord() {
+  const a = audio(), now = a.currentTime;
+  [110, 164.8, 220, 277.2, 329.6].forEach((f, i) => {
+    const o = a.createOscillator(), g = a.createGain();
+    o.type = i % 2 ? "sawtooth" : "triangle"; o.frequency.value = f;
+    g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(0.09, now + 0.08); g.gain.exponentialRampToValueAtTime(0.0001, now + 2.6);
+    o.connect(g).connect(a.destination); o.start(now); o.stop(now + 2.7);
+  });
+}
+
+document.getElementById("replay").addEventListener("click", () => {
+  try { audio().resume(); } catch (e) {}
+  const title = document.getElementById("title");
+  title.classList.add("replaying"); void title.offsetWidth; title.classList.remove("replaying");
+  buildName(); sparks = []; t0 = performance.now();
+  if (reduce) { hit(true); return; }
+  scheduleBursts(true);
+});
+</script>
+
+</body>
+</html>
