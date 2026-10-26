@@ -169,10 +169,16 @@ h2 { margin: 0; font: 600 clamp(30px, 5vw, 48px)/1.1 var(--display); letter-spac
 div.work { cursor: default; }
 
 /* story + experience */
-.story { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; max-width: 70ch; }
-.story p { margin: 0; font-size: 17.5px; line-height: 1.7; color: var(--text); }
-.story p:first-child::first-letter { font: 700 3.2em/.8 var(--display); color: var(--gold); float: left; padding: 6px 10px 0 0; }
-.story .pull { font: 600 clamp(22px, 3.2vw, 30px)/1.25 var(--display); color: var(--gold); border-left: 3px solid var(--ember); padding-left: 16px; }
+.story { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; margin-bottom: 28px; }
+.story .intro { margin: 0; font-size: 19px; line-height: 1.6; color: var(--text); max-width: 68ch; }
+.chapters { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.chapters li { background: var(--stage); border: 1px solid var(--rule); border-top: 3px solid var(--gold); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.chapters .yr { font: 500 12px/1.4 var(--mono); color: var(--gold); letter-spacing: .06em; text-transform: uppercase; }
+.chapters h3 { margin: 0; font: 600 18px/1.25 var(--display); color: var(--text); }
+.chapters p { margin: 0; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
+.story .pull { margin: 0; font: 600 clamp(20px, 2.8vw, 26px)/1.3 var(--display); color: var(--gold); border-left: 3px solid var(--ember); padding-left: 16px; max-width: 46ch; }
+.story .teach { margin: 0; font-size: 15.5px; line-height: 1.6; color: var(--muted); max-width: 70ch; }
+.story .teach b { color: var(--text); font-weight: 600; }
 .jobs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--rule); }
 .jobs li { display: grid; grid-template-columns: minmax(130px, 190px) minmax(0, 1fr); gap: 8px 24px; padding: 22px 0; border-bottom: 1px solid var(--rule); }
 .jobs .when { font: 500 12px/1.5 var(--mono); color: var(--gold); letter-spacing: .04em; }
@@ -270,13 +276,15 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <span class="reel">Reel 5 · The journey</span>
     <h2>From a farming village to a digital workforce</h2>
     <div class="story">
-      <p>I build software that does real work. For more than ten years that has meant automation, data platforms and production systems. Today it means AI agents: digital employees that research, write, check and publish on their own, and enterprise agent programmes that cut years of delivery down to months.</p>
-      <p>I grew up in Komarapudi, a village near Nellore, in a family of farmers who did not have much. Education was the way forward, all the way to an MCA under Sri Venkateswara University.</p>
-      <p>My software career began in Hyderabad in 2010 with Python automation for semiconductor test data at MoSys, then Java, Spring and Hibernate platforms at Pyramid Softsol. At Virtusa I built Spark and Scala data pipelines on AWS EMR for a research-analytics company and an insurer.</p>
-      <p>Then came five years at Bank of America. I led SRE and DevOps work, then GenAI and automation for a 100–150 person organisation. I founded the prompt-engineering team, built a framework that automated 28,600 compliance reviews a year and saved around 14,300 engineer-hours, and collected 28 awards, including a Platinum award for GenAI leadership.</p>
+      <p class="intro">I build software that does real work. For more than ten years that meant automation, data platforms and production systems. Today it means AI agents: digital employees that research, write, check and publish on their own.</p>
+      <ol class="chapters">
+        <li><span class="yr">Roots</span><h3>A farming village</h3><p>Grew up in Komarapudi, near Nellore, in a family of farmers. Education was the way forward, up to an MCA from Sri Venkateswara University.</p></li>
+        <li><span class="yr">2010 – 2019</span><h3>The builder years</h3><p>Hyderabad: Python automation at MoSys, Java platforms at Pyramid Softsol, Spark and Scala pipelines on AWS at Virtusa.</p></li>
+        <li><span class="yr">2021 – 2026</span><h3>Automation at scale</h3><p>Five years at Bank of America: SRE and DevOps, then GenAI for a 100–150 person organisation, and the prompt-engineering team I founded.</p></li>
+        <li><span class="yr">2026 – now</span><h3>A digital workforce</h3><p>An agent factory for a 20-agent programme at ValueMomentum; now leading agentic GenAI on AWS at Minfy, and running this lab on the side.</p></li>
+      </ol>
       <p class="pull">The question changed from "can AI help an engineer?" to "can AI do the job, reliably, every day?"</p>
-      <p>At ValueMomentum I answered it at scale: I built the reference agent and the agent factory behind a 20-agent incident-management programme, cutting a 2-year plan to 6 to 8 months. Today at Minfy I lead a team building agentic GenAI solutions on AWS, and alongside the day job I run this lab. The goal is 200 digital employees within a year, each one measured like any other colleague.</p>
-      <p>Teaching has run alongside all of it. I started as a trainer in 2004 and was an Assistant Professor before moving into industry, have trained more than 500 engineers, and run training groups in every company I join. The free courses on this site are that same habit.</p>
+      <p class="teach"><b>Teaching, all along.</b> A trainer since 2004 and once an Assistant Professor: 500+ engineers trained, and a learning group in every company I join. The free courses here are the same habit.</p>
     </div>
 
     <h2 style="font-size:clamp(28px,4.5vw,42px);margin-top:12px">Experience</h2>
