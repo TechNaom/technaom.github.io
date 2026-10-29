@@ -152,7 +152,11 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .exec .eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
 .exec h1 { margin: 12px 0 0; font: 700 clamp(36px, 5.2vw, 58px)/1.05 var(--display); letter-spacing: -.02em; color: var(--navy); }
 .exec .role { margin: 12px 0 0; font: 600 clamp(17px, 2vw, 21px)/1.35 var(--display); color: var(--gold-deep); }
-.exec .value { margin: 16px 0 0; font-size: 17.5px; line-height: 1.65; color: #3b4656; max-width: 56ch; }
+.exec .value { position: relative; margin: 22px 0 0; max-width: 58ch; padding: 26px 24px 20px; background: #ffd23f; color: #111111;
+  font: 500 17px/1.65 "Segoe UI Variable Text", "Segoe UI", "Noto Sans", Arial, sans-serif; border: 2px solid #111111; border-radius: 14px;
+  box-shadow: 6px 6px 0 #111111; }
+.exec .value::before { content: "About me"; position: absolute; top: -13px; left: 18px; background: #111111; color: #ffd23f;
+  font: 700 11px/1 "Segoe UI", "Noto Sans", Arial, sans-serif; letter-spacing: .14em; text-transform: uppercase; padding: 7px 10px; border-radius: 999px; }
 .exec .cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
 .exec .btn { border-color: var(--gold); color: var(--gold); }
 .exec .btn.solid { background: var(--gold); color: #fff; }
