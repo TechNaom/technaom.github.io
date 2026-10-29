@@ -110,6 +110,25 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
   .arrow { flex-basis: 22px; transform: rotate(90deg); }
 }
 
+/* credentials */
+.creds { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: center; }
+.cert-frame { display: block; position: relative; border-radius: 10px; padding: 10px; background: linear-gradient(135deg, #0a1a33, #0f3c7a 55%, #0078d4); box-shadow: 0 18px 40px rgba(10,26,51,.28); transform: rotate(-1.2deg); transition: transform .3s ease; }
+.cert-frame:hover, .cert-frame:focus-visible { transform: rotate(0deg) scale(1.01); }
+.cert-frame img { display: block; width: 100%; height: auto; border-radius: 6px; }
+.cert-frame .ribbon { position: absolute; top: -12px; right: 18px; background: var(--live); color: #fff; font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 8px 10px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,.2); }
+.cred-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.cred { border: 1px solid var(--rule); border-left: 4px solid var(--gold); border-radius: 6px; padding: 14px 16px; background: var(--stage); display: flex; flex-direction: column; gap: 4px; }
+.cred.feature { border-left-color: var(--live); box-shadow: 0 1px 3px rgba(16,24,40,.08); }
+.cred.soon { border-left-color: var(--ember); }
+.cred b { font: 600 17px/1.3 var(--display); }
+.cred span { color: var(--muted); font-size: 14px; }
+.cred small { font: 500 11px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--gold); }
+.cred.feature small { color: var(--live); }
+.cred.soon small { color: var(--ember); }
+.cert-note { font-size: 12px; color: var(--muted); margin: 0; }
+@media (max-width: 760px) { .creds { grid-template-columns: minmax(0, 1fr); } .cert-frame { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .cert-frame { transition: none; } }
+
 /* ---------- sections ---------- */
 main { padding-inline: 16px; padding-block: 0 64px; }
 .sec { max-width: 1080px; margin: 0 auto; padding-block: clamp(48px, 8vw, 88px) 0; display: flex; flex-direction: column; gap: 22px; }
@@ -213,7 +232,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 </style>
 </head>
 <body>
-<header class="topnav"><div class="in"><a class="brand" href="#top"><i aria-hidden="true"></i>Manohar Papasani</a><nav aria-label="Sections"><a href="#workforce">Workforce</a><a href="#architecture">Architecture</a><a href="#notebook">Lab notebook</a><a href="#open">Repositories</a><a href="#story">Journey</a><a href="#back">Contact</a></nav></div></header>
+<header class="topnav"><div class="in"><a class="brand" href="#top"><i aria-hidden="true"></i>Manohar Papasani</a><nav aria-label="Sections"><a href="#workforce">Workforce</a><a href="#architecture">Architecture</a><a href="#notebook">Lab notebook</a><a href="#open">Repositories</a><a href="#credentials">Credentials</a><a href="#story">Journey</a><a href="#back">Contact</a></nav></div></header>
 <section class="stage" id="top" aria-label="Opening title">
   <canvas id="fx" aria-hidden="true"></canvas>
   <div class="title" id="title">
@@ -271,6 +290,25 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     </div>
     <div class="filters" id="filters" role="toolbar" aria-label="Filter repositories"></div>
     <div class="works" id="works"></div>
+  </section>
+
+  <section class="sec" id="credentials">
+    <span class="reel">Credentials</span>
+    <h2>Certified to build what I build</h2>
+    <p class="lede">Formal training behind the hands-on work. The newest: a six-month programme in Generative and Agentic AI from IIT Patna, completed in October 2026.</p>
+    <div class="creds">
+      <a class="cert-frame" href="assets/iit-patna-certificate.jpg" target="_blank" rel="noopener" aria-label="Open the IIT Patna certificate in full size">
+        <span class="ribbon">Completed · Oct 2026</span>
+        <img src="assets/iit-patna-certificate.jpg" alt="Certificate from the Indian Institute of Technology Patna: Manohar Papasani has completed the six-month certificate course Generative AI and Agentic AI for Developers, issued 29 October 2026." loading="lazy" width="2000" height="1414">
+      </a>
+      <ul class="cred-list">
+        <li class="cred feature"><small>Completed · 2026</small><b>Generative AI &amp; Agentic AI for Developers</b><span>Indian Institute of Technology Patna · Continuing Education Programme · 6 months, online</span></li>
+        <li class="cred soon"><small>Preparing · Dec 2026</small><b>Claude Certified Architect – Professional</b><span>Anthropic · hands-on labs under way</span></li>
+        <li class="cred"><small>Certification</small><b>Cisco Certified Python Professional</b><span>Cisco</span></li>
+        <li class="cred"><small>Postgraduate</small><b>Master of Computer Applications (MCA)</b><span>VRIPS · Sri Venkateswara University</span></li>
+      </ul>
+    </div>
+    <p class="cert-note">Certificate and enrollment numbers are hidden for privacy; available on request.</p>
   </section>
 
   <section class="sec" id="story">
