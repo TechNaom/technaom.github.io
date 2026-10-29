@@ -77,6 +77,9 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .ticker span { font: 400 13.5px/1.4 var(--body); color: #c9d6ea; }
 .ticker small { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #8fb3dc; }
 .ticker .pill { align-self: flex-start; font: 600 10.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #1b1405; background: linear-gradient(90deg, #e8e8ea, #ffffff, #cfd3da); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.ticker b .of { font-size: .5em; color: #7a8698; font-weight: 600; }
+.ticker .prog { display: block; height: 6px; border-radius: 3px; background: #e3ebf5; overflow: hidden; margin-top: 4px; }
+.ticker .prog i { display: block; height: 100%; background: linear-gradient(90deg, var(--gold), var(--cyan)); border-radius: 3px; }
 .ticker .medals { display: flex; flex-wrap: wrap; gap: 5px; }
 .ticker .medals i { font: 600 10.5px/1 var(--mono); font-style: normal; padding: 5px 7px; border-radius: 999px; color: #10141c; white-space: nowrap; }
 .ticker .m-pt { background: linear-gradient(90deg, #dfe4ec, #ffffff, #c9d2de); }
@@ -294,7 +297,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <div class="ticker" aria-label="Highlights">
     <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>awards in five years, for GenAI leadership and delivery</span><span class="medals"><i class="m-pt">1 Platinum</i><i class="m-au">8 Gold</i><i class="m-ag">7 Silver</i><i class="m-br">12 Bronze</i></span></div>
     <div><small>Bank of America</small><b><em data-count="14300">14,300</em></b><span>engineer-hours saved every year with GenAI automation</span></div>
-    <div><small>Enterprise agent factory</small><b><em data-count="20">20</em> agents</b><span>programme delivered in 6–8 months instead of 2 years</span></div>
+    <div><small>In progress · goal 200</small><b><em data-count="13">13</em> <span class="of">/ 200</span></b><span>digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="13 of 200 digital employees"><i style="width:6.5%"></i></span></div>
     <div><small>Certified · 2026</small><b>IIT <em>Patna</em></b><span>Generative &amp; Agentic AI for Developers, six months</span></div>
   </div>
 </section>
