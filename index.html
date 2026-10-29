@@ -41,8 +41,8 @@ a { color: var(--gold); text-decoration-thickness: 1px; text-underline-offset: 3
 a:focus-visible, button:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 
 /* ---------- opening title ---------- */
-.stage, .back { --text: #ffffff; --muted: #b8c6db; --rule: rgba(255,255,255,.16); --gold: #50e6ff; --gold-deep: #0078d4; --ember: #50e6ff; --night: #0a1a33; color: var(--text); color-scheme: dark; }
-.stage { position: relative; overflow: hidden; background: radial-gradient(120% 90% at 50% 30%, #0f3c7a 0%, #0a1a33 55%, #050c1a 100%); }
+.back { --text: #ffffff; --muted: #b8c6db; --rule: rgba(255,255,255,.16); --gold: #50e6ff; --gold-deep: #0078d4; --ember: #50e6ff; --night: #0a1a33; color: var(--text); color-scheme: dark; }
+.stage { position: relative; background: linear-gradient(180deg, #ffffff 0%, #f3f7fc 100%); border-bottom: 1px solid var(--rule); }
 #fx { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
 .title { position: relative; z-index: 2; padding: clamp(56px, 12vw, 120px) 16px clamp(40px, 8vw, 80px); display: flex; flex-direction: column; align-items: center; gap: 14px; text-align: center; }
 .billing { font: 500 12px/1 var(--mono); letter-spacing: .38em; text-transform: uppercase; color: var(--muted); animation: fadeUp .8s ease-out both; animation-delay: .1s; }
@@ -77,6 +77,12 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .ticker span { font: 400 13.5px/1.4 var(--body); color: #c9d6ea; }
 .ticker small { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #8fb3dc; }
 .ticker .pill { align-self: flex-start; font: 600 10.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #1b1405; background: linear-gradient(90deg, #e8e8ea, #ffffff, #cfd3da); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+.ticker .medals { display: flex; flex-wrap: wrap; gap: 5px; }
+.ticker .medals i { font: 600 10.5px/1 var(--mono); font-style: normal; padding: 5px 7px; border-radius: 999px; color: #10141c; white-space: nowrap; }
+.ticker .m-pt { background: linear-gradient(90deg, #dfe4ec, #ffffff, #c9d2de); }
+.ticker .m-au { background: linear-gradient(90deg, #f6d36b, #ffe9a3, #e2b13c); }
+.ticker .m-ag { background: linear-gradient(90deg, #c4cad3, #eef1f5, #aeb6c1); }
+.ticker .m-br { background: linear-gradient(90deg, #d39a6a, #f0c49d, #b8794a); }
 @media (max-width: 900px) { .ticker { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 460px) { .ticker { grid-template-columns: minmax(0, 1fr); } }
 
@@ -136,6 +142,32 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .tags i { font: 500 11px/1 var(--mono); font-style: normal; padding: 5px 7px; border-radius: 4px; background: #eef5fc; color: var(--gold-deep); }
 .cred a.view { font-size: 13px; margin-top: 2px; }
 @media (prefers-reduced-motion: reduce) { .cert-frame { transition: none; } }
+
+
+/* executive hero */
+.exec { max-width: 1080px; margin: 0 auto; padding: clamp(40px, 7vw, 76px) 16px 28px; display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+.exec .eyebrow { font: 600 12px/1 var(--mono); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.exec h1 { margin: 12px 0 0; font: 700 clamp(36px, 5.2vw, 58px)/1.05 var(--display); letter-spacing: -.02em; color: var(--navy); }
+.exec .role { margin: 12px 0 0; font: 600 clamp(17px, 2vw, 21px)/1.35 var(--display); color: var(--gold-deep); }
+.exec .value { margin: 16px 0 0; font-size: 17.5px; line-height: 1.65; color: #3b4656; max-width: 56ch; }
+.exec .cta { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 24px; }
+.exec .btn { border-color: var(--gold); color: var(--gold); }
+.exec .btn.solid { background: var(--gold); color: #fff; }
+.exec .meta { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 22px; font-size: 13.5px; color: var(--muted); }
+.exec .meta span::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--live); margin-right: 7px; vertical-align: middle; }
+.portrait { justify-self: center; width: min(320px, 100%); aspect-ratio: 4 / 5; border-radius: 16px; position: relative; overflow: hidden;
+  background: radial-gradient(120% 90% at 30% 20%, #e6f1fb 0%, #cfe3f7 45%, #9cc6ee 100%); box-shadow: 0 24px 50px rgba(10,26,51,.18); display: grid; place-items: center; }
+.portrait img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.portrait .mono { font: 700 88px/1 var(--display); color: rgba(10,26,51,.82); letter-spacing: -.04em; }
+.portrait .badge { position: absolute; left: 14px; bottom: 14px; right: 14px; background: rgba(255,255,255,.92); border-radius: 10px; padding: 10px 12px; font-size: 13px; color: var(--navy); box-shadow: 0 6px 16px rgba(10,26,51,.12); }
+.portrait .badge b { display: block; font: 600 14px/1.3 var(--display); }
+.stage .ticker > div { background: #ffffff; border: 1px solid var(--rule); box-shadow: 0 1px 2px rgba(16,24,40,.05), 0 8px 24px rgba(16,24,40,.06); backdrop-filter: none; }
+.stage .ticker > div::before { background: linear-gradient(90deg, var(--gold), var(--cyan)); opacity: 1; }
+.stage .ticker b { color: var(--navy); }
+.stage .ticker b em { color: var(--gold); }
+.stage .ticker span { color: #4a5565; }
+.stage .ticker small { color: var(--gold-deep); }
+@media (max-width: 820px) { .exec { grid-template-columns: minmax(0, 1fr); } .portrait { display: none; } }
 
 /* ---------- sections ---------- */
 main { padding-inline: 16px; padding-block: 0 64px; }
@@ -241,20 +273,26 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 </head>
 <body>
 <header class="topnav"><div class="in"><a class="brand" href="#top"><i aria-hidden="true"></i>Manohar Papasani</a><nav aria-label="Sections"><a href="#workforce">Workforce</a><a href="#architecture">Architecture</a><a href="#notebook">Lab notebook</a><a href="#open">Repositories</a><a href="#credentials">Credentials</a><a href="#story">Journey</a><a href="#back">Contact</a></nav></div></header>
-<section class="stage" id="top" aria-label="Opening title">
-  <canvas id="fx" aria-hidden="true"></canvas>
-  <div class="title" id="title">
-    <span class="billing">An independent AI R&amp;D lab presents</span>
-    <h1 class="name" id="name" aria-label="Manohar Papasani"></h1>
-    <p class="tag">The man who hires <em>digital employees</em></p>
-    <p class="sub">I build AI agents that do real jobs on a schedule, check their own work, and get measured like any other employee. This is the lab: who is on duty, what we are researching, and what ships next.</p>
-    <div class="cta-row">
-      <button id="replay" type="button">▶ Replay the title with sound</button>
-      <a class="btn solid" href="#workforce">Meet the workforce</a>
+<section class="stage" id="top" aria-label="Introduction">
+  <div class="exec">
+    <div>
+      <span class="eyebrow">AI R&amp;D · Hyderabad</span>
+      <h1>Manohar Papasani</h1>
+      <p class="role">GenAI Lead &amp; AI Architect at Minfy · AI Systems Builder</p>
+      <p class="value">I build AI agents that do real jobs: digital employees that research, write, check their own work and run around the clock, measured like any other colleague. Before this, I led GenAI and automation at Bank of America.</p>
+      <div class="cta">
+        <a class="btn solid" href="#workforce">See the work</a>
+        <a class="btn" href="#back">Get in touch</a>
+      </div>
+      <div class="meta"><span>Agentic AI on AWS</span><span>Ex-Bank of America AVP</span><span>IIT Patna certified, 2026</span></div>
+    </div>
+    <div class="portrait" aria-hidden="true">
+      <span class="mono">MP</span>
+      <div class="badge"><b>Building an AI digital workforce</b>Agents that research, write and publish, 24×7</div>
     </div>
   </div>
   <div class="ticker" aria-label="Highlights">
-    <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>awards in five years, for GenAI leadership and delivery</span><span class="pill">Incl. Platinum award</span></div>
+    <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>awards in five years, for GenAI leadership and delivery</span><span class="medals"><i class="m-pt">1 Platinum</i><i class="m-au">8 Gold</i><i class="m-ag">7 Silver</i><i class="m-br">12 Bronze</i></span></div>
     <div><small>Bank of America</small><b><em data-count="14300">14,300</em></b><span>engineer-hours saved every year with GenAI automation</span></div>
     <div><small>Enterprise agent factory</small><b><em data-count="20">20</em> agents</b><span>programme delivered in 6–8 months instead of 2 years</span></div>
     <div><small>Certified · 2026</small><b>IIT <em>Patna</em></b><span>Generative &amp; Agentic AI for Developers, six months</span></div>
@@ -632,7 +670,7 @@ document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
 (() => {
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   document.querySelectorAll(".ticker [data-count]").forEach(el => {
-    const end = +el.dataset.count, t0 = performance.now(), dur = 1400, delay = 3600;
+    const end = +el.dataset.count, t0 = performance.now(), dur = 1400, delay = 300;
     const fmt = n => n.toLocaleString("en-IN");
     el.textContent = fmt(0);
     const step = now => {
@@ -644,101 +682,6 @@ document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
   });
 })();
 
-// ---------- the title sequence ----------
-const WORDS = ["MANOHAR", "PAPASANI"], STEP = 0.17, START = 0.35;
-const LETTERS = WORDS.join("").length;
-const nameEl = document.getElementById("name");
-function buildName() {
-  let k = 0;
-  nameEl.innerHTML = WORDS.map(w => `<span class="word" aria-hidden="true">${[...w].map(ch => `<span style="animation-delay:${(START + (k++) * STEP).toFixed(2)}s">${ch}</span>`).join("")}</span>`).join("");
-}
-buildName();
-
-const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-const cvs = document.getElementById("fx"), ctx = cvs.getContext("2d");
-let W = 0, H = 0, sparks = [], t0 = performance.now();
-function size() { const r = cvs.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2); W = r.width; H = r.height; cvs.width = W * d; cvs.height = H * d; ctx.setTransform(d, 0, 0, d, 0, 0); }
-addEventListener("resize", size); size();
-
-function burst(x, y, n, big) {
-  for (let i = 0; i < n; i++) {
-    const a = Math.random() * Math.PI * 2, s = (big ? 3 : 1.6) + Math.random() * (big ? 7 : 4);
-    sparks.push({ x, y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.2, life: 1, hue: Math.random() < .7 ? 190 : 210 });
-  }
-}
-function scheduleBursts(withSound) {
-  const host = cvs.getBoundingClientRect();
-  nameEl.querySelectorAll(".word span").forEach((el, i) => {
-    setTimeout(() => {
-      const r = el.getBoundingClientRect();
-      burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 34, false);
-      if (withSound) hit(i === LETTERS - 1);
-    }, (START + i * STEP + 0.38) * 1000);
-  });
-  setTimeout(() => { const r = nameEl.getBoundingClientRect(); burst(r.left - host.left + r.width / 2, r.top - host.top + r.height / 2, 160, true); if (withSound) chord(); }, (START + LETTERS * STEP + 0.5) * 1000);
-}
-
-function frame(now) {
-  const t = (now - t0) / 1000;
-  ctx.clearRect(0, 0, W, H);
-  // rotating searchlight rays behind the name
-  const cx = W / 2, cy = H * 0.36, R = Math.max(W, H) * 1.2;
-  ctx.save(); ctx.translate(cx, cy); ctx.rotate(t * 0.06);
-  for (let i = 0; i < 14; i++) {
-    ctx.rotate(Math.PI * 2 / 14);
-    const g = ctx.createLinearGradient(0, 0, R, 0);
-    g.addColorStop(0, "rgba(80,230,255,0.10)"); g.addColorStop(1, "rgba(80,230,255,0)");
-    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(R, -R * 0.07); ctx.lineTo(R, R * 0.07); ctx.closePath(); ctx.fill();
-  }
-  ctx.restore();
-  // drifting embers
-  for (let i = 0; i < 40; i++) {
-    const x = (i * 97.3 + t * 12 * (1 + (i % 3))) % W, y = H - ((i * 53.1 + t * 22 * (1 + (i % 4) * .4)) % H);
-    ctx.fillStyle = `rgba(${60 + (i % 5) * 20},${180 + (i % 4) * 15},255,${0.15 + (i % 4) * 0.08})`;
-    ctx.fillRect(x, y, 2, 2);
-  }
-  // sparks
-  sparks = sparks.filter(s => s.life > 0);
-  for (const s of sparks) {
-    s.x += s.vx; s.y += s.vy; s.vy += 0.12; s.vx *= 0.985; s.life -= 0.018;
-    ctx.fillStyle = `hsla(${s.hue},100%,${60 + s.life * 25}%,${s.life})`;
-    ctx.fillRect(s.x, s.y, 2.4, 2.4);
-  }
-  if (!reduce) requestAnimationFrame(frame);
-}
-if (!reduce) { requestAnimationFrame(frame); scheduleBursts(false); } else { frame(performance.now()); }
-
-// ---------- sound (only after a click) ----------
-let ac = null;
-function audio() { if (!ac) ac = new (window.AudioContext || window.webkitAudioContext)(); return ac; }
-function hit(last) {
-  const a = audio(), now = a.currentTime;
-  const o = a.createOscillator(), g = a.createGain();
-  o.type = "sine"; o.frequency.setValueAtTime(last ? 110 : 150, now); o.frequency.exponentialRampToValueAtTime(42, now + 0.35);
-  g.gain.setValueAtTime(0.9, now); g.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-  o.connect(g).connect(a.destination); o.start(now); o.stop(now + 0.55);
-  const len = a.sampleRate * 0.12, buf = a.createBuffer(1, len, a.sampleRate), d = buf.getChannelData(0);
-  for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * (1 - i / len);
-  const n = a.createBufferSource(), ng = a.createGain(); n.buffer = buf; ng.gain.value = 0.25; n.connect(ng).connect(a.destination); n.start(now);
-}
-function chord() {
-  const a = audio(), now = a.currentTime;
-  [110, 164.8, 220, 277.2, 329.6].forEach((f, i) => {
-    const o = a.createOscillator(), g = a.createGain();
-    o.type = i % 2 ? "sawtooth" : "triangle"; o.frequency.value = f;
-    g.gain.setValueAtTime(0.0001, now); g.gain.exponentialRampToValueAtTime(0.09, now + 0.08); g.gain.exponentialRampToValueAtTime(0.0001, now + 2.6);
-    o.connect(g).connect(a.destination); o.start(now); o.stop(now + 2.7);
-  });
-}
-
-document.getElementById("replay").addEventListener("click", () => {
-  try { audio().resume(); } catch (e) {}
-  const title = document.getElementById("title");
-  title.classList.add("replaying"); void title.offsetWidth; title.classList.remove("replaying");
-  buildName(); sparks = []; t0 = performance.now();
-  if (reduce) { hit(true); return; }
-  scheduleBursts(true);
-});
 </script>
 
 </body>
