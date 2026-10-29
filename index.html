@@ -69,11 +69,16 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 @keyframes fadeUp { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 .replaying .name .word span, .replaying .tag, .replaying .sub, .replaying .cta-row, .replaying .billing { animation: none; }
 
-.ticker { position: relative; z-index: 2; border-top: 1px solid var(--rule); display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
-.ticker div { padding: 16px; border-right: 1px solid var(--rule); display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.ticker div:last-child { border-right: 0; }
-.ticker b { font: 700 clamp(26px, 4vw, 34px)/1 var(--display); color: var(--gold); font-variant-numeric: tabular-nums; }
-.ticker span { font: 400 12px/1.35 var(--mono); color: var(--muted); }
+.ticker { position: relative; z-index: 2; max-width: 1080px; margin: 0 auto; padding: 0 16px 40px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; }
+.ticker > div { position: relative; padding: 18px 18px 16px; border-radius: 10px; background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.025)); border: 1px solid rgba(255,255,255,.12); box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 10px 30px rgba(0,0,0,.25); backdrop-filter: blur(6px); display: flex; flex-direction: column; gap: 6px; min-width: 0; overflow: hidden; }
+.ticker > div::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--cyan), transparent); opacity: .8; }
+.ticker b { font: 700 clamp(30px, 3.6vw, 42px)/1 var(--display); color: #fff; font-variant-numeric: tabular-nums; letter-spacing: -.01em; }
+.ticker b em { font-style: normal; color: var(--cyan); }
+.ticker span { font: 400 13.5px/1.4 var(--body); color: #c9d6ea; }
+.ticker small { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: #8fb3dc; }
+.ticker .pill { align-self: flex-start; font: 600 10.5px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: #1b1405; background: linear-gradient(90deg, #e8e8ea, #ffffff, #cfd3da); padding: 5px 9px; border-radius: 999px; white-space: nowrap; }
+@media (max-width: 900px) { .ticker { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 460px) { .ticker { grid-template-columns: minmax(0, 1fr); } }
 
 
 /* top nav */
@@ -248,10 +253,11 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
       <a class="btn solid" href="#workforce">Meet the workforce</a>
     </div>
   </div>
-  <div class="ticker">
-    <div><b>68</b><span>tasks in the Gemma 4 agent study</span></div>
-    <div><b>10+</b><span>years building software, data platforms and AI</span></div>
-    <div><b>IIT Patna</b><span>certified in Generative &amp; Agentic AI, 2026</span></div>
+  <div class="ticker" aria-label="Highlights">
+    <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>awards in five years, for GenAI leadership and delivery</span><span class="pill">Incl. Platinum award</span></div>
+    <div><small>Bank of America</small><b><em data-count="14300">14,300</em></b><span>engineer-hours saved every year with GenAI automation</span></div>
+    <div><small>Enterprise agent factory</small><b><em data-count="20">20</em> agents</b><span>programme delivered in 6–8 months instead of 2 years</span></div>
+    <div><small>Certified · 2026</small><b>IIT <em>Patna</em></b><span>Generative &amp; Agentic AI for Developers, six months</span></div>
   </div>
 </section>
 
@@ -620,6 +626,23 @@ document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
     ${d.xcut ? `<div class="xcut"><b>Across every step</b>${d.xcut.map(x => `<span>${x}</span>`).join("")}</div>` : ""}
     ${d.loops ? `<div class="loops">${d.loops.map(x => `<span>${x}</span>`).join("")}</div>` : ""}
   </figure>`).join("");
+
+
+// ---------- count-up for the highlight numbers (final values are already in the HTML) ----------
+(() => {
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  document.querySelectorAll(".ticker [data-count]").forEach(el => {
+    const end = +el.dataset.count, t0 = performance.now(), dur = 1400, delay = 3600;
+    const fmt = n => n.toLocaleString("en-IN");
+    el.textContent = fmt(0);
+    const step = now => {
+      const k = Math.min(1, Math.max(0, (now - t0 - delay) / dur));
+      el.textContent = fmt(Math.round(end * (1 - Math.pow(1 - k, 3))));
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  });
+})();
 
 // ---------- the title sequence ----------
 const WORDS = ["MANOHAR", "PAPASANI"], STEP = 0.17, START = 0.35;
