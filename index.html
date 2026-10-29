@@ -112,8 +112,8 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 
 /* credentials */
 .creds { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: center; }
-.cert-frame { display: block; position: relative; border-radius: 10px; padding: 10px; background: linear-gradient(135deg, #0a1a33, #0f3c7a 55%, #0078d4); box-shadow: 0 18px 40px rgba(10,26,51,.28); transform: rotate(-1.2deg); transition: transform .3s ease; }
-.cert-frame:hover, .cert-frame:focus-visible { transform: rotate(0deg) scale(1.01); }
+.cert-frame { display: block; position: relative; border-radius: 10px; padding: 10px; background: linear-gradient(135deg, #0a1a33, #0f3c7a 55%, #0078d4); box-shadow: 0 18px 40px rgba(10,26,51,.28); transition: transform .3s ease, box-shadow .3s ease; }
+.cert-frame:hover, .cert-frame:focus-visible { transform: translateY(-3px); box-shadow: 0 24px 48px rgba(10,26,51,.32); }
 .cert-frame img { display: block; width: 100%; height: auto; border-radius: 6px; }
 .cert-frame .ribbon { position: absolute; top: -12px; right: 18px; background: var(--live); color: #fff; font: 600 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; padding: 8px 10px; border-radius: 4px; box-shadow: 0 4px 10px rgba(0,0,0,.2); }
 .cred-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -126,7 +126,10 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .cred.feature small { color: var(--live); }
 .cred.soon small { color: var(--ember); }
 .cert-note { font-size: 12px; color: var(--muted); margin: 0; }
-@media (max-width: 760px) { .creds { grid-template-columns: minmax(0, 1fr); } .cert-frame { transform: none; } }
+@media (max-width: 760px) { .creds { grid-template-columns: minmax(0, 1fr); } }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.tags i { font: 500 11px/1 var(--mono); font-style: normal; padding: 5px 7px; border-radius: 4px; background: #eef5fc; color: var(--gold-deep); }
+.cred a.view { font-size: 13px; margin-top: 2px; }
 @media (prefers-reduced-motion: reduce) { .cert-frame { transition: none; } }
 
 /* ---------- sections ---------- */
@@ -303,6 +306,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
       </a>
       <ul class="cred-list">
         <li class="cred feature"><small>Completed · 2026</small><b>Generative AI &amp; Agentic AI for Developers</b><span>Indian Institute of Technology Patna · Continuing Education Programme · 6 months, online</span></li>
+        <li class="cred"><small>Continuous learning · Jan 2026</small><b>Generative AI Sprint: AI for Founders and Business</b><span>Outskill · 14 days · AI Generalist Accelerator Program (NSDC course: AI for Founders and Business)</span><span class="tags"><i>Prompt Engineering</i><i>n8n Automation</i><i>No-Code Products</i><i>Voice Agents</i><i>MCP</i><i>Multimodal AI</i></span><a class="view" href="assets/outskill-genai-sprint-certificate.jpg" target="_blank" rel="noopener">View certificate</a></li>
         <li class="cred soon"><small>Preparing · Dec 2026</small><b>Claude Certified Architect – Professional</b><span>Anthropic · hands-on labs under way</span></li>
         <li class="cred"><small>Certification</small><b>Cisco Certified Python Professional</b><span>Cisco</span></li>
         <li class="cred"><small>Postgraduate</small><b>Master of Computer Applications (MCA)</b><span>VRIPS · Sri Venkateswara University</span></li>
