@@ -1,11 +1,11 @@
 {
- "generated_at": "2026-10-31T06:01+00:00",
+ "generated_at": "2026-10-31T08:25+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "our posting records"
  ],
  "all_time": {
-  "posts": 26,
+  "posts": 27,
   "followers": 967,
   "connections": 697
  },
@@ -13,7 +13,7 @@
   {
    "month": "2026-10",
    "totals": {
-    "posts": 26
+    "posts": 27
    },
    "start": {},
    "end": {
@@ -70,9 +70,9 @@
    ],
    [
     "2026-10-31",
-    1
+    2
    ]
   ]
  },
- "summary": "The LinkedIn profile has 967 followers and 697 connections. Posts were published on 8 days in October 2026, with a total of 26 posts recorded."
+ "summary": "The LinkedIn brand has 967 followers and 697 connections, and has published 27 posts to date. The daily series for followers, connections, and posts each contains only one observed day, so no trend can be stated for any of these metrics."
 }
