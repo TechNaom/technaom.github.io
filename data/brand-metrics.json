@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T14:18+00:00",
+ "generated_at": "2026-10-31T15:19+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
@@ -6272,7 +6272,7 @@
    ]
   ]
  },
- "summary": "Manohar's LinkedIn profile grew from 699 followers at the start of August 2026 to 967 followers by the end of October 2026, with 567 new followers over the past year. In October 2026, impressions rose 1775.9% and engagements rose 1650% compared with September 2026, and the 42 posts written by Manohar's AI agents since 11 October contributed to that month's activity.",
+ "summary": "The profile grew to 967 followers by the end of October 2026, adding 133 new followers that month, a change of 600% from September 2026. Impressions for October 2026 reached 10,955, an increase of 1775.9% over the previous month, and the 42 posts written by Manohar's AI agents since 11 October contributed to that month's activity.",
  "top_posts": [
   {
    "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
@@ -6317,54 +6317,60 @@
   "analysed": 189,
   "quality": {
    "k": 3,
-   "silhouette": 0.156,
+   "silhouette": 0.153,
    "stability": 0.91
   },
   "topics": [
    {
-    "name": "AI agents governance",
+    "name": "AI agents strategy",
     "share": 51,
-    "comments": 45,
+    "comments": 46,
     "likes": 51,
     "keywords": [
      "agents",
      "agent",
      "governance",
      "genai",
-     "llm",
+     "google",
      "models"
     ]
    },
    {
-    "name": "Habits and consistency",
-    "share": 34,
-    "comments": 36,
-    "likes": 28,
+    "name": "Habits and workplace trust",
+    "share": 32,
+    "comments": 34,
+    "likes": 27,
     "keywords": [
      "employees",
+     "time",
+     "saying",
      "told",
-     "need",
      "easy",
-     "daily",
-     "walk"
+     "daily"
     ]
    },
    {
-    "name": "Career moves and milestones",
-    "share": 15,
-    "comments": 14,
-    "likes": 15,
+    "name": "Career milestones announcements",
+    "share": 16,
+    "comments": 15,
+    "likes": 16,
     "keywords": [
      "jio",
      "hyderabad",
      "vanguard",
      "sector",
-     "innovation",
-     "reliance"
+     "campus",
+     "journey"
     ]
    }
   ],
   "topics_status": "ok"
+ },
+ "what_works": {
+  "status": "learning",
+  "posts": 169,
+  "min_posts": 100,
+  "cv_r2": -0.018
  },
  "notable_days": [
   {

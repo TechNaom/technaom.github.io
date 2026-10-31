@@ -406,6 +406,11 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
         </div>
       </div>
     </div>
+    <div class="growth-card" id="g-works" hidden>
+      <h3>What works in my posts</h3>
+      <ul class="notable" id="g-works-list"></ul>
+      <p class="growth-note" id="g-works-note"></p>
+    </div>
     <div class="growth-grid stack">
       <div class="growth-card">
         <h3>Monthly audit</h3>
@@ -917,6 +922,19 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
       `<li><span><b>${fmt(n.impressions)}</b> impressions on ${esc(new Date(n.day + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }))} <small>(${times(n)})</small>${n.post_url && /^https:\/\/www\.linkedin\.com\//.test(n.post_url) ? ` · <a href="${esc(n.post_url)}" target="_blank" rel="noopener">the post</a>` : ""}</span></li>`
     ).join("");
     document.getElementById("g-notable").hidden = false;
+  }
+
+  const works = m.what_works;
+  if (works && works.posts) {
+    const list = document.getElementById("g-works-list"), note = document.getElementById("g-works-note");
+    if (works.status === "ok" && (works.findings || []).length) {
+      list.innerHTML = works.findings.map(f => `<li><span>Posts ${esc(f.groups[0])}: median <b>${f.median_engagement[0]}</b> engagements, against <b>${f.median_engagement[1]}</b> for posts ${esc(f.groups[1])} <small>(${f.posts[0]} and ${f.posts[1]} posts)</small></span></li>`).join("");
+      note.textContent = `A model tested on posts it had not seen explains part of the difference in engagement (score ${works.cv_r2}). Based on ${fmt(works.posts)} posts at least a week old.`;
+    } else {
+      list.hidden = true;
+      note.textContent = `Still learning. Every Monday a model checks whether the time, length, hashtags, images or links of my posts predict their engagement, testing itself on posts it has not seen. With ${fmt(works.posts)} posts it does not yet beat a simple average (score ${works.cv_r2 ?? "n/a"}; it needs 0.1), so nothing is claimed here yet.`;
+    }
+    document.getElementById("g-works").hidden = false;
   }
 
   const nowMonth = (m.generated_at || "").slice(0, 7);
