@@ -220,7 +220,14 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .kpis .lbl { font-size: 13.5px; color: var(--muted); }
 .others { margin: 0; background: var(--stage); border: 1px solid var(--rule); border-left: 4px solid var(--gold); border-radius: 12px; padding: 14px 18px; font-size: 16px; line-height: 1.6; color: var(--text); }
 .others b { font: 700 20px/1 var(--display); color: var(--gold); }
-.others[hidden] { display: none; }
+.others[hidden], .growth-card[hidden] { display: none; }
+.mixbar { display: flex; height: 18px; border-radius: 9px; overflow: hidden; background: var(--rule); }
+.mixbar i { display: block; height: 100%; }
+.mixlist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 18px; }
+.mixlist li { display: flex; gap: 10px; align-items: baseline; font-size: 15px; color: var(--text); min-width: 0; }
+.mixlist .dot { width: 12px; height: 12px; border-radius: 50%; flex: none; transform: translateY(1px); }
+.mixlist b { font: 700 18px/1 var(--display); color: var(--gold); }
+.mixlist small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 3px; }
 .growth-card h3 { margin: 0; font: 600 16px/1.3 var(--display); color: var(--text); }
 .bars.months span { font-size: 10.5px; }
 .growth-grid.stack { grid-template-columns: minmax(0, 1fr); }
@@ -375,6 +382,12 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <p class="lede">Every week my analytics agents collect the numbers from LinkedIn, count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
     <div class="kpis" id="g-kpis"></div>
     <p class="others" id="g-others" hidden></p>
+    <div class="growth-card" id="g-mix" hidden>
+      <h3>Where I show up</h3>
+      <div class="mixbar" id="g-mixbar" role="img"></div>
+      <ul class="mixlist" id="g-mixlist"></ul>
+      <p class="growth-note" id="g-mixnote"></p>
+    </div>
     <div class="growth-grid">
       <div class="growth-card">
         <h3>What the numbers say</h3>
@@ -865,6 +878,20 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
     const others = document.getElementById("g-others");
     others.innerHTML = `Showing up for others: on average I leave ${parts.join(" and ")} a day on other people's posts. <span class="lbl">Averages from the days measured in the past two weeks.</span>`;
     others.hidden = false;
+  }
+
+  const mix = m.engagement_mix;
+  if (mix && mix.topics && mix.topics.length) {
+    const palette = ["#0078d4", "#50e6ff", "#8a63d2", "#f2a900", "#2bb673", "#e8590c", "#6c7a89", "#c2185b"];
+    const pct = (n, d) => d ? Math.round((100 * n) / d) : 0;
+    document.getElementById("g-mixbar").innerHTML = mix.topics.map((t, i) => `<i style="width:${t.share}%;background:${palette[i % palette.length]}" title="${esc(t.name)} ${t.share}%"></i>`).join("");
+    document.getElementById("g-mixbar").setAttribute("aria-label", mix.topics.map(t => `${t.name} ${t.share}%`).join(", "));
+    document.getElementById("g-mixlist").innerHTML = mix.topics.map((t, i) =>
+      `<li><span class="dot" style="background:${palette[i % palette.length]}"></span><span><b>${t.share}%</b> ${esc(t.name)}<small>${fmt(t.comments)} comments · ${fmt(t.likes)} likes</small></span></li>`).join("");
+    const tg = mix.targets || {}, likes = Object.values(tg).reduce((a, b) => a + b, 0);
+    const where = likes ? ` Of my likes, ${pct(tg.post || 0, likes)}% are on posts, ${pct(tg.group || 0, likes)}% on posts in groups and ${pct(tg.comment || 0, likes)}% on other people's comments.` : "";
+    document.getElementById("g-mixnote").textContent = `Topics found by machine learning: each post I commented on or liked is turned into a meaning vector, and similar posts are grouped by clustering. Code checks that the groups are clear and stable before they appear here. Based on ${fmt(mix.items)} comments and likes over the last ${mix.days} days.${where}`;
+    document.getElementById("g-mix").hidden = false;
   }
 
   const months = (m.months || []).filter(a => a.totals && a.totals.impressions != null).slice(-12);

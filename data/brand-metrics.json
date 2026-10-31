@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T11:30+00:00",
+ "generated_at": "2026-10-31T13:38+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
@@ -6272,7 +6272,7 @@
    ]
   ]
  },
- "summary": "Over the past year the profile’s impressions grew to 66,942, engagements rose to 1,067, and new followers increased to 567. Followers reached 967 and posts totaled 42, both showing growth, while likes given and comments made have been steady at averages of 80 and 58 per day respectively. The profile has 696 connections.",
+ "summary": "The LinkedIn profile has grown to 967 followers, with 133 new followers in October 2026, up 600 percent from September 2026. Impressions in October 2026 reached 10,955, up 1775.9 percent from the previous month, and the 42 posts written by Manohar's AI agents since 11 October helped drive that activity.",
  "top_posts": [
   {
    "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
@@ -6299,5 +6299,71 @@
    "date": "2026-08-09",
    "engagements": 27
   }
- ]
+ ],
+ "engagement_mix": {
+  "items": 200,
+  "comments": 100,
+  "likes": 100,
+  "targets": {
+   "post": 78,
+   "group": 18,
+   "comment": 4
+  },
+  "reactions": {
+   "like": 99,
+   "love": 1
+  },
+  "days": 3,
+  "analysed": 189,
+  "quality": {
+   "k": 3,
+   "silhouette": 0.156,
+   "stability": 0.91
+  },
+  "topics": [
+   {
+    "name": "AI agents and governance",
+    "share": 51,
+    "comments": 45,
+    "likes": 51,
+    "keywords": [
+     "agents",
+     "agent",
+     "governance",
+     "genai",
+     "llm",
+     "models"
+    ]
+   },
+   {
+    "name": "Habits and consistency",
+    "share": 34,
+    "comments": 36,
+    "likes": 28,
+    "keywords": [
+     "employees",
+     "told",
+     "need",
+     "easy",
+     "daily",
+     "walk"
+    ]
+   },
+   {
+    "name": "Career moves and milestones",
+    "share": 15,
+    "comments": 14,
+    "likes": 15,
+    "keywords": [
+     "jio",
+     "hyderabad",
+     "vanguard",
+     "sector",
+     "innovation",
+     "reliance"
+    ]
+   }
+  ],
+  "topics_status": "ok"
+ }
 }
