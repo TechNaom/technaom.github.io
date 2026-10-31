@@ -214,7 +214,7 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .bars b { font: 600 12px/1 var(--mono); color: var(--navy); }
 .bars span { font: 400 11px/1 var(--mono); color: var(--muted); white-space: nowrap; }
 .growth-note { font-size: 12.5px; color: var(--muted); margin: 0; }
-.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
 .kpis > div { background: var(--stage); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; box-shadow: 0 1px 3px rgba(16,24,40,.06); }
 .kpis .big { font: 700 clamp(28px, 4vw, 40px)/1 var(--display); color: var(--gold); }
 .kpis .lbl { font-size: 13.5px; color: var(--muted); }
@@ -232,7 +232,7 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .tops li:last-child { border-bottom: 0; }
 .tops b { font: 700 18px/1 var(--display); color: var(--gold); }
 .tops small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 3px; }
-@media (max-width: 760px) { .growth-grid { grid-template-columns: minmax(0, 1fr); } .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 760px) { .growth-grid { grid-template-columns: minmax(0, 1fr); } .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kpis > div:last-child { grid-column: 1 / -1; } }
 
 /* ---------- sections ---------- */
 main { padding-inline: 16px; padding-block: 0 64px; }
@@ -843,13 +843,13 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
   const daily = m.daily || {};
   // Past-year totals come from the last 365 daily values, so the label stays true as history grows.
   const lastYear = k => (daily[k] || []).slice(-365).reduce((s, d) => s + d[1], 0);
+  const firstPost = ((daily.posts || [])[0] || [""])[0] ? new Date(daily.posts[0][0] + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short" }) : "";
   const kpis = [
     [m.all_time.followers, "Followers"],
     [lastYear("impressions"), "Impressions in the past year"],
     [lastYear("engagements"), "Engagements in the past year"],
     [lastYear("new_followers"), "New followers in the past year"],
-    [m.all_time.posts, "Posts by the digital workforce"],
-    [m.all_time.connections, "Connections"],
+    [m.all_time.posts, "Posts by the digital workforce since " + firstPost],
   ].filter(([v]) => v);
   document.getElementById("g-kpis").innerHTML = kpis.map(([v, l]) => `<div><span class="big">${fmt(v)}</span><span class="lbl">${l}</span></div>`).join("");
   document.getElementById("g-summary").textContent = m.summary || "";
