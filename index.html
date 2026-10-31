@@ -198,6 +198,21 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .picker input[type=color] { width: 30px; height: 30px; border: 2px solid #111; border-radius: 50%; padding: 0; background: none; cursor: pointer; }
 .picker output { font: 600 12px/1.4 "Segoe UI", Arial, sans-serif; background: #f3f5f8; border-radius: 8px; padding: 8px; }
 
+/* brand growth (from data/brand-metrics.json) */
+.sec[hidden] { display: none; }
+.growth-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 18px; }
+.growth-card { background: var(--stage); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(16,24,40,.06); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.growth-card .big { font: 700 clamp(38px, 5vw, 54px)/1 var(--display); color: var(--gold); }
+.growth-card .lbl { font-size: 14px; color: var(--muted); }
+.growth-card .summary { font-size: 16px; line-height: 1.6; color: var(--text); margin: 0; }
+.bars { display: flex; align-items: flex-end; gap: 6px; height: 150px; padding-top: 8px; }
+.bars div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
+.bars i { display: block; width: 100%; max-width: 38px; border-radius: 6px 6px 2px 2px; background: linear-gradient(180deg, var(--cyan), var(--gold)); }
+.bars b { font: 600 12px/1 var(--mono); color: var(--navy); }
+.bars span { font: 400 11px/1 var(--mono); color: var(--muted); white-space: nowrap; }
+.growth-note { font-size: 12.5px; color: var(--muted); margin: 0; }
+@media (max-width: 760px) { .growth-grid { grid-template-columns: minmax(0, 1fr); } }
+
 /* ---------- sections ---------- */
 main { padding-inline: 16px; padding-block: 0 64px; }
 .sec { max-width: 1080px; margin: 0 auto; padding-block: clamp(48px, 8vw, 88px) 0; display: flex; flex-direction: column; gap: 22px; }
@@ -330,6 +345,24 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 </section>
 
 <main>
+  <section class="sec" id="growth" hidden>
+    <span class="reel">Brand growth</span>
+    <h2>Measured, not claimed</h2>
+    <p class="lede">My analytics agents count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
+    <div class="growth-grid">
+      <div class="growth-card">
+        <span class="lbl">Posts published by the digital workforce</span>
+        <span class="big" id="g-posts">0</span>
+        <p class="summary" id="g-summary"></p>
+      </div>
+      <div class="growth-card">
+        <span class="lbl">Posts per day</span>
+        <div class="bars" id="g-bars" role="img" aria-label="Posts per day chart"></div>
+      </div>
+    </div>
+    <p class="growth-note" id="g-note"></p>
+  </section>
+
   <section class="sec" id="workforce">
     <span class="reel">Reel 1 · The workforce</span>
     <h2>Nobody here takes a day off</h2>
@@ -761,6 +794,23 @@ document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
     b.style.fontFamily = css; b.onclick = () => { st.font = n; apply(); }; fw.appendChild(b); });
   apply();
 })();
+
+// ---------- brand growth: render data/brand-metrics.json (Site Publisher output) ----------
+fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(m => {
+  if (!m || !m.all_time) return;
+  document.getElementById("g-posts").textContent = (m.all_time.posts || 0).toLocaleString("en-IN");
+  document.getElementById("g-summary").textContent = m.summary || "";
+  const days = (m.daily && m.daily.posts) || [];
+  const max = Math.max(1, ...days.map(d => d[1]));
+  document.getElementById("g-bars").innerHTML = days.slice(-14).map(([d, v]) => {
+    const dt = new Date(d + "T00:00:00");
+    const label = dt.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+    return `<div><b>${v}</b><i style="height:${Math.max(6, (v / max) * 110)}px"></i><span>${label}</span></div>`;
+  }).join("");
+  const when = new Date(m.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  document.getElementById("g-note").textContent = `Source: ${(m.sources || []).join(", ")}. Updated ${when}. Followers and impressions join once the weekly LinkedIn analytics export is connected.`;
+  document.getElementById("growth").hidden = false;
+}).catch(() => {});
 </script>
 
 </body>

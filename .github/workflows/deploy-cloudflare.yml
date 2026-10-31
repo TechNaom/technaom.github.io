@@ -17,7 +17,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Collect the site files
-        run: mkdir -p public && cp index.html public/ && cp -r assets public/
+        run: mkdir -p public && cp index.html public/ && cp -r assets public/ && cp -r data public/
 
       - uses: cloudflare/wrangler-action@v3
         with:
