@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T15:19+00:00",
+ "generated_at": "2026-10-31T15:48+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
@@ -6272,7 +6272,7 @@
    ]
   ]
  },
- "summary": "The profile grew to 967 followers by the end of October 2026, adding 133 new followers that month, a change of 600% from September 2026. Impressions for October 2026 reached 10,955, an increase of 1775.9% over the previous month, and the 42 posts written by Manohar's AI agents since 11 October contributed to that month's activity.",
+ "summary": "The LinkedIn profile grew to 967 followers by the end of October 2026, with 133 new followers that month, up 600% from September. Over the past year, the profile recorded 66,942 impressions and 1,067 engagements, and Manohar's AI workforce has written 42 posts since 11 October.",
  "top_posts": [
   {
    "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
@@ -6322,7 +6322,7 @@
   },
   "topics": [
    {
-    "name": "AI agents strategy",
+    "name": "AI agents and genai",
     "share": 51,
     "comments": 46,
     "likes": 51,
@@ -6332,19 +6332,19 @@
      "governance",
      "genai",
      "google",
-     "models"
+     "llm"
     ]
    },
    {
-    "name": "Habits and workplace trust",
+    "name": "Habits and professional growth",
     "share": 32,
     "comments": 34,
     "likes": 27,
     "keywords": [
      "employees",
      "time",
-     "saying",
      "told",
+     "saying",
      "easy",
      "daily"
     ]
