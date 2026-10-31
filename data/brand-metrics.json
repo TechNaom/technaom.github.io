@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T08:35+00:00",
+ "generated_at": "2026-10-31T08:53+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
@@ -7,7 +7,7 @@
  ],
  "all_time": {
   "posts": 27,
-  "impressions": 66938,
+  "impressions": 66942,
   "engagements": 1067,
   "new_followers": 567,
   "followers": 967,
@@ -260,7 +260,7 @@
    "month": "2026-10",
    "totals": {
     "posts": 27,
-    "impressions": 10951,
+    "impressions": 10955,
     "engagements": 210,
     "new_followers": 133
    },
@@ -273,7 +273,7 @@
    },
    "change_vs_previous": {
     "posts": null,
-    "impressions": 1775.2,
+    "impressions": 1775.9,
     "engagements": 1650,
     "new_followers": 600
    },
@@ -4670,7 +4670,7 @@
    ],
    [
     "2026-10-31",
-    282
+    286
    ]
   ],
   "new_followers": [
@@ -6170,7 +6170,7 @@
    ]
   ]
  },
- "summary": "The profile has grown from 836 followers at the start of October to 967 by the end of the month, adding 133 new followers. Impressions rose to 10,951 in October, up 1775.2% from the previous month, while engagements reached 210, a 1650% increase.",
+ "summary": "The LinkedIn page has grown to 967 followers and 697 connections, with 567 new followers gained over the past year. Impressions reached 66,942 and engagements 1,067 in the same period. In October 2026, the page posted 27 times, generating 10,955 impressions and 210 engagements, while adding 133 new followers.",
  "top_posts": [
   {
    "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
