@@ -493,24 +493,41 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 
   <footer>
     <span>Manohar Papasani · Hyderabad</span>
-    <span>Updated 30 Oct 2026 · Built with my digital employees</span>
+    <span>Updated 31 Oct 2026 · Built with my digital employees</span>
   </footer>
 </main>
 
 <script>
 const TEAMS = [
-  { name: "Morning motivation", shift: "08:00 IST · Daily",
-    about: "True stories, verified quotes and life lessons from every field, each with a card designed to match.",
+  { name: "Leadership", shift: "08:00 IST · Daily",
+    about: "Practical leadership for people who build with technology and AI: true stories, verified quotes from leaders and management thinkers, and lessons, each with a card designed to match.",
     crew: [
       ["Planner", "Chooses the day's story, quote or lesson."],
-      ["Quote scout", "Searches Wikiquote and the web for candidates."],
+      ["Quote scout", "Searches Wikiquote and the web for leaders' own words."],
       ["Verifier", "Proves every quote is real before it is used."],
       ["Writer", "Writes only from verified facts."],
       ["Card maker", "Designs the matching visual."],
       ["Critic", "Rejects anything generic or unproven."],
       ["Healer", "Finds the root cause of a missed post and fixes it within minutes."],
     ] },
-  { name: "Tech learning", shift: "10:00 IST · Daily",
+  { name: "AI interview question", shift: "12:00 IST · Daily",
+    about: "One real question from an AI Architect or AI Developer interview, as a candidate reported it, answered at architect level. The company is named only when the candidate's report names it.",
+    crew: [
+      ["Interview scout", "Searches candidates' interview reports from the last year, never question banks or prep portals."],
+      ["Checker", "Confirms in code that the question is in the report, word for word."],
+      ["Writer", "Explains what is being tested, a strong answer and the common mistakes."],
+      ["Card maker", "Puts the question on the card."],
+      ["Architect reviewer", "Rejects an answer that is wrong or too shallow."],
+      ["Healer", "Moves to the next topic and finds another question if a run fails."],
+    ] },
+  { name: "AI news digest", shift: "16:00 IST · Daily",
+    about: "The day's top AI updates in one post, every claim traced to its source. The longest-serving team.",
+    crew: [
+      ["News collector", "Gathers the top ten AI updates and drops repeats."],
+      ["Writer", "Drafts the digest in my voice."],
+      ["Quality gate", "Checks every claim against its source and rewrites once if needed."],
+    ] },
+  { name: "Tech learning", shift: "23:30 IST · Daily",
     about: "Tier lists, comparisons and explainers, researched from the last month's sources.",
     crew: [
       ["Planner", "Chooses the topic and the format."],
@@ -520,22 +537,6 @@ const TEAMS = [
       ["Critic", "Checks tiers, claims and consistency."],
       ["Healer", "Finds the root cause of a missed post and fixes it within minutes."],
     ] },
-  { name: "Inspiring news", shift: "12:00 IST · Daily",
-    about: "Good news confirmed by two independent outlets, never political.",
-    crew: [
-      ["News scout", "Finds the strongest story and scores it."],
-      ["Writer", "Tells it plainly, from the reports alone."],
-      ["Card maker", "Designs the visual."],
-      ["Critic", "Fact-checks the post before it goes out."],
-      ["Healer", "Finds another story if none is strong enough."],
-    ] },
-  { name: "AI news digest", shift: "16:00 IST · Daily",
-    about: "The day's top AI updates in one post, every claim traced to its source. The longest-serving team.",
-    crew: [
-      ["News collector", "Gathers the top ten AI updates and drops repeats."],
-      ["Writer", "Drafts the digest in my voice."],
-      ["Quality gate", "Checks every claim against its source and rewrites once if needed."],
-    ] },
   { name: "Comment copilot", shift: "On call",
     about: "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
     crew: [
@@ -543,6 +544,7 @@ const TEAMS = [
     ] },
 ];
 const LOG = [
+  { d: "31 Oct 2026", t: "Real interview questions, checked by code", p: "The 12:00 IST team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.", c: "Shipped" },
   { d: "29 Oct 2026", t: "Certified by IIT Patna: Generative AI & Agentic AI for Developers", p: "Completed the six-month certificate course from the Indian Institute of Technology Patna (Continuing Education Programme), covering generative AI and agentic AI for developers. The same ideas run in production here every day: agents that plan, write, check, heal and publish on their own.", c: "Milestone" },
   { d: "27 Oct 2026", t: "A cost controller joins the team", p: "Every morning at 09:00 IST it reads token usage from both Langfuse accounts and reports spend per workflow and per model. First report: the whole workforce cost about one US dollar for the month so far.", c: "Shipped" },
   { d: "27 Oct 2026", t: "AI code-review bench: Claude Haiku catches 14 of 14 planted bugs", p: "14 real bugs from my own agent code, re-introduced as ordinary-looking pull requests, plus 2 correct changes to count false alarms. Claude Haiku caught all 14, including all 10 critical or high ones, with no false alarms. The automated judge first scored it 10 of 14; reading the reviews by hand showed all 4 misses were the judge's errors. Commercial reviewers are next on the same bench.", c: "Preliminary" },
@@ -567,7 +569,7 @@ const REPOS = [
   ["agentic-content-engine-design", "Agent engine design", "The design of a multi-agent content engine on open-weight models, measured against a production workflow.", "Research", "public", "Design"],
   ["autonomous-ai-workflow-field-guide", "Autonomous AI field guide", "Shipping an AI workflow to production: reliability, observability, cost, security, governance, evaluation.", "Research", "public", "Guide"],
   ["linkedin-branding-engine", "AI news digest engine", "The 4 PM crew: collects the day's AI news, writes, fact-checks every claim and publishes.", "Agent systems", "private", "Live"],
-  ["agentic-content-engine", "Agentic content engine", "LangGraph agent teams for motivation, tech learning and good news, fully autonomous with a watchdog and cost caps.", "Agent systems", "private", "Live"],
+  ["agentic-content-engine", "Agentic content engine", "LangGraph agent teams for leadership, AI interview questions and tech learning, fully autonomous with self-healing, a watchdog and cost caps.", "Agent systems", "private", "Live"],
   ["ai-agent-platform", "AI agent platform", "Multi-agent and multi-RAG platform with evaluation and observability built in.", "Agent systems", "private", "Build"],
   ["healthcare-interop-platform", "Healthcare interop platform", "HIPAA-aligned HL7 v2 and FHIR (R4/R5) interoperability platform.", "Agent systems", "private", "Build"],
   ["enterprise-knowledge-assistant", "Enterprise knowledge assistant", "Advanced RAG over company documents: hybrid retrieval, RRF, LLM re-ranking, MMR, conversation memory.", "Agent systems", "public", "Build"],
@@ -655,15 +657,15 @@ const DIAGRAMS = [
   { title: "The digital workforce platform",
     about: "Every team runs on the same platform. A timer starts the shift, the agents work through a graph of steps, and nothing is published until it passes the gates.",
     nodes: [
-      ["clock", "Schedule", ["Cloudflare cron at 08:00, 10:00 and 12:00 IST", "GitHub Actions runners", "One run per shift"]],
+      ["clock", "Schedule", ["Cloudflare cron at 08:00, 12:00, 16:00 and 23:30 IST", "GitHub Actions runners", "One post per shift, healed if missed"]],
       ["graph", "Agent teams", ["LangGraph state graphs", "Planner, scouts, writer, critic", "Checkpoints in Postgres, resumable"]],
-      ["chip", "Models", ["Open models on Groq (Qwen, gpt-oss)", "Any provider per role, by config"]],
+      ["chip", "Models", ["Open models on Groq (Qwen, gpt-oss)", "Fallback to Gemini Flash, then Claude Haiku", "Any provider per role, by config"]],
       ["db", "Tools and memory", ["Tavily web search", "Wikiquote, Wikipedia, Wikimedia Commons", "Neon Postgres + pgvector memory"]],
       ["shield", "Quality gates", ["Quotes verified by two sources", "Critic: facts, style, no clichés", "One rewrite, otherwise skip"], "gate"],
       ["send", "Publish", ["LinkedIn API: post, card, carousel", "Review record on GitHub"], "out"],
     ],
     xcut: ["Langfuse trace for every agent", "Watchdog and alerts", "Daily token caps", "Kill switch"] },
-  { title: "One shift, step by step: morning motivation at 08:00",
+  { title: "One shift, step by step: leadership at 08:00",
     about: "Seven digital employees hand the work along. Two loops keep quality up: an unverified quote sends the scout back, and a weak draft gets one rewrite; if a post still misses its slot, the healer fixes the cause and posts.",
     nodes: [
       ["clock", "Planner", ["Picks story, quote or lessons", "Chooses the theme"]],
