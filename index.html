@@ -204,6 +204,9 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .growth-card { background: var(--stage); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(16,24,40,.06); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .growth-card .big { font: 700 clamp(38px, 5vw, 54px)/1 var(--display); color: var(--gold); }
 .growth-card .lbl { font-size: 14px; color: var(--muted); }
+.g-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.g-stats > div { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.g-stats .big { font-size: clamp(30px, 3.6vw, 42px); }
 .growth-card .summary { font-size: 16px; line-height: 1.6; color: var(--text); margin: 0; }
 .bars { display: flex; align-items: flex-end; gap: 6px; height: 150px; padding-top: 8px; }
 .bars div { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; height: 100%; justify-content: flex-end; }
@@ -351,8 +354,11 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <p class="lede">My analytics agents count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
     <div class="growth-grid">
       <div class="growth-card">
-        <span class="lbl">Posts published by the digital workforce</span>
-        <span class="big" id="g-posts">0</span>
+        <div class="g-stats">
+          <div><span class="big" id="g-followers">0</span><span class="lbl">Followers</span></div>
+          <div><span class="big" id="g-posts">0</span><span class="lbl">Posts by the digital workforce</span></div>
+          <div><span class="big" id="g-connections">0</span><span class="lbl">Connections</span></div>
+        </div>
         <p class="summary" id="g-summary"></p>
       </div>
       <div class="growth-card">
@@ -798,7 +804,10 @@ document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
 // ---------- brand growth: render data/brand-metrics.json (Site Publisher output) ----------
 fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(m => {
   if (!m || !m.all_time) return;
-  document.getElementById("g-posts").textContent = (m.all_time.posts || 0).toLocaleString("en-IN");
+  const fmt = v => (v || 0).toLocaleString("en-IN");
+  document.getElementById("g-posts").textContent = fmt(m.all_time.posts);
+  document.getElementById("g-followers").textContent = fmt(m.all_time.followers);
+  document.getElementById("g-connections").textContent = fmt(m.all_time.connections);
   document.getElementById("g-summary").textContent = m.summary || "";
   const days = (m.daily && m.daily.posts) || [];
   const max = Math.max(1, ...days.map(d => d[1]));
@@ -808,7 +817,7 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
     return `<div><b>${v}</b><i style="height:${Math.max(6, (v / max) * 110)}px"></i><span>${label}</span></div>`;
   }).join("");
   const when = new Date(m.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  document.getElementById("g-note").textContent = `Source: ${(m.sources || []).join(", ")}. Updated ${when}. Followers and impressions join once the weekly LinkedIn analytics export is connected.`;
+  document.getElementById("g-note").textContent = `Source: ${(m.sources || []).join(", ")}. Updated ${when}. Impressions join once the weekly LinkedIn analytics export is connected.`;
   document.getElementById("growth").hidden = false;
 }).catch(() => {});
 </script>

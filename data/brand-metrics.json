@@ -1,10 +1,13 @@
 {
- "generated_at": "2026-10-31T05:38+00:00",
+ "generated_at": "2026-10-31T06:01+00:00",
  "sources": [
+  "public LinkedIn profile (Apify)",
   "our posting records"
  ],
  "all_time": {
-  "posts": 26
+  "posts": 26,
+  "followers": 967,
+  "connections": 697
  },
  "months": [
   {
@@ -13,7 +16,10 @@
     "posts": 26
    },
    "start": {},
-   "end": {},
+   "end": {
+    "followers": 967,
+    "connections": 697
+   },
    "change_vs_previous": {
     "posts": null
    },
@@ -21,6 +27,18 @@
   }
  ],
  "daily": {
+  "connections": [
+   [
+    "2026-10-31",
+    697
+   ]
+  ],
+  "followers": [
+   [
+    "2026-10-31",
+    967
+   ]
+  ],
   "posts": [
    [
     "2026-10-24",
@@ -56,5 +74,5 @@
    ]
   ]
  },
- "summary": "The brand posted 26 times in total, with 26 posts in October 2026. Eight days of activity were recorded this month, with daily post counts ranging from 1 to 4."
+ "summary": "The LinkedIn profile has 967 followers and 697 connections. Posts were published on 8 days in October 2026, with a total of 26 posts recorded."
 }
