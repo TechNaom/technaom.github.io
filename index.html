@@ -218,6 +218,9 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .kpis > div { background: var(--stage); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; box-shadow: 0 1px 3px rgba(16,24,40,.06); }
 .kpis .big { font: 700 clamp(28px, 4vw, 40px)/1 var(--display); color: var(--gold); }
 .kpis .lbl { font-size: 13.5px; color: var(--muted); }
+.others { margin: 0; background: var(--stage); border: 1px solid var(--rule); border-left: 4px solid var(--gold); border-radius: 12px; padding: 14px 18px; font-size: 16px; line-height: 1.6; color: var(--text); }
+.others b { font: 700 20px/1 var(--display); color: var(--gold); }
+.others[hidden] { display: none; }
 .growth-card h3 { margin: 0; font: 600 16px/1.3 var(--display); color: var(--text); }
 .bars.months span { font-size: 10.5px; }
 .growth-grid.stack { grid-template-columns: minmax(0, 1fr); }
@@ -369,8 +372,9 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <section class="sec" id="growth" hidden>
     <span class="reel">Brand growth</span>
     <h2>Measured, not claimed</h2>
-    <p class="lede">Every morning my analytics agents collect the numbers from LinkedIn, count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
+    <p class="lede">Every week my analytics agents collect the numbers from LinkedIn, count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
     <div class="kpis" id="g-kpis"></div>
+    <p class="others" id="g-others" hidden></p>
     <div class="growth-grid">
       <div class="growth-card">
         <h3>What the numbers say</h3>
@@ -853,6 +857,15 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
   ].filter(([v]) => v);
   document.getElementById("g-kpis").innerHTML = kpis.map(([v, l]) => `<div><span class="big">${fmt(v)}</span><span class="lbl">${l}</span></div>`).join("");
   document.getElementById("g-summary").textContent = m.summary || "";
+  const act = m.activity_per_day || {};
+  if (act.comments_made || act.likes_given) {
+    const parts = [];
+    if (act.comments_made) parts.push(`<b>${fmt(act.comments_made)}</b> comments`);
+    if (act.likes_given) parts.push(`<b>${fmt(act.likes_given)}</b> likes`);
+    const others = document.getElementById("g-others");
+    others.innerHTML = `Showing up for others: on average I leave ${parts.join(" and ")} a day on other people's posts. <span class="lbl">Averages from the days measured in the past two weeks.</span>`;
+    others.hidden = false;
+  }
 
   const months = (m.months || []).filter(a => a.totals && a.totals.impressions != null).slice(-12);
   const max = Math.max(1, ...months.map(a => a.totals.impressions));
@@ -878,7 +891,7 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
   ).join("") : "<li>Top posts appear after the next LinkedIn export.</li>";
 
   const when = new Date(m.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  document.getElementById("g-note").textContent = `Sources: ${(m.sources || []).join(", ")}. Updated ${when}. Followers and posts refresh daily; impressions and engagements refresh every Monday from the LinkedIn analytics export.`;
+  document.getElementById("g-note").textContent = `Sources: ${(m.sources || []).join(", ")}. Updated ${when}. Everything refreshes every Monday; each day is counted from its own dated record.`;
   document.getElementById("growth").hidden = false;
 }).catch(() => {});
 </script>
