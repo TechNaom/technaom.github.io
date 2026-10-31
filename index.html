@@ -214,7 +214,25 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .bars b { font: 600 12px/1 var(--mono); color: var(--navy); }
 .bars span { font: 400 11px/1 var(--mono); color: var(--muted); white-space: nowrap; }
 .growth-note { font-size: 12.5px; color: var(--muted); margin: 0; }
-@media (max-width: 760px) { .growth-grid { grid-template-columns: minmax(0, 1fr); } }
+.kpis { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.kpis > div { background: var(--stage); border: 1px solid var(--rule); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; min-width: 0; box-shadow: 0 1px 3px rgba(16,24,40,.06); }
+.kpis .big { font: 700 clamp(28px, 4vw, 40px)/1 var(--display); color: var(--gold); }
+.kpis .lbl { font-size: 13.5px; color: var(--muted); }
+.growth-card h3 { margin: 0; font: 600 16px/1.3 var(--display); color: var(--text); }
+.bars.months span { font-size: 10.5px; }
+.growth-grid.stack { grid-template-columns: minmax(0, 1fr); }
+.audit-wrap { overflow-x: auto; }
+.audit { width: 100%; border-collapse: collapse; font-size: 14px; }
+.audit th, .audit td { padding: 8px 6px; text-align: right; border-bottom: 1px solid var(--rule); white-space: nowrap; }
+.audit th:first-child, .audit td:first-child { text-align: left; }
+.audit th { font: 600 11.5px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.audit td { font-variant-numeric: tabular-nums; color: var(--text); }
+.tops { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.tops li { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--rule); font-size: 14px; }
+.tops li:last-child { border-bottom: 0; }
+.tops b { font: 700 18px/1 var(--display); color: var(--gold); }
+.tops small { display: block; color: var(--muted); font-size: 12.5px; margin-top: 3px; }
+@media (max-width: 760px) { .growth-grid { grid-template-columns: minmax(0, 1fr); } .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* ---------- sections ---------- */
 main { padding-inline: 16px; padding-block: 0 64px; }
@@ -228,7 +246,7 @@ h2 { margin: 0; font: 600 clamp(30px, 5vw, 48px)/1.1 var(--display); letter-spac
 .goal .row { display: flex; justify-content: space-between; gap: 12px; font: 400 13px var(--mono); color: var(--muted); flex-wrap: wrap; }
 .goal .row b { color: var(--text); font-weight: 500; }
 .meter { height: 10px; background: var(--stage); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
-.meter i { display: block; height: 100%; width: 13%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
+.meter i { display: block; height: 100%; width: 16%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
 .teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .team { background: var(--stage); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 1px 3px rgba(16,24,40,.06); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .team header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
@@ -342,7 +360,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <div class="ticker" aria-label="Highlights">
     <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>Awards in five years, for GenAI leadership and delivery</span><span class="medals"><i class="m-pt">1 Platinum</i><i class="m-au">8 Gold</i><i class="m-ag">7 Silver</i><i class="m-br">12 Bronze</i></span></div>
     <div><small>Bank of America</small><b><em data-count="14300">14,300</em></b><span>Engineer-hours saved every year with GenAI automation</span></div>
-    <div><small>In progress · goal 200</small><b><em data-count="13">13</em> <span class="of">/ 200</span></b><span>Digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="13 of 200 digital employees"><i style="width:6.5%"></i></span></div>
+    <div><small>In progress · goal 200</small><b><em data-count="16">16</em> <span class="of">/ 200</span></b><span>Digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="16 of 200 digital employees"><i style="width:8%"></i></span></div>
     <div><small>Certified · 2026</small><b>IIT <em>Patna</em></b><span>Generative &amp; Agentic AI for Developers, six months</span></div>
   </div>
 </section>
@@ -351,19 +369,26 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <section class="sec" id="growth" hidden>
     <span class="reel">Brand growth</span>
     <h2>Measured, not claimed</h2>
-    <p class="lede">My analytics agents count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
+    <p class="lede">Every morning my analytics agents collect the numbers from LinkedIn, count every post and write this summary themselves. A code check rejects any number that is not in the data.</p>
+    <div class="kpis" id="g-kpis"></div>
     <div class="growth-grid">
       <div class="growth-card">
-        <div class="g-stats">
-          <div><span class="big" id="g-followers">0</span><span class="lbl">Followers</span></div>
-          <div><span class="big" id="g-posts">0</span><span class="lbl">Posts by the digital workforce</span></div>
-          <div><span class="big" id="g-connections">0</span><span class="lbl">Connections</span></div>
-        </div>
+        <h3>What the numbers say</h3>
         <p class="summary" id="g-summary"></p>
       </div>
       <div class="growth-card">
-        <span class="lbl">Posts per day</span>
-        <div class="bars" id="g-bars" role="img" aria-label="Posts per day chart"></div>
+        <h3>Impressions per month</h3>
+        <div class="bars months" id="g-bars" role="img" aria-label="Impressions per month for the past year"></div>
+      </div>
+    </div>
+    <div class="growth-grid stack">
+      <div class="growth-card">
+        <h3>Monthly audit</h3>
+        <div class="audit-wrap"><table class="audit" id="g-audit"></table></div>
+      </div>
+      <div class="growth-card">
+        <h3>Top posts of the year</h3>
+        <ul class="tops" id="g-tops"></ul>
       </div>
     </div>
     <p class="growth-note" id="g-note"></p>
@@ -374,8 +399,8 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <h2>Nobody here takes a day off</h2>
     <p class="lede">Every agent below runs on its own schedule in the cloud, with a quality gate before anything goes out and a trace of every step. The goal is 100 of them working together by 31 January 2027, and 200 within a year.</p>
     <div class="goal">
-      <div class="row"><span><b>13</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027 · <b>200</b> by Oct 2027</span></div>
-      <div class="meter" role="img" aria-label="13 of 100 agents"><i></i></div>
+      <div class="row"><span><b>16</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027 · <b>200</b> by Oct 2027</span></div>
+      <div class="meter" role="img" aria-label="16 of 100 agents"><i></i></div>
     </div>
     <div class="teams" id="teams"></div>
   </section>
@@ -576,6 +601,13 @@ const TEAMS = [
       ["Critic", "Checks tiers, claims and consistency."],
       ["Healer", "Finds the root cause of a missed post and fixes it within minutes."],
     ] },
+  { name: "Brand analytics", shift: "08:00 IST · Daily",
+    about: "Measures how the brand is growing and publishes the numbers on this site, with every figure traceable to its source.",
+    crew: [
+      ["Analytics fetcher", "Collects followers, impressions and engagement from LinkedIn, plus every post the workforce made."],
+      ["Brand analyst", "Writes the summary; a code check rejects any number that is not in the data."],
+      ["Site publisher", "Updates this site and confirms the new numbers are live."],
+    ] },
   { name: "Comment copilot", shift: "On call",
     about: "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
     crew: [
@@ -583,6 +615,7 @@ const TEAMS = [
     ] },
 ];
 const LOG = [
+  { d: "31 Oct 2026", t: "A brand analytics team joins: growth, measured every day", p: "Three new agents measure how the brand is growing and publish it on this site with nobody involved. The fetcher collects followers and connections every morning and downloads the LinkedIn analytics export every Monday: 66,942 impressions and 1,067 engagements in the past year, with October's impressions nearly 19 times September's. The analyst writes the summary, and a code check rejects any number that is not in the data. The publisher updates the site and confirms the new numbers are live. The workforce is now 16.", c: "Shipped" },
   { d: "31 Oct 2026", t: "Real interview questions, checked by code", p: "The 12:00 IST team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.", c: "Shipped" },
   { d: "29 Oct 2026", t: "Certified by IIT Patna: Generative AI & Agentic AI for Developers", p: "Completed the six-month certificate course from the Indian Institute of Technology Patna (Continuing Education Programme), covering generative AI and agentic AI for developers. The same ideas run in production here every day: agents that plan, write, check, heal and publish on their own.", c: "Milestone" },
   { d: "27 Oct 2026", t: "A cost controller joins the team", p: "Every morning at 09:00 IST it reads token usage from both Langfuse accounts and reports spend per workflow and per model. First report: the whole workforce cost about one US dollar for the month so far.", c: "Shipped" },
@@ -804,20 +837,48 @@ document.getElementById("diagrams").innerHTML = DIAGRAMS.map(d => `
 // ---------- brand growth: render data/brand-metrics.json (Site Publisher output) ----------
 fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json() : null).then(m => {
   if (!m || !m.all_time) return;
-  const fmt = v => (v || 0).toLocaleString("en-IN");
-  document.getElementById("g-posts").textContent = fmt(m.all_time.posts);
-  document.getElementById("g-followers").textContent = fmt(m.all_time.followers);
-  document.getElementById("g-connections").textContent = fmt(m.all_time.connections);
+  const fmt = v => Math.round(v || 0).toLocaleString("en-IN");
+  const short = v => v >= 1000 ? (v / 1000).toFixed(v >= 10000 ? 0 : 1) + "k" : String(Math.round(v));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const daily = m.daily || {};
+  // Past-year totals come from the last 365 daily values, so the label stays true as history grows.
+  const lastYear = k => (daily[k] || []).slice(-365).reduce((s, d) => s + d[1], 0);
+  const kpis = [
+    [m.all_time.followers, "Followers"],
+    [lastYear("impressions"), "Impressions in the past year"],
+    [lastYear("engagements"), "Engagements in the past year"],
+    [lastYear("new_followers"), "New followers in the past year"],
+    [m.all_time.posts, "Posts by the digital workforce"],
+    [m.all_time.connections, "Connections"],
+  ].filter(([v]) => v);
+  document.getElementById("g-kpis").innerHTML = kpis.map(([v, l]) => `<div><span class="big">${fmt(v)}</span><span class="lbl">${l}</span></div>`).join("");
   document.getElementById("g-summary").textContent = m.summary || "";
-  const days = (m.daily && m.daily.posts) || [];
-  const max = Math.max(1, ...days.map(d => d[1]));
-  document.getElementById("g-bars").innerHTML = days.slice(-14).map(([d, v]) => {
-    const dt = new Date(d + "T00:00:00");
-    const label = dt.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
-    return `<div><b>${v}</b><i style="height:${Math.max(6, (v / max) * 110)}px"></i><span>${label}</span></div>`;
+
+  const months = (m.months || []).filter(a => a.totals && a.totals.impressions != null).slice(-12);
+  const max = Math.max(1, ...months.map(a => a.totals.impressions));
+  const monthName = (ym, opts) => new Date(ym + "-01T00:00:00").toLocaleDateString("en-GB", opts);
+  document.getElementById("g-bars").innerHTML = months.map(a => {
+    const v = a.totals.impressions;
+    return `<div><b>${short(v)}</b><i style="height:${Math.max(4, (v / max) * 110)}px"></i><span>${monthName(a.month, { month: "short" })}</span></div>`;
   }).join("");
+
+  const nowMonth = (m.generated_at || "").slice(0, 7);
+  const cell = v => v == null ? "–" : fmt(v);
+  const rows = (m.months || []).slice(-6).reverse().map(a => {
+    const t = a.totals || {}, e = a.end || {};
+    const label = monthName(a.month, { month: "short", year: "numeric" }) + (a.month === nowMonth ? " (so far)" : "");
+    return `<tr><td>${label}</td><td>${cell(t.impressions)}</td><td>${cell(t.engagements)}</td><td>${cell(t.new_followers)}</td><td>${cell(e.followers)}</td><td>${t.posts ? fmt(t.posts) : "–"}</td></tr>`;
+  }).join("");
+  document.getElementById("g-audit").innerHTML = `<thead><tr><th>Month</th><th>Impressions</th><th>Engagements</th><th>New followers</th><th>Followers</th><th>Workforce posts</th></tr></thead><tbody>${rows}</tbody>`;
+
+  const tops = (m.top_posts || []).filter(p => /^https:\/\/www\.linkedin\.com\//.test(p.url));
+  const day = d => new Date(d + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+  document.getElementById("g-tops").innerHTML = tops.length ? tops.map(p =>
+    `<li><span>Post from ${esc(day(p.date))}<small><a href="${esc(p.url)}" target="_blank" rel="noopener">View on LinkedIn</a></small></span><span><b>${fmt(p.engagements)}</b><small>engagements</small></span></li>`
+  ).join("") : "<li>Top posts appear after the next LinkedIn export.</li>";
+
   const when = new Date(m.generated_at).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
-  document.getElementById("g-note").textContent = `Source: ${(m.sources || []).join(", ")}. Updated ${when}. Impressions join once the weekly LinkedIn analytics export is connected.`;
+  document.getElementById("g-note").textContent = `Sources: ${(m.sources || []).join(", ")}. Updated ${when}. Followers and posts refresh daily; impressions and engagements refresh every Monday from the LinkedIn analytics export.`;
   document.getElementById("growth").hidden = false;
 }).catch(() => {});
 </script>
