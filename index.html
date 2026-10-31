@@ -221,6 +221,10 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .others { margin: 0; background: var(--stage); border: 1px solid var(--rule); border-left: 4px solid var(--gold); border-radius: 12px; padding: 14px 18px; font-size: 16px; line-height: 1.6; color: var(--text); }
 .others b { font: 700 20px/1 var(--display); color: var(--gold); }
 .others[hidden], .growth-card[hidden] { display: none; }
+#g-notable[hidden] { display: none; }
+.notable { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: var(--text); }
+.notable b { color: var(--gold); font-variant-numeric: tabular-nums; }
+.notable small { color: var(--muted); }
 .mixbar { display: flex; height: 18px; border-radius: 9px; overflow: hidden; background: var(--rule); }
 .mixbar i { display: block; height: 100%; }
 .mixlist { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px 18px; }
@@ -396,6 +400,10 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
       <div class="growth-card">
         <h3>Impressions per month</h3>
         <div class="bars months" id="g-bars" role="img" aria-label="Impressions per month for the past year"></div>
+        <div id="g-notable" hidden>
+          <span class="lbl">Biggest days (each at least 4 times a typical day)</span>
+          <ul class="notable" id="g-notable-list"></ul>
+        </div>
       </div>
     </div>
     <div class="growth-grid stack">
@@ -901,6 +909,15 @@ fetch("data/brand-metrics.json", { cache: "no-store" }).then(r => r.ok ? r.json(
     const v = a.totals.impressions;
     return `<div><b>${short(v)}</b><i style="height:${Math.max(4, (v / max) * 110)}px"></i><span>${monthName(a.month, { month: "short" })}</span></div>`;
   }).join("");
+
+  const notable = m.notable_days || [];
+  if (notable.length) {
+    const times = n => n.typical >= 1 ? `about ${Math.round(n.impressions / n.typical)} times a typical day` : "from almost none the days before";
+    document.getElementById("g-notable-list").innerHTML = [...notable].sort((a, b) => b.impressions - a.impressions).slice(0, 5).map(n =>
+      `<li><span><b>${fmt(n.impressions)}</b> impressions on ${esc(new Date(n.day + "T00:00:00").toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }))} <small>(${times(n)})</small>${n.post_url && /^https:\/\/www\.linkedin\.com\//.test(n.post_url) ? ` · <a href="${esc(n.post_url)}" target="_blank" rel="noopener">the post</a>` : ""}</span></li>`
+    ).join("");
+    document.getElementById("g-notable").hidden = false;
+  }
 
   const nowMonth = (m.generated_at || "").slice(0, 7);
   const cell = v => v == null ? "–" : fmt(v);

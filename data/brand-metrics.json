@@ -1,5 +1,5 @@
 {
- "generated_at": "2026-10-31T14:01+00:00",
+ "generated_at": "2026-10-31T14:18+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
@@ -6272,7 +6272,7 @@
    ]
   ]
  },
- "summary": "The profile grew from 699 followers at the start of August 2026 to 967 by the end of October 2026, with 567 new followers over the past year. In October 2026, impressions rose by 1775.9 percent and engagements by 1650 percent compared with September 2026, and 42 posts were written by Manohar's AI agents since 11 October.",
+ "summary": "Manohar's LinkedIn profile grew from 699 followers at the start of August 2026 to 967 followers by the end of October 2026, with 567 new followers over the past year. In October 2026, impressions rose 1775.9% and engagements rose 1650% compared with September 2026, and the 42 posts written by Manohar's AI agents since 11 October contributed to that month's activity.",
  "top_posts": [
   {
    "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
@@ -6322,7 +6322,7 @@
   },
   "topics": [
    {
-    "name": "AI agents and governance",
+    "name": "AI agents governance",
     "share": 51,
     "comments": 45,
     "likes": 51,
@@ -6336,7 +6336,7 @@
     ]
    },
    {
-    "name": "Daily habits and consistency",
+    "name": "Habits and consistency",
     "share": 34,
     "comments": 36,
     "likes": 28,
@@ -6365,5 +6365,61 @@
    }
   ],
   "topics_status": "ok"
+ },
+ "notable_days": [
+  {
+   "day": "2026-10-19",
+   "impressions": 559,
+   "typical": 134,
+   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_im-happy-to-share-that-im-starting-a-new-ugcPost-7517906262999588864-Q3Bb"
+  },
+  {
+   "day": "2026-10-11",
+   "impressions": 706,
+   "typical": 18,
+   "post_url": null
+  },
+  {
+   "day": "2026-08-26",
+   "impressions": 2099,
+   "typical": 288,
+   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6"
+  },
+  {
+   "day": "2026-07-12",
+   "impressions": 658,
+   "typical": 144,
+   "post_url": null
+  },
+  {
+   "day": "2026-07-05",
+   "impressions": 1478,
+   "typical": 32,
+   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_python-course-presentation-ugcPost-7479575924405891072-2fOt"
+  },
+  {
+   "day": "2026-05-04",
+   "impressions": 1488,
+   "typical": 22,
+   "post_url": null
+  },
+  {
+   "day": "2026-02-23",
+   "impressions": 3669,
+   "typical": 38,
+   "post_url": null
+  },
+  {
+   "day": "2026-02-03",
+   "impressions": 521,
+   "typical": 0,
+   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_milestone-growthjourney-avpsenioranalyst-share-7424147353625915392-I-jq"
+  }
+ ],
+ "impressions_week": {
+  "last_week": 3836,
+  "usual_week": 1862,
+  "ratio": 2.06,
+  "drop": false
  }
 }
