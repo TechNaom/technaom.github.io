@@ -341,6 +341,9 @@ div.work { cursor: default; }
 .back ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 8px; color: var(--text); }
 .back li span { color: var(--muted); }
 .back .cta-row { justify-content: flex-start; animation: none; }
+.follow-row { margin: 4px 0 0; font-size: 14px; }
+.follow-row a, .follow-links a { color: var(--gold); text-decoration: none; }
+.follow-row a:hover, .follow-links a:hover { text-decoration: underline; }
 footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 1px solid var(--rule); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font: 400 12px var(--mono); color: var(--muted); }
 .concept { font: 500 11px/1 var(--mono); letter-spacing: .14em; text-transform: uppercase; color: var(--ember); }
 
@@ -572,9 +575,13 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
         <h2>Back the lab</h2>
         <p class="lede" style="margin:0">Looking for partners, sponsors and early users for the next builds. Each one ships in public with measured results.</p>
         <div class="cta-row">
-          <a class="btn solid" href="https://www.linkedin.com/in/manohar-p-b89916aa" target="_blank" rel="noopener">Talk to me on LinkedIn</a>
+          <a class="btn solid" href="https://www.linkedin.com/in/manohar-papasani-b89916aa" target="_blank" rel="noopener">Talk to me on LinkedIn</a>
           <a class="btn" href="https://github.com/TechNaom" target="_blank" rel="noopener">See the code</a>
         </div>
+        <p class="follow-row">Every post also goes to
+          <a href="https://bsky.app/profile/manoharpapa.bsky.social" target="_blank" rel="noopener">Bluesky</a>,
+          <a href="https://dev.to/technaom" target="_blank" rel="noopener">Dev.to</a> and
+          <a href="https://www.facebook.com/340486599487719" target="_blank" rel="noopener">Facebook</a>.</p>
       </div>
       <ul>
         <li><b>Agent swarm</b> <span>· A factory that turns a short spec into a working agent, and a shared board where 100 agents coordinate</span></li>
@@ -587,7 +594,14 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
 
   <footer>
     <span>Manohar Papasani · Hyderabad</span>
-    <span>Updated 31 Oct 2026 · Built with my digital employees</span>
+    <span class="follow-links">
+      <a href="https://www.linkedin.com/in/manohar-papasani-b89916aa" target="_blank" rel="noopener">LinkedIn</a> ·
+      <a href="https://github.com/TechNaom" target="_blank" rel="noopener">GitHub</a> ·
+      <a href="https://bsky.app/profile/manoharpapa.bsky.social" target="_blank" rel="noopener">Bluesky</a> ·
+      <a href="https://dev.to/technaom" target="_blank" rel="noopener">Dev.to</a> ·
+      <a href="https://www.facebook.com/340486599487719" target="_blank" rel="noopener">Facebook</a>
+    </span>
+    <span>Updated 2 Nov 2026 · Built with my digital employees</span>
   </footer>
 </main>
 
@@ -638,6 +652,19 @@ const TEAMS = [
       ["Brand analyst", "Writes the summary; a code check rejects any number that is not in the data."],
       ["Site publisher", "Updates this site and confirms the new numbers are live."],
     ] },
+  { name: "LinkedIn insights", shift: "Sundays",
+    about: "Studies what makes public posts on AI and leadership perform, then tells each team what to change. Every claim is checked against the numbers before any team sees it.",
+    crew: [
+      ["Trend scout", "Plans the week's searches across six themes, within strict spending limits."],
+      ["Insights analyst", "Explains the statistics and the engagement model in plain words."],
+      ["Content strategist", "Turns verified findings into changes for each team; code rejects advice that is not backed by a strong result."],
+    ] },
+  { name: "Distribution", shift: "After every post",
+    about: "Shares every post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out on LinkedIn: the same post, with only LinkedIn wording adjusted.",
+    crew: [
+      ["Ledger reader", "Picks up each new post with its text and card."],
+      ["Channel publishers", "Fit the post to each platform's limits and add one follow block; each post goes to each channel exactly once."],
+    ] },
   { name: "Comment copilot", shift: "On call",
     about: "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
     crew: [
@@ -645,6 +672,9 @@ const TEAMS = [
     ] },
 ];
 const LOG = [
+  { d: "2 Nov 2026", t: "Every post now reaches four platforms", p: "A distribution team shares each LinkedIn post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out. The post stays the same; only LinkedIn wording such as \u201Crepost\u201D or \u201Cconnections\u201D is adjusted, and each channel gets one follow block. The first cross-posts went out on 1 November, and each post goes to each channel exactly once.", c: "Shipped" },
+  { d: "1 Nov 2026", t: "An insights engine studies what works on LinkedIn", p: "Three agents study public posts on AI and leadership every Sunday. The first run analysed 257 posts: posts themed on leadership drew a median engagement of 113 against 33 for the rest, and posts with an image 98 against 33. Code checks every claim against the numbers; the first run caught the agents inventing advice twice, and both were rejected before any team saw them.", c: "Shipped" },
+  { d: "1 Nov 2026", t: "An anomaly watcher checks the pipelines every morning", p: "Each morning it compares the day before with the previous 28 days for every workflow: model calls, tokens, cost and how often a slot had to be rerun. It raises an alert only when something is at least three times the usual value and above a minimum, so small changes never trigger it.", c: "Shipped" },
   { d: "31 Oct 2026", t: "A brand analytics team joins: growth, measured every day", p: "Three new agents measure how the brand is growing and publish it on this site with nobody involved. The fetcher collects followers and connections every morning and downloads the LinkedIn analytics export every Monday: 66,942 impressions and 1,067 engagements in the past year, with October's impressions nearly 19 times September's. The analyst writes the summary, and a code check rejects any number that is not in the data. The publisher updates the site and confirms the new numbers are live. The workforce is now 16.", c: "Shipped" },
   { d: "31 Oct 2026", t: "Real interview questions, checked by code", p: "The 12:00 IST team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.", c: "Shipped" },
   { d: "29 Oct 2026", t: "Certified by IIT Patna: Generative AI & Agentic AI for Developers", p: "Completed the six-month certificate course from the Indian Institute of Technology Patna (Continuing Education Programme), covering generative AI and agentic AI for developers. The same ideas run in production here every day: agents that plan, write, check, heal and publish on their own.", c: "Milestone" },
