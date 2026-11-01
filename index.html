@@ -260,7 +260,7 @@ h2 { margin: 0; font: 600 clamp(30px, 5vw, 48px)/1.1 var(--display); letter-spac
 .goal .row { display: flex; justify-content: space-between; gap: 12px; font: 400 13px var(--mono); color: var(--muted); flex-wrap: wrap; }
 .goal .row b { color: var(--text); font-weight: 500; }
 .meter { height: 10px; background: var(--stage); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
-.meter i { display: block; height: 100%; width: 16%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
+.meter i { display: block; height: 100%; width: 35%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
 .teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .team { background: var(--stage); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 1px 3px rgba(16,24,40,.06); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .team header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
@@ -377,7 +377,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <div class="ticker" aria-label="Highlights">
     <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>Awards in five years, for GenAI leadership and delivery</span><span class="medals"><i class="m-pt">1 Platinum</i><i class="m-au">8 Gold</i><i class="m-ag">7 Silver</i><i class="m-br">12 Bronze</i></span></div>
     <div><small>Bank of America</small><b><em data-count="14300">14,300</em></b><span>Engineer-hours saved every year with GenAI automation</span></div>
-    <div><small>In progress · goal 200</small><b><em data-count="16">16</em> <span class="of">/ 200</span></b><span>Digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="16 of 200 digital employees"><i style="width:8%"></i></span></div>
+    <div><small>In progress · goal 200</small><b><em data-count="35">35</em> <span class="of">/ 200</span></b><span>Digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="35 of 200 digital employees"><i style="width:17%"></i></span></div>
     <div><small>Certified · 2026</small><b>IIT <em>Patna</em></b><span>Generative &amp; Agentic AI for Developers, six months</span></div>
   </div>
 </section>
@@ -432,8 +432,8 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <h2>Nobody here takes a day off</h2>
     <p class="lede">Every agent below runs on its own schedule in the cloud, with a quality gate before anything goes out and a trace of every step. The goal is 100 of them working together by 31 January 2027, and 200 within a year.</p>
     <div class="goal">
-      <div class="row"><span><b>16</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027 · <b>200</b> by Oct 2027</span></div>
-      <div class="meter" role="img" aria-label="16 of 100 agents"><i></i></div>
+      <div class="row"><span><b>35</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027 · <b>200</b> by Oct 2027</span></div>
+      <div class="meter" role="img" aria-label="35 of 100 agents"><i></i></div>
     </div>
     <div class="teams" id="teams"></div>
   </section>
@@ -663,7 +663,15 @@ const TEAMS = [
     about: "Shares every post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out on LinkedIn: the same post, with only LinkedIn wording adjusted.",
     crew: [
       ["Ledger reader", "Picks up each new post with its text and card."],
-      ["Channel publishers", "Fit the post to each platform's limits and add one follow block; each post goes to each channel exactly once."],
+      ["Bluesky publisher", "Shares a 300-character version with the card and links to follow."],
+      ["Dev.to publisher", "Shares the interview and learning posts as full articles."],
+      ["Facebook publisher", "Shares the whole post with its card on the TechNaom AI Labs page."],
+    ] },
+  { name: "Operations", shift: "09:00 IST · Daily",
+    about: "Keeps the whole workforce cheap and healthy, with nobody watching dashboards.",
+    crew: [
+      ["Cost controller", "Reports yesterday's spend per workflow and per model every morning."],
+      ["Anomaly watcher", "Compares yesterday with the 28 days before it and raises an alert only when something is far from usual."],
     ] },
   { name: "Comment copilot", shift: "On call",
     about: "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
@@ -672,9 +680,12 @@ const TEAMS = [
     ] },
 ];
 const LOG = [
+  { d: "2 Nov 2026", t: "The teams now learn from each other", p: "The insights team writes a weekly brief of what works, which the content teams can read as advice, and every published post is now logged with the advice it used. Brand analytics adds how each post did, so the teams will see whether the advice actually helps before it is switched on for every slot.", c: "Shipped" },
   { d: "2 Nov 2026", t: "Every post now reaches four platforms", p: "A distribution team shares each LinkedIn post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out. The post stays the same; only LinkedIn wording such as \u201Crepost\u201D or \u201Cconnections\u201D is adjusted, and each channel gets one follow block. The first cross-posts went out on 1 November, and each post goes to each channel exactly once.", c: "Shipped" },
   { d: "1 Nov 2026", t: "An insights engine studies what works on LinkedIn", p: "Three agents study public posts on AI and leadership every Sunday. The first run analysed 257 posts: posts themed on leadership drew a median engagement of 113 against 33 for the rest, and posts with an image 98 against 33. Code checks every claim against the numbers; the first run caught the agents inventing advice twice, and both were rejected before any team saw them.", c: "Shipped" },
   { d: "1 Nov 2026", t: "An anomaly watcher checks the pipelines every morning", p: "Each morning it compares the day before with the previous 28 days for every workflow: model calls, tokens, cost and how often a slot had to be rerun. It raises an alert only when something is at least three times the usual value and above a minimum, so small changes never trigger it.", c: "Shipped" },
+  { d: "31 Oct 2026", t: "A noon post failed, and was healed and posted by 12:06", p: "The first interview post wrote a good draft but failed at 12:00 on a small configuration bug: a label colour was read as a number. The healer reran the slot at 12:05 and it was posted at 12:06. The bug was fixed the same day, and a label problem can no longer stop a post.", c: "Shipped" },
+  { d: "31 Oct 2026", t: "The first interview question post: 104 impressions and 2 comments in an hour", p: "A real question from a candidate's interview report, answered at architect level, drew 104 impressions and 2 comments within its first hour, including a reply from a reader outside my network who picked out one of the points. The motivation post it replaced drew about 29 impressions and no comments.", c: "Result" },
   { d: "31 Oct 2026", t: "A brand analytics team joins: growth, measured every day", p: "Three new agents measure how the brand is growing and publish it on this site with nobody involved. The fetcher collects followers and connections every morning and downloads the LinkedIn analytics export every Monday: 66,942 impressions and 1,067 engagements in the past year, with October's impressions nearly 19 times September's. The analyst writes the summary, and a code check rejects any number that is not in the data. The publisher updates the site and confirms the new numbers are live. The workforce is now 16.", c: "Shipped" },
   { d: "31 Oct 2026", t: "Real interview questions, checked by code", p: "The 12:00 IST team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.", c: "Shipped" },
   { d: "29 Oct 2026", t: "Certified by IIT Patna: Generative AI & Agentic AI for Developers", p: "Completed the six-month certificate course from the Indian Institute of Technology Patna (Continuing Education Programme), covering generative AI and agentic AI for developers. The same ideas run in production here every day: agents that plan, write, check, heal and publish on their own.", c: "Milestone" },
@@ -797,6 +808,16 @@ const DIAGRAMS = [
       ["send", "Publish", ["LinkedIn API: post, card, carousel", "Review record on GitHub"], "out"],
     ],
     xcut: ["Langfuse trace for every agent", "Watchdog and alerts", "Daily token caps", "Kill switch"] },
+  { title: "How the teams work together",
+    about: "Each team runs on its own, with its own keys, limits and alerts, so one team's failure never stops another. They share what they need through read-only records: a weekly brief of what works, and a ledger of every post.",
+    nodes: [
+      ["search", "LinkedIn insights", ["Sundays: studies public posts on AI and leadership", "Every claim checked against the numbers"]],
+      ["pen", "Content teams", ["08:00 leadership, 12:00 interview question, 23:30 learning", "Read the weekly brief as advice"]],
+      ["db", "Posts ledger", ["One record per published post", "Which team, which day, which advice"]],
+      ["send", "Distribution", ["Bluesky, Dev.to and Facebook", "About 20 minutes after each post"], "out"],
+      ["chart", "Brand analytics", ["Followers and impressions every week", "Shows whether the advice helped"]],
+    ],
+    loops: ["Results flow back to the insights team, which adjusts next week's brief"] },
   { title: "One shift, step by step: leadership at 08:00",
     about: "Seven digital employees hand the work along. Two loops keep quality up: an unverified quote sends the scout back, and a weak draft gets one rewrite; if a post still misses its slot, the healer fixes the cause and posts.",
     nodes: [
