@@ -638,7 +638,7 @@ const TEAMS = [
       ["Critic", "Checks tiers, claims and consistency."],
       ["Healer", "Finds the root cause of a missed post and fixes it within minutes."],
     ] },
-  { name: "Brand analytics", shift: "08:00 IST · Daily",
+  { name: "Brand analytics", shift: "Mondays and Thursdays",
     about: "Measures how the brand is growing and publishes the numbers on this site, with every figure traceable to its source.",
     crew: [
       ["Analytics fetcher", "Collects followers, impressions and engagement from LinkedIn, plus every post the workforce made."],
@@ -653,12 +653,13 @@ const TEAMS = [
       ["Content strategist", "Turns verified findings into changes for each team; code rejects advice that is not backed by a strong result."],
     ] },
   { name: "Distribution", shift: "After every post",
-    about: "Shares every post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out on LinkedIn: the same post, with only LinkedIn wording adjusted.",
+    about: "Shares every post on Bluesky, Dev.to, Facebook and X about ten minutes after it goes out on LinkedIn, one post at a time on each channel: the same post, with only LinkedIn wording adjusted.",
     crew: [
       ["Ledger reader", "Picks up each new post with its text and card."],
       ["Bluesky publisher", "Shares a 300-character version with the card and links to follow."],
       ["Dev.to publisher", "Shares the interview and learning posts as full articles."],
       ["Facebook publisher", "Shares the whole post with its card on the TechNaom AI Labs page."],
+      ["X publisher", "Shares a short version with no links, at most four posts a day."],
     ] },
   { name: "Operations", shift: "09:00 IST · Daily",
     about: "Keeps the whole workforce cheap and healthy, with nobody watching dashboards.",
@@ -673,6 +674,7 @@ const TEAMS = [
     ] },
 ];
 const LOG = [
+  { d: "3 Nov 2026", t: "Every post now reaches five platforms, on time", p: "X joined Bluesky, Dev.to and Facebook, and every post now ends with the same five follow links. The cross-posts had been started by a scheduler that ran one to seven hours late on 2 November, so they moved to the same exact-time trigger as the posts themselves: each post now goes out about ten minutes after LinkedIn, one at a time on each channel and never as a burst of old posts.", c: "Shipped" },
   { d: "2 Nov 2026", t: "Tracing caught the cost report counting some calls twice", p: "While switching on tracing for the insights team, its trace showed each Claude Haiku call twice: once from the agent framework and once from a newer version of the model provider's own library. Across the workforce, 20 calls in a week had been counted twice, about 6% of the reported spend. The traces now keep one record per call, and the daily cost report skips the old duplicates, so past and future numbers are both right.", c: "Shipped" },
   { d: "2 Nov 2026", t: "The teams now learn from each other", p: "The insights team writes a weekly brief of what works, which the content teams can read as advice, and every published post is now logged with the advice it used. Brand analytics adds how each post did, so the teams will see whether the advice actually helps before it is switched on for every slot.", c: "Shipped" },
   { d: "2 Nov 2026", t: "Every post now reaches four platforms", p: "A distribution team shares each LinkedIn post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out. The post stays the same; only LinkedIn wording such as \u201Crepost\u201D or \u201Cconnections\u201D is adjusted, and each channel gets one follow block. The first cross-posts went out on 1 November, and each post goes to each channel exactly once.", c: "Shipped" },
