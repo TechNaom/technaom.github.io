@@ -1,23 +1,23 @@
 {
- "generated_at": "2026-10-31T15:48+00:00",
+ "generated_at": "2026-11-02T05:21+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
   "our posting records"
  ],
  "all_time": {
-  "posts": 42,
+  "posts": 48,
   "impressions": 66942,
   "engagements": 1067,
   "new_followers": 567,
-  "followers": 967,
-  "connections": 696
+  "followers": 983,
+  "connections": 697
  },
  "activity_per_day": {
-  "comments_made": 58,
-  "comments_made_days": 6,
-  "likes_given": 80,
-  "likes_given_days": 4
+  "comments_made": 55,
+  "comments_made_days": 8,
+  "likes_given": 76,
+  "likes_given_days": 6
  },
  "months": [
   {
@@ -265,7 +265,7 @@
   {
    "month": "2026-10",
    "totals": {
-    "posts": 42,
+    "posts": 43,
     "impressions": 10955,
     "engagements": 210,
     "new_followers": 133
@@ -284,6 +284,27 @@
     "new_followers": 600
    },
    "days_observed": 31
+  },
+  {
+   "month": "2026-11",
+   "totals": {
+    "posts": 5,
+    "impressions": 0,
+    "engagements": 0,
+    "new_followers": 0
+   },
+   "start": {},
+   "end": {
+    "followers": 983,
+    "connections": 697
+   },
+   "change_vs_previous": {
+    "posts": -88.4,
+    "impressions": -100,
+    "engagements": -100,
+    "new_followers": -100
+   },
+   "days_observed": 2
   }
  ],
  "daily": {
@@ -310,6 +331,14 @@
    ],
    [
     "2026-10-30",
+    57
+   ],
+   [
+    "2026-10-31",
+    37
+   ],
+   [
+    "2026-11-01",
     58
    ]
   ],
@@ -317,6 +346,10 @@
    [
     "2026-10-31",
     696
+   ],
+   [
+    "2026-11-02",
+    697
    ]
   ],
   "engagements": [
@@ -3241,6 +3274,10 @@
    [
     "2026-10-31",
     967
+   ],
+   [
+    "2026-11-02",
+    983
    ]
   ],
   "impressions": [
@@ -4720,7 +4757,15 @@
    ],
    [
     "2026-10-30",
-    76
+    75
+   ],
+   [
+    "2026-10-31",
+    59
+   ],
+   [
+    "2026-11-01",
+    79
    ]
   ],
   "new_followers": [
@@ -6268,99 +6313,80 @@
    ],
    [
     "2026-10-31",
-    3
+    4
+   ],
+   [
+    "2026-11-01",
+    4
+   ],
+   [
+    "2026-11-02",
+    1
    ]
   ]
  },
- "summary": "The LinkedIn profile grew to 967 followers by the end of October 2026, with 133 new followers that month, up 600% from September. Over the past year, the profile recorded 66,942 impressions and 1,067 engagements, and Manohar's AI workforce has written 42 posts since 11 October.",
- "top_posts": [
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
-   "date": "2026-08-23",
-   "engagements": 127
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_milestone-growthjourney-avpsenioranalyst-share-7424147353625915392-I-jq",
-   "date": "2026-02-02",
-   "engagements": 45
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_im-happy-to-share-that-im-starting-a-new-ugcPost-7517906262999588864-Q3Bb",
-   "date": "2026-10-19",
-   "engagements": 33
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_python-course-presentation-ugcPost-7479575924405891072-2fOt",
-   "date": "2026-07-05",
-   "engagements": 29
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_genai-development-setup-2026-vs-code-share-7492244678143164416-TTZl",
-   "date": "2026-08-09",
-   "engagements": 27
-  }
- ],
+ "summary": "The LinkedIn profile now has 983 followers and 697 connections, with 567 new followers over the past year and 66,942 impressions over the same period. October 2026 saw impressions rise by 1775.9% and engagements rise by 1650% compared with September 2026, and new followers rose by 600%. The AI workforce has published 48 posts since 11 October, and Manohar's profile gave an average of 55 comments and 76 likes per day.",
  "engagement_mix": {
-  "items": 200,
-  "comments": 100,
-  "likes": 100,
+  "items": 801,
+  "comments": 401,
+  "likes": 400,
   "targets": {
-   "post": 78,
-   "group": 18,
-   "comment": 4
+   "post": 329,
+   "group": 41,
+   "comment": 30
   },
   "reactions": {
-   "like": 99,
-   "love": 1
+   "like": 398,
+   "love": 2
   },
-  "days": 3,
-  "analysed": 189,
+  "days": 8,
+  "analysed": 600,
   "quality": {
    "k": 3,
-   "silhouette": 0.153,
-   "stability": 0.91
+   "silhouette": 0.152,
+   "stability": 0.99
   },
   "topics": [
    {
-    "name": "AI agents and genai",
-    "share": 51,
-    "comments": 46,
-    "likes": 51,
+    "name": "Career growth mindset",
+    "share": 44,
+    "comments": 131,
+    "likes": 132,
     "keywords": [
-     "agents",
+     "agree",
+     "walk",
+     "kindness",
+     "fear",
+     "options",
+     "ask"
+    ]
+   },
+   {
+    "name": "AI in work",
+    "share": 39,
+    "comments": 111,
+    "likes": 124,
+    "keywords": [
      "agent",
-     "governance",
-     "genai",
-     "google",
-     "llm"
+     "workflows",
+     "prompt",
+     "rag",
+     "llm",
+     "agents"
     ]
    },
    {
-    "name": "Habits and professional growth",
-    "share": 32,
-    "comments": 34,
-    "likes": 27,
+    "name": "Career and business growth",
+    "share": 17,
+    "comments": 50,
+    "likes": 52,
     "keywords": [
-     "employees",
-     "time",
-     "told",
-     "saying",
-     "easy",
-     "daily"
-    ]
-   },
-   {
-    "name": "Career milestones announcements",
-    "share": 16,
-    "comments": 15,
-    "likes": 16,
-    "keywords": [
-     "jio",
      "hyderabad",
-     "vanguard",
-     "sector",
-     "campus",
-     "journey"
+     "infosys",
+     "gcc",
+     "lamp",
+     "tourism",
+     "kumar"
     ]
    }
   ],
@@ -6368,16 +6394,16 @@
  },
  "what_works": {
   "status": "learning",
-  "posts": 169,
+  "posts": 175,
   "min_posts": 100,
-  "cv_r2": -0.018
+  "cv_r2": -0.014
  },
  "notable_days": [
   {
    "day": "2026-10-19",
    "impressions": 559,
    "typical": 134,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_im-happy-to-share-that-im-starting-a-new-ugcPost-7517906262999588864-Q3Bb"
+   "post_url": null
   },
   {
    "day": "2026-10-11",
@@ -6389,7 +6415,7 @@
    "day": "2026-08-26",
    "impressions": 2099,
    "typical": 288,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6"
+   "post_url": null
   },
   {
    "day": "2026-07-12",
@@ -6401,7 +6427,7 @@
    "day": "2026-07-05",
    "impressions": 1478,
    "typical": 32,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_python-course-presentation-ugcPost-7479575924405891072-2fOt"
+   "post_url": null
   },
   {
    "day": "2026-05-04",
@@ -6419,7 +6445,7 @@
    "day": "2026-02-03",
    "impressions": 521,
    "typical": 0,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_milestone-growthjourney-avpsenioranalyst-share-7424147353625915392-I-jq"
+   "post_url": null
   }
  ],
  "impressions_week": {
