@@ -1,0 +1,66 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import facts from "../data/facts.json";
+import repos from "../data/repos.json";
+import cats from "../data/cats.json";
+
+// [repo, title, description, category, visibility, badge]
+type Repo = [string, string, string, string, string, string];
+const list = repos as Repo[];
+const id = (s: string) => "f-" + s.toLowerCase().replace(/[^a-z]+/g, "-");
+const count = (c: string) => (c === "All" ? list.length : list.filter((r) => r[3] === c).length);
+const live = list.filter((r) => r[5] === "Live").length;
+const stats = [
+  { n: facts.repos.total, label: "Repositories on GitHub" },
+  { n: facts.repos.public, label: "Public, open to anyone" },
+  { n: facts.repos.courses, label: "Free courses" },
+  { n: live, label: "Systems running live" },
+];
+const filterCss = cats.filter((c) => c !== "All")
+  .map((c) => `.work:has(#${id(c)}:checked) .repo:not([data-cat="${c}"]) { display: none; }`).join("\n");
+---
+<Base title="Work" path="/work" description={`${facts.repos.total} repositories: production agent systems, research, free courses and open-source contributions.`}>
+  <PageHero crumb="Work" eyebrow="The work" title={`${facts.repos.total} repositories. One builder.`}
+    lede="Research, production agent systems, free courses anyone can take, and open-source contributions. Public ones link to the code; private ones run real workloads and stay closed.">
+    <dl class="grid grid-cols-2 sm:grid-cols-4 gap-6 pt-6 max-w-[760px]">
+      {stats.map((s) => (
+        <div><dd class="display num text-5xl">{s.n}</dd><dt class="text-sm" style="color: var(--night-muted)">{s.label}</dt></div>
+      ))}
+    </dl>
+  </PageHero>
+
+  <div class="work wrap py-14 grid gap-8">
+    <fieldset class="flex flex-wrap gap-2 border-0 p-0 m-0">
+      <legend class="sr-only">Filter the repositories</legend>
+      {cats.map((c, i) => (
+        <label class="chip cursor-pointer">
+          <input type="radio" name="cat" id={id(c)} checked={i === 0} class="sr-only" />
+          <span>{c} <span class="opacity-60 num">{count(c)}</span></span>
+        </label>
+      ))}
+    </fieldset>
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 list-none p-0 m-0">
+      {list.map(([repo, title, text, cat, vis, badge]) => (
+        <li class="repo grid gap-3 content-start p-6 rounded-xl border" data-cat={cat} style="background: var(--card); border-color: var(--rule)">
+          <div class="flex justify-between items-center gap-3 text-xs">
+            <p class="eyebrow m-0" style="color: var(--muted)">{cat}</p>
+            <p class="m-0 px-2 py-0.5 rounded-full font-semibold" style={badge === "Live" ? "background: #dff3e7; color: #1f7a45" : "background: var(--amber-soft); color: var(--amber)"}>{badge}</p>
+          </div>
+          <h2 class="text-lg font-semibold leading-snug">{title}</h2>
+          <p style="color: var(--muted)" class="text-[15px]">{text}</p>
+          {vis === "public"
+            ? <a href={`https://github.com/TechNaom/${repo}`} class="link text-sm mt-1">View the code <span aria-hidden="true">→</span></a>
+            : <span class="text-sm mt-1" style="color: var(--muted)">Private build</span>}
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style set:html={filterCss}></style>
+<style>
+  .chip span { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--rule); font-size: 15px; }
+  .chip input:checked + span { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip input:focus-visible + span { outline: 2px solid var(--amber); outline-offset: 2px; }
+</style>

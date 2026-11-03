@@ -1,0 +1,9 @@
+---
+interface Props { eyebrow: string; title: string; lede?: string; dark?: boolean }
+const { eyebrow, title, lede, dark = false } = Astro.props;
+---
+<div class="grid gap-3 max-w-[64ch]">
+  <p class="eyebrow" style={`color: var(${dark ? "--amber-bright" : "--amber"})`}>{eyebrow}</p>
+  <h2 class="display text-4xl sm:text-5xl leading-tight">{title}</h2>
+  {lede && <p style={`color: var(${dark ? "--night-muted" : "--muted"})`}>{lede}</p>}
+</div>

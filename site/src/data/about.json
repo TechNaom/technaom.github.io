@@ -1,0 +1,171 @@
+{
+  "intro": "I build software that does real work. For more than ten years that meant automation, data platforms and production systems. Today it means AI agents: digital employees that research, write, check and publish on their own.",
+  "journey": [
+    {
+      "when": "Roots",
+      "title": "A farming village",
+      "text": "I grew up in Komarapudi, near Nellore, in a farming family. Education was the way forward, all the way to an MCA from Sri Venkateswara University."
+    },
+    {
+      "when": "2010 – 2019",
+      "title": "The builder years",
+      "text": "In Hyderabad, I built Python automation at MoSys, Java platforms at Pyramid Softsol, and Spark and Scala pipelines on AWS at Virtusa."
+    },
+    {
+      "when": "2021 – 2026",
+      "title": "Automation at scale",
+      "text": "I spent five years at Bank of America, first in SRE and DevOps, then leading GenAI for an organisation of 100 to 150 people, where I founded the prompt-engineering team."
+    },
+    {
+      "when": "2026 – now",
+      "title": "A digital workforce",
+      "text": "At ValueMomentum I built the agent factory behind a 20-agent programme. Today I lead agentic GenAI on AWS at Minfy and run this lab alongside."
+    }
+  ],
+  "question": "The question changed from “Can AI help an engineer?” to “Can AI do the job, reliably, every day?”",
+  "experience": [
+    {
+      "when": "Oct 2026 – present",
+      "org": "Minfy",
+      "role": "AI Developer Lead",
+      "place": "Hyderabad",
+      "now": true,
+      "points": [
+        "I lead a team of four engineers building agentic GenAI solutions on AWS Bedrock for AWS Marketplace.",
+        "I own the build: environments, scope, architecture and delivery of the first solutions."
+      ]
+    },
+    {
+      "when": "Aug 2026 – Oct 2026",
+      "org": "ValueMomentum",
+      "role": "GenAI Solution Architect and AI Senior Lead",
+      "points": [
+        "I designed the agent factory behind a client's 20-agent incident-management programme: a two-year plan delivered in six to eight months, with about 70–80% of the platform reused.",
+        "I built the flagship root-cause-analysis agent on Copilot Studio. Time to first answer fell from about 30 seconds to under five, across more than 1,506 incidents per run, at no new infrastructure cost.",
+        "Continuous evaluation, with the CI, quality gates and regression harness I brought to low-code agents, lifted answer consistency from about 25% to about 80%."
+      ]
+    },
+    {
+      "when": "Apr 2021 – Jul 2026",
+      "org": "Bank of America",
+      "role": "AVP, GenAI and Automation Lead, and SRE and DevOps Lead",
+      "points": [
+        "A prompt-engineering framework I built saved about 14,300 engineer-hours a year: it automated more than 28,600 compliance reviews a year at four times the throughput, from 40 minutes to 10 each.",
+        "I founded the prompt-engineering team and built a library of more than 10,000 structured prompts. More than 100 automations followed across eight to ten teams: over 20 that I built and over 80 that I mentored.",
+        "Database health checks across 27 databases fell from 1.5 hours to 5–10 minutes, and I led incident management and service restoration in critical windows.",
+        "Copilot adoption for an organisation of 100 to 150 people was mine to lead, with GenAI orchestration (LLMOps) on LangSmith and Galileo.",
+        "Over five years, the work earned 28 awards, including Platinum for GenAI leadership."
+      ]
+    },
+    {
+      "when": "Aug 2019 – Mar 2021",
+      "org": "Virtusa",
+      "role": "Senior Consultant",
+      "points": [
+        "I built Spark and Scala data pipelines on AWS EMR for a research-analytics company, with automated Hive ingestion and a large-scale migration from S3 to HDFS.",
+        "I built Spark applications with JanusGraph and HBase for an insurer's disability-evaluation platform."
+      ]
+    },
+    {
+      "when": "Dec 2012 – Sep 2014",
+      "org": "Pyramid Softsol",
+      "role": "Software Engineer",
+      "points": [
+        "I built Java, Spring and Hibernate application layers for two client platforms, automated data migration and fixed production incidents."
+      ]
+    },
+    {
+      "when": "Oct 2010 – Jul 2011",
+      "org": "MoSys India",
+      "role": "Technical Consultant",
+      "place": "Hyderabad",
+      "points": [
+        "I wrote Python automation for semiconductor test data in CSV, JSON and XML, and handled Oracle extraction, validation and cleansing."
+      ]
+    }
+  ],
+  "teaching": {
+    "text": "Teaching has run alongside it all. I have been a trainer since 2004 and was an Assistant Professor. I have trained more than 500 engineers and run a learning group in every company I join; the free courses on this site come from the same habit.",
+    "roles": [
+      {
+        "when": "Aug 2011 – Nov 2012 and Nov 2014 – Jul 2019",
+        "org": "Independent technical trainer",
+        "text": "Python, Java and big data, for corporate and campus groups."
+      },
+      {
+        "when": "Nov 2007 – Mar 2010",
+        "org": "DRK College of Engineering and Technology",
+        "text": "Assistant Professor."
+      },
+      {
+        "when": "2004 – 2007",
+        "org": "CAT Computers, Nellore",
+        "text": "Trainer. This is where my teaching started."
+      }
+    ]
+  },
+  "credentials": [
+    {
+      "status": "Completed · Oct 2026",
+      "title": "Generative AI and Agentic AI for Developers",
+      "issuer": "Indian Institute of Technology Patna · Continuing Education Programme · Six months, online",
+      "image": "/assets/iit-patna-certificate.jpg"
+    },
+    {
+      "status": "Completed · Jan 2026",
+      "title": "Generative AI Sprint: AI for Founders and Business",
+      "issuer": "Outskill · 14 days · AI Generalist Accelerator Program (NSDC course)",
+      "topics": [
+        "Prompt engineering",
+        "Automation with n8n",
+        "No-code products",
+        "Voice agents",
+        "MCP",
+        "Multimodal AI"
+      ],
+      "image": "/assets/outskill-genai-sprint-certificate.jpg"
+    },
+    {
+      "status": "Preparing · Dec 2026",
+      "title": "Claude Certified Architect – Professional",
+      "issuer": "Anthropic · Hands-on labs under way"
+    },
+    {
+      "status": "Certification",
+      "title": "Cisco Certified Python Professional",
+      "issuer": "Cisco"
+    },
+    {
+      "status": "Postgraduate",
+      "title": "Master of Computer Applications (MCA)",
+      "issuer": "VRIPS · Sri Venkateswara University"
+    }
+  ],
+  "education": [
+    {
+      "level": "Postgraduate",
+      "title": "MCA",
+      "where": "VRIPS · Sri Venkateswara University"
+    },
+    {
+      "level": "Undergraduate",
+      "title": "Bachelor's degree",
+      "where": "Vivekananda Degree College · Sri Venkateswara University"
+    },
+    {
+      "level": "Classes 11–12",
+      "title": "Intermediate",
+      "where": "Ratna Junior College"
+    },
+    {
+      "level": "Classes 8–10",
+      "title": "Secondary school",
+      "where": "Vidya Bharathi"
+    },
+    {
+      "level": "Classes 1–7",
+      "title": "Primary school",
+      "where": "Siddhartha English Medium School"
+    }
+  ]
+}

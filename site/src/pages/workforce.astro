@@ -1,0 +1,70 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import facts from "../data/facts.json";
+import teams from "../data/teams.json";
+import { shift, words } from "../lib/format";
+
+const w = facts.workforce;
+const crewCount = teams.reduce((n, t) => n + t.crew.length, 0);
+if (crewCount !== w.agents) throw new Error(`teams.json has ${crewCount} agents but facts.json says ${w.agents}`);
+const goal = w.goals[0]!;
+const pct = Math.round((w.agents / goal.agents) * 100);
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+---
+<Base title="Workforce" path="/workforce" description={`The ${w.agents} AI agents in ${words(w.teams)} teams that research, write, check and publish every day, and what each one does.`}>
+  <PageHero crumb="Workforce" eyebrow="The digital workforce" title="Nobody here takes a day off"
+    lede={`The workforce has ${w.agents} agents in ${words(w.teams)} teams. Every agent runs on its own schedule in the cloud, with a quality gate before anything goes out and a trace of every step.`}>
+    <div class="grid gap-2 max-w-[560px] pt-4">
+      <div class="flex justify-between text-sm" style="color: var(--night-muted)">
+        <span><b class="num" style="color: var(--night-ink)">{w.agents}</b> of {goal.agents} agents</span>
+        <span>Goal: {goal.agents} by {goal.by}, then {w.goals[1]!.agents} by {w.goals[1]!.by}</span>
+      </div>
+      <div class="h-2 rounded-full overflow-hidden" style="background: var(--night-band)" role="progressbar" aria-valuenow={w.agents} aria-valuemin="0" aria-valuemax={goal.agents} aria-label="Progress towards the agent goal">
+        <div class="h-full rounded-full" style={`width: ${pct}%; background: var(--amber-bright)`}></div>
+      </div>
+    </div>
+  </PageHero>
+
+  <nav aria-label="Teams" class="border-b sticky top-16 z-30" style="background: var(--paper); border-color: var(--rule)">
+    <div class="wrap flex gap-2 overflow-x-auto py-3 text-sm">
+      {teams.map((t) => (
+        <a href={`#${slug(t.name)}`} class="shrink-0 px-3 py-1.5 rounded-full border no-underline" style="border-color: var(--rule); color: var(--ink)">{t.name}</a>
+      ))}
+    </div>
+  </nav>
+
+  <div class="wrap py-16 grid gap-8">
+    {teams.map((t) => (
+      <section id={slug(t.name)} class="scroll-mt-32 grid lg:grid-cols-[340px_1fr] gap-8 p-8 rounded-2xl border" style="background: var(--card); border-color: var(--rule)">
+        <div class="grid gap-3 content-start">
+          <p class="eyebrow" style="color: var(--amber)">{shift(t.shift)}</p>
+          <h2 class="display text-4xl leading-tight">{t.name}</h2>
+          <p style="color: var(--muted)">{t.about}</p>
+          <p class="text-sm flex items-center gap-2" style="color: var(--muted)">
+            <span class="inline-block w-2 h-2 rounded-full" style="background: #2e9e5b"></span>
+            {t.crew.length === 1 ? "One agent on duty" : `${words(t.crew.length).replace(/^./, (c) => c.toUpperCase())} agents on duty`}
+          </p>
+        </div>
+        <ol class="grid sm:grid-cols-2 gap-3 list-none p-0 m-0">
+          {t.crew.map(([name, job], i) => (
+            <li class="grid gap-1 p-4 rounded-xl border" style="border-color: var(--rule)">
+              <h3 class="flex items-center gap-2 font-semibold text-base m-0">
+                <span class="mono text-xs px-1.5 py-0.5 rounded" style="background: var(--amber-soft); color: var(--amber)">{String(i + 1).padStart(2, "0")}</span>
+                {name}
+              </h3>
+              <p style="color: var(--muted)" class="text-[15px] m-0">{job}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    ))}
+  </div>
+
+  <section class="night">
+    <div class="wrap py-16 flex flex-wrap items-center justify-between gap-6">
+      <h2 class="display text-4xl max-w-[24ch]">See how these teams run on their own clocks</h2>
+      <a href="/architecture" class="btn btn-primary">See the architecture</a>
+    </div>
+  </section>
+</Base>

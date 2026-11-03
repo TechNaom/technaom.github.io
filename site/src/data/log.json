@@ -44,7 +44,7 @@
   {
     "d": "31 Oct 2026",
     "t": "A noon post failed, and was healed and posted by 12:06",
-    "p": "The first interview post wrote a good draft but failed at 12:00 on a small configuration bug: a label colour was read as a number. The healer reran the slot at 12:05 and it was posted at 12:06. The bug was fixed the same day, and a label problem can no longer stop a post.",
+    "p": "The first interview post wrote a good draft but failed at 12:00 on a small configuration bug: a label colour was read as a number. The healer reran the slot at 12:05, and it was posted at 12:06. The bug was fixed the same day, and a label problem can no longer stop a post.",
     "c": "Shipped"
   },
   {
@@ -62,7 +62,7 @@
   {
     "d": "31 Oct 2026",
     "t": "Real interview questions, checked by code",
-    "p": "The 12:00 IST team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.",
+    "p": "The 12 PM team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.",
     "c": "Shipped"
   },
   {
@@ -74,7 +74,7 @@
   {
     "d": "27 Oct 2026",
     "t": "A cost controller joins the team",
-    "p": "Every morning at 09:00 IST it reads token usage from both Langfuse accounts and reports spend per workflow and per model. First report: the whole workforce cost about one US dollar for the month so far.",
+    "p": "Every morning at 9:00 AM IST it reads token usage from both Langfuse accounts and reports spend per workflow and per model. First report: the whole workforce cost about one US dollar for the month so far.",
     "c": "Shipped"
   },
   {
@@ -98,7 +98,7 @@
   {
     "d": "26 Oct 2026",
     "t": "No single AI provider can stop a post",
-    "p": "Every agent now falls back across three providers: open models on Groq, then Gemini Flash, then Claude Haiku. The same day, Groq's daily limit ran out and the backups kept every draft flowing. A missed slot also emails an alert 30 minutes after its time.",
+    "p": "Every agent now falls back across three providers: open models on Groq, then Gemini Flash, then Claude Haiku. The same day, Groq's daily limit ran out, and the backups kept every draft flowing. A missed slot also emails an alert 30 minutes after its time.",
     "c": "Shipped"
   },
   {
@@ -116,7 +116,7 @@
   {
     "d": "27 Oct 2026",
     "t": "This site goes live",
-    "p": "A public home for the lab: the workforce, architecture, research notebook, all 46 repositories and the full journey. From today it is updated with every piece of R&D.",
+    "p": "A public home for the lab: the workforce, architecture, research notebook, all 46 repositories and the full journey. From today, it is updated with every piece of R&D.",
     "c": "Shipped"
   },
   {

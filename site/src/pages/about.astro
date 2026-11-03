@@ -1,0 +1,116 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHead from "../components/SectionHead.astro";
+import about from "../data/about.json";
+import facts from "../data/facts.json";
+import { fmt } from "../lib/format";
+
+const numbers = [
+  { n: "10+", label: "Years in software, data platforms and AI" },
+  { n: fmt(facts.bofa.hoursSaved), label: "Engineer-hours a year saved at Bank of America" },
+  { n: String(facts.bofa.awards), label: "Awards, including Platinum for GenAI leadership" },
+  { n: "20", label: "Agent programme delivered in six to eight months instead of two years" },
+];
+---
+<Base title="About" path="/about" description={`${facts.name}: from a farming village near Nellore to leading agentic GenAI at Minfy and building a digital workforce.`}>
+  <PageHero crumb="About" eyebrow="The journey" title="From a farming village to a digital workforce" lede={about.intro} />
+
+  <section class="wrap py-16 grid gap-10">
+    <ol class="grid md:grid-cols-2 lg:grid-cols-4 gap-5 list-none p-0 m-0">
+      {about.journey.map((j, i) => (
+        <li class="relative grid gap-2 content-start p-6 rounded-xl border" style="background: var(--card); border-color: var(--rule)">
+          <span class="eyebrow" style="color: var(--amber)">{j.when}</span>
+          <h2 class="text-xl font-semibold">{j.title}</h2>
+          <p style="color: var(--muted)" class="text-[15px]">{j.text}</p>
+          {i < about.journey.length - 1 && <span aria-hidden="true" class="hidden lg:block absolute -right-4 top-1/2 text-xl" style="color: var(--amber)">→</span>}
+        </li>
+      ))}
+    </ol>
+    <p class="display text-3xl sm:text-4xl max-w-[30ch] leading-tight">{about.question}</p>
+  </section>
+
+  <section aria-label="Career in numbers" class="border-y" style="border-color: var(--rule)">
+    <div class="wrap grid grid-cols-2 lg:grid-cols-4">
+      {numbers.map((p, i) => (
+        <div class={`py-9 px-2 sm:px-6 grid gap-1 ${i ? "lg:border-l" : ""} ${i % 2 ? "border-l" : ""}`} style="border-color: var(--rule)">
+          <span class="display num text-5xl">{p.n}</span>
+          <span style="color: var(--muted)" class="text-[15px] leading-snug">{p.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <section id="experience" class="wrap py-16 grid lg:grid-cols-[300px_1fr] gap-12">
+    <SectionHead eyebrow="Experience" title="Where I have built" />
+    <ol class="grid gap-0 list-none p-0 m-0">
+      {about.experience.map((e) => (
+        <li class="grid sm:grid-cols-[190px_1fr] gap-2 sm:gap-8 py-8 border-b first:pt-0" style="border-color: var(--rule)">
+          <div class="grid gap-1 content-start text-sm" style="color: var(--muted)">
+            <span>{e.when}</span>{e.place && <span>{e.place}</span>}
+          </div>
+          <div class="grid gap-3">
+            <h3 class="text-xl font-semibold flex flex-wrap items-center gap-2">{e.org}
+              {e.now && <span class="text-xs px-2 py-0.5 rounded-full font-semibold" style="background: #dff3e7; color: #1f7a45">Now</span>}</h3>
+            <p class="font-medium -mt-2" style="color: var(--muted)">{e.role}</p>
+            <ul class="grid gap-2 m-0 pl-5 list-disc marker:text-[color:var(--amber)]">
+              {e.points.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="night">
+    <div class="wrap py-16 grid lg:grid-cols-[300px_1fr] gap-12">
+      <SectionHead dark eyebrow="Teaching" title="Teaching, alongside it all" />
+      <div class="grid gap-6">
+        <p style="color: var(--night-muted)" class="max-w-[65ch]">{about.teaching.text}</p>
+        <ol class="grid gap-3 list-none p-0 m-0">
+          {about.teaching.roles.map((r) => (
+            <li class="grid sm:grid-cols-[260px_1fr] gap-1 sm:gap-6 p-4 rounded-xl border" style="background: var(--night-2); border-color: var(--night-rule)">
+              <span class="text-sm" style="color: var(--night-muted)">{r.when}</span>
+              <span><b>{r.org}</b> <span style="color: var(--night-muted)">· {r.text}</span></span>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section id="credentials" class="wrap py-16 grid gap-10">
+    <SectionHead eyebrow="Credentials" title="Certified to build what I build"
+      lede="Formal training behind the hands-on work. The newest is a six-month programme in generative and agentic AI from IIT Patna, completed in October 2026." />
+    <div class="grid md:grid-cols-2 gap-5">
+      {about.credentials.map((c) => (
+        <article class="grid gap-4 content-start p-6 rounded-xl border" style="background: var(--card); border-color: var(--rule)">
+          {c.image && (
+            <a href={c.image} class="block rounded-lg overflow-hidden border" style="border-color: var(--rule)">
+              <img src={c.image} alt={`Certificate: ${c.title}`} loading="lazy" class="w-full h-auto" />
+            </a>
+          )}
+          <span class="eyebrow" style="color: var(--amber)">{c.status}</span>
+          <h3 class="text-xl font-semibold leading-snug">{c.title}</h3>
+          <p style="color: var(--muted)" class="text-[15px]">{c.issuer}</p>
+          {c.topics && <ul class="flex flex-wrap gap-2 list-none p-0 m-0">{c.topics.map((t) => <li class="text-sm px-2.5 py-1 rounded-full border" style="border-color: var(--rule)">{t}</li>)}</ul>}
+        </article>
+      ))}
+    </div>
+    <p class="text-sm" style="color: var(--muted)">Certificate and enrolment numbers are hidden for privacy, and are available on request.</p>
+  </section>
+
+  <section class="border-t" style="border-color: var(--rule)">
+    <div class="wrap py-16 grid lg:grid-cols-[300px_1fr] gap-12">
+      <SectionHead eyebrow="Education" title="Where it started" />
+      <ol class="grid gap-0 list-none p-0 m-0">
+        {about.education.map((e) => (
+          <li class="grid sm:grid-cols-[190px_1fr] gap-1 sm:gap-8 py-4 border-b last:border-0" style="border-color: var(--rule)">
+            <span class="text-sm" style="color: var(--muted)">{e.level}</span>
+            <span><b>{e.title}</b> <span style="color: var(--muted)">· {e.where}</span></span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,135 @@
+---
+import Base from "../layouts/Base.astro";
+import PageHero from "../components/PageHero.astro";
+import SectionHead from "../components/SectionHead.astro";
+import ImpressionsChart from "../components/ImpressionsChart.astro";
+import metrics from "../../../data/brand-metrics.json";
+import { fmt, day, monthLong, words } from "../lib/format";
+
+const at = metrics.all_time;
+const tiles = [
+  { n: at.followers, label: "Followers" },
+  { n: at.connections, label: "Connections" },
+  { n: at.impressions, label: "Impressions in the past year" },
+  { n: at.engagements, label: "Engagements in the past year" },
+  { n: at.new_followers, label: "New followers in the past year" },
+  { n: at.posts, label: "Posts by the agents since 11 Oct 2026" },
+];
+const audit = metrics.months.slice(-6).reverse();
+const lastMonth = metrics.months.at(-1)!.month;
+const notable = [...metrics.notable_days].sort((a, b) => b.impressions - a.impressions).slice(0, 6);
+const mix = metrics.engagement_mix;
+const act = metrics.activity_per_day;
+const tops = metrics.top_posts.filter((p) => /^https:\/\/www\.linkedin\.com\//.test(p.url)).slice(0, 5);
+const ww = metrics.what_works;
+---
+<Base title="Brand growth" path="/growth" description="The LinkedIn growth my digital workforce produces, measured twice a week from LinkedIn's own numbers.">
+  <PageHero crumb="Brand growth" eyebrow="Measured, not claimed" title="The numbers, straight from LinkedIn"
+    lede="Twice a week, on Mondays and Thursdays, my analytics agents collect these numbers from LinkedIn, count every post and write the summary. Code rejects any figure that is not in the data.">
+    <dl class="grid grid-cols-2 sm:grid-cols-3 gap-x-8 gap-y-6 pt-6 max-w-[820px]">
+      {tiles.map((t) => (
+        <div><dd class="display num text-5xl">{fmt(t.n)}</dd><dt class="text-sm" style="color: var(--night-muted)">{t.label}</dt></div>
+      ))}
+    </dl>
+    <p class="text-sm pt-2" style="color: var(--night-muted)">Updated {day(metrics.generated_at)}. Sources: LinkedIn analytics export, my public LinkedIn profile and our posting records.</p>
+  </PageHero>
+
+  <section class="wrap py-16 grid lg:grid-cols-[1.3fr_1fr] gap-10 items-start">
+    <div class="grid gap-6">
+      <SectionHead eyebrow="Reach" title="Impressions per month" lede="The amber bars are the months since the agents started posting." />
+      <div class="rounded-2xl p-6 night"><ImpressionsChart months={metrics.months.slice(-12)} /></div>
+    </div>
+    <div class="grid gap-5">
+      <h3 class="text-xl font-semibold">Biggest days</h3>
+      <p style="color: var(--muted)">Days with at least four times the impressions of a typical day.</p>
+      <ol class="grid gap-3 list-none p-0 m-0">
+        {notable.map((n) => (
+          <li class="flex justify-between gap-4 p-4 rounded-xl border" style="background: var(--card); border-color: var(--rule)">
+            <span><b class="num">{fmt(n.impressions)}</b> impressions on {day(n.day)}</span>
+            <span class="text-sm text-right" style="color: var(--muted)">
+              About {words(Math.round(n.impressions / Math.max(1, n.typical)))} times a typical day
+              {n.post_url && <> · <a class="link" href={n.post_url}>See the post</a></>}
+            </span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="border-t" style="border-color: var(--rule)">
+    <div class="wrap py-16 grid gap-8">
+      <SectionHead eyebrow="Monthly audit" title="Month by month" lede="Every month is counted from its own dated records. The current month is shown so far." />
+      <div class="overflow-x-auto rounded-2xl border" style="border-color: var(--rule); background: var(--card)">
+        <table class="w-full text-left num min-w-[720px]">
+          <thead class="text-sm" style="color: var(--muted)">
+            <tr class="border-b" style="border-color: var(--rule)">
+              <th scope="col" class="p-4 font-medium">Month</th><th scope="col" class="p-4 font-medium text-right">Impressions</th>
+              <th scope="col" class="p-4 font-medium text-right">Engagements</th><th scope="col" class="p-4 font-medium text-right">New followers</th>
+              <th scope="col" class="p-4 font-medium text-right">Followers at month end</th><th scope="col" class="p-4 font-medium text-right">Posts by the agents</th>
+            </tr>
+          </thead>
+          <tbody>
+            {audit.map((m) => (
+              <tr class="border-b last:border-0" style="border-color: var(--rule)">
+                <th scope="row" class="p-4 font-semibold">{monthLong(m.month)}{m.month === lastMonth && <span class="font-normal" style="color: var(--muted)"> (so far)</span>}</th>
+                <td class="p-4 text-right">{fmt(m.totals.impressions)}</td>
+                <td class="p-4 text-right">{fmt(m.totals.engagements)}</td>
+                <td class="p-4 text-right">{fmt(m.totals.new_followers)}</td>
+                <td class="p-4 text-right">{fmt(m.end.followers)}</td>
+                <td class="p-4 text-right">{m.month >= "2026-10" ? fmt(m.totals.posts) : "–"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="night">
+    <div class="wrap py-16 grid lg:grid-cols-[1fr_1.2fr] gap-12">
+      <div class="grid gap-5 content-start">
+        <SectionHead dark eyebrow="Showing up for others" title="Where I show up" />
+        <p style="color: var(--night-muted)">
+          On average, I leave {act.comments_made} comments and {act.likes_given} likes a day on other people's posts, measured over the past two weeks.
+          Each post I comment on or like is turned into a meaning vector, and similar posts are grouped by clustering. Code checks that the groups are clear and stable before they appear here.
+        </p>
+        <p class="text-sm" style="color: var(--night-muted)">Based on {fmt(mix.items)} comments and likes over the last {mix.days} days.</p>
+      </div>
+      <ol class="grid gap-4 list-none p-0 m-0">
+        {mix.topics.map((t) => (
+          <li class="grid gap-2 p-5 rounded-xl border" style="background: var(--night-2); border-color: var(--night-rule)">
+            <div class="flex justify-between items-baseline gap-4">
+              <span class="font-semibold">{t.name}</span>
+              <span class="display num text-3xl" style="color: var(--amber-bright)">{t.share}%</span>
+            </div>
+            <div class="h-1.5 rounded-full" style="background: var(--night-band)"><div class="h-full rounded-full" style={`width: ${t.share}%; background: var(--amber-bright)`}></div></div>
+            <span class="text-sm" style="color: var(--night-muted)">{t.comments} comments · {t.likes} likes</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="wrap py-16 grid lg:grid-cols-2 gap-12">
+    <div class="grid gap-5 content-start">
+      <SectionHead eyebrow="Top posts" title="The posts people engaged with most" />
+      <ol class="grid gap-3 list-none p-0 m-0">
+        {tops.map((p, i) => (
+          <li class="flex items-center justify-between gap-4 p-4 rounded-xl border" style="background: var(--card); border-color: var(--rule)">
+            <span class="flex items-center gap-3"><span class="mono text-xs px-1.5 py-0.5 rounded" style="background: var(--amber-soft); color: var(--amber)">{String(i + 1).padStart(2, "0")}</span>
+              <a class="link" href={p.url}>Post from {day(p.date)}</a></span>
+            <span class="num"><b>{p.engagements}</b> <span style="color: var(--muted)">engagements</span></span>
+          </li>
+        ))}
+      </ol>
+    </div>
+    <div class="grid gap-5 content-start">
+      <SectionHead eyebrow="What works" title="Still learning, so nothing is claimed yet" />
+      <p style="color: var(--muted)">
+        Every Monday a model checks whether the time, length, hashtags, images or links of my posts predict their engagement, testing itself on posts it has not seen.
+        With {ww.posts} posts, it does not yet predict better than a simple average, so this page makes no claim about what works.
+        The answer will appear here once the model clears that bar.
+      </p>
+    </div>
+  </section>
+</Base>

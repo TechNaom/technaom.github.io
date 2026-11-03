@@ -156,7 +156,7 @@
   {
     "name": "Distribution",
     "shift": "After every post",
-    "about": "Shares every post on Bluesky, Dev.to, Facebook and X about ten minutes after it goes out on LinkedIn, one post at a time on each channel: the same post, with only LinkedIn wording adjusted.",
+    "about": "Shares every post on X, Bluesky, Facebook and Dev.to, between 10 and 90 minutes after it goes out on LinkedIn, one platform at a time. The post stays the same; only LinkedIn wording is adjusted.",
     "crew": [
       [
         "Ledger reader",
@@ -164,11 +164,11 @@
       ],
       [
         "Bluesky publisher",
-        "Shares a 300-character version with the card and links to follow."
+        "Posts a 300-character version with the card and links to follow."
       ],
       [
         "Dev.to publisher",
-        "Shares the interview and learning posts as full articles."
+        "Publishes the leadership, interview and learning posts as full articles."
       ],
       [
         "Facebook publisher",
@@ -176,7 +176,7 @@
       ],
       [
         "X publisher",
-        "Shares a short version with no links, at most four posts a day."
+        "Sends a short version with no links, at most four posts a day."
       ]
     ]
   },

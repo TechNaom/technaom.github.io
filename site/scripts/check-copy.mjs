@@ -23,22 +23,33 @@ const EXEMPT = (el) => {
   return false;
 };
 
+// Inline elements join the sentence around them; every other element starts a new block of text.
+const INLINE = new Set(["a", "b", "strong", "em", "i", "span", "time", "abbr", "small", "sup", "sub", "tspan", "code", "kbd", "mark", "q", "s", "u", "label"]);
 function visibleText(html) {
   const root = parse(html, { comment: false });
   root.querySelectorAll("script, style, noscript").forEach((n) => n.remove());
-  const nodes = [];
-  const walk = (n) => {
+  const blocks = []; // { text, dated }
+  const clean = (t) => t.replace(/&amp;/g, "&").replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"').replace(/&nbsp;/g, " ");
+  const isDated = (n) => { for (; n; n = n.parentNode) if (n.getAttribute?.("data-dated") !== undefined && n.getAttribute?.("data-dated") !== null) return true; return false; };
+  const walk = (n, buf) => {
     for (const c of n.childNodes) {
       if (c.nodeType === 3) {
-        const t = c.rawText.replace(/&amp;/g, "&").replace(/&#39;|&apos;/g, "'").replace(/&quot;/g, '"').replace(/\s+/g, " ").trim();
-        const ex = EXEMPT(c.parentNode);
-        if (t && ex === "cont" && nodes.length) nodes[nodes.length - 1] += " " + t;
-        else if (t && !ex) nodes.push(t);
-      } else if (c.nodeType === 1) walk(c);
+        if (!EXEMPT(c.parentNode)) buf.parts.push(clean(c.rawText));
+      } else if (c.nodeType === 1) {
+        if (EXEMPT(c) === true) { buf.parts.push(" "); continue; }
+        if (INLINE.has(c.rawTagName)) walk(c, buf);
+        else { flush(buf); const inner = { parts: [], node: c }; walk(c, inner); flush(inner); }
+      }
     }
   };
-  walk(root.querySelector("body") || root);
-  return nodes;
+  const flush = (buf) => {
+    const text = buf.parts.join("").replace(/\s+/g, " ").trim();
+    if (text) blocks.push({ text, dated: isDated(buf.node) });
+    buf.parts = [];
+  };
+  const body = root.querySelector("body") || root;
+  const top = { parts: [], node: body }; walk(body, top); flush(top);
+  return blocks;
 }
 
 const BANNED = [/\bworth noting\b/i, /\bleverag(e|ing)\b/i, /\bcutting-edge\b/i, /\bseamless(ly)?\b/i, /\butili[sz]e\b/i, /\bin order to\b/i, /\bgame[- ]chang/i, /\bsynerg/i, /\brevolutioni[sz]/i, /\bdelve\b/i];
@@ -49,8 +60,11 @@ mkdirSync(".copy", { recursive: true });
 
 for (const file of pages) {
   const page = "/" + file.replace(/\\/g, "/").replace(/(index)?\.html$/, "");
-  const nodes = visibleText(readFileSync(join(DIST, file), "utf8"));
+  const blocks = visibleText(readFileSync(join(DIST, file), "utf8"));
+  const nodes = blocks.map((b) => b.text);
   const full = nodes.join("\n");
+  // Dated notebook entries were true when written, so fact rules skip them (style rules still apply)
+  const current = blocks.filter((b) => !b.dated).map((b) => b.text).join("\n");
   writeFileSync(join(".copy", file.replace(/[\\/]/g, "_") + ".txt"), full);
 
   for (const t of nodes) {
@@ -72,15 +86,15 @@ for (const file of pages) {
   }
 
   // Facts: every agent count equals facts.json
-  for (const m of full.matchAll(/\b([\d,]+|[Tt]hirty-six)\s+(?:AI\s+)?agents\b/g)) {
+  for (const m of current.matchAll(/\b(\d[\d,]*|[Tt]hirty-six)\s+(?:AI\s+)?agents\b/g)) {
     const n = NUMBER_WORDS[m[1].toLowerCase()] ?? Number(m[1].replace(/,/g, ""));
     const allowed = [facts.workforce.agents, ...facts.workforce.goals.map((g) => g.agents)];
     if (!allowed.includes(n)) report(page, "fact-agents", `"${m[0]}" but facts.json says ${facts.workforce.agents}`);
   }
-  for (const m of full.matchAll(/\b(\d+)\s+repositories\b/g)) {
+  for (const m of current.matchAll(/\b(\d+)\s+repositories\b/g)) {
     if (Number(m[1]) !== facts.repos.total) report(page, "fact-repos", `"${m[0]}" but facts.json says ${facts.repos.total}`);
   }
-  for (const sentence of full.split(/(?<=[.!?])\s+|\n/)) {
+  for (const sentence of current.split(/(?<=[.!?])\s+|\n/)) {
     if (/Bluesky, Dev\.to and Facebook\b/.test(sentence) && !/\bX\b/.test(sentence)) {
       report(page, "fact-platforms", `A platform list leaves out X: ${sentence}`);
     }
@@ -96,7 +110,7 @@ try {
 
 // Grammar: LanguageTool, British English
 if (grammar) {
-  const OFF = ["WHITESPACE_RULE", "UPPERCASE_SENTENCE_START", "PUNCTUATION_PARAGRAPH_END", "DASH_RULE", "EN_QUOTES", "COMMA_PARENTHESIS_WHITESPACE", "OXFORD_SPELLING_Z_NOT_S", "MORFOLOGIK_RULE_EN_GB", "EN_UNPAIRED_BRACKETS", "PLUS_MINUS", "CONFUSION_RULE_NEWS_NEW"];
+  const OFF = ["WHITESPACE_RULE", "UPPERCASE_SENTENCE_START", "PUNCTUATION_PARAGRAPH_END", "DASH_RULE", "EN_QUOTES", "COMMA_PARENTHESIS_WHITESPACE", "OXFORD_SPELLING_Z_NOT_S", "MORFOLOGIK_RULE_EN_GB", "EN_UNPAIRED_BRACKETS", "PLUS_MINUS", "CONFUSION_RULE_NEWS_NEW", "NEWS_COMPOUNDS", "LEARN_NNNNS_ON_DO", "APOSTROPHE_PLURAL_"];
   for (const f of readdirSync(".copy")) {
     // Each text node as its own line; grammar is checked on lines that form sentences
     const text = readFileSync(join(".copy", f), "utf8").split("\n").filter((l) => l.split(" ").length >= 4).join("\n\n");

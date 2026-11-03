@@ -3,13 +3,14 @@ import Base from "../layouts/Base.astro";
 import facts from "../data/facts.json";
 import log from "../data/log.json";
 import metrics from "../../../data/brand-metrics.json";
+import teams from "../data/teams.json";
+import ImpressionsChart from "../components/ImpressionsChart.astro";
+import { shift, words } from "../lib/format";
 
 const w = facts.workforce;
 const fmt = (n: number) => n.toLocaleString("en-GB");
 const day = (iso: string) =>
   new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-const monthName = (ym: string) => MONTHS[Number(ym.slice(5, 7)) - 1]!;
 
 const proof = [
   { n: fmt(w.agents), label: "AI agents in production" },
@@ -20,7 +21,6 @@ const proof = [
 
 const at = metrics.all_time;
 const months = metrics.months.slice(-12);
-const peak = Math.max(...months.map((m) => m.totals.impressions));
 
 const lab = [
   {
@@ -52,6 +52,12 @@ const career = [
   { when: "Oct 2026 – present", org: "Minfy", role: "AI Developer Lead", text: "I lead a team of four engineers building agentic GenAI solutions on AWS." },
   { when: "Aug – Oct 2026", org: "ValueMomentum", role: "GenAI Solution Architect", text: "I designed the agent factory behind a client's 20-agent programme, delivered in six to eight months instead of two years." },
   { when: "Apr 2021 – Jul 2026", org: "Bank of America", role: "AVP, GenAI and Automation Lead", text: `I saved about ${fmt(facts.bofa.hoursSaved)} engineer-hours a year, founded the prompt-engineering team and won ${facts.bofa.awards} awards in five years.` },
+];
+const next = [
+  { title: "Agent swarm", text: "A factory that turns a short spec into a working agent, and a shared board where 100 agents coordinate." },
+  { title: "Guardrails agent", text: "It interviews a team, then enforces their rules across every agent." },
+  { title: "Competition autopilot", text: "It finds AI competitions worldwide, builds entries and fixes its own failures." },
+  { title: "Machine learning inside agents", text: "Routers, rankers and guards that make agents cheaper and safer." },
 ];
 ---
 <Base title="Home" description={`${facts.name} builds AI systems that do real work: a digital workforce of ${w.agents} agents that writes, checks and publishes every day, measured at every step.`}>
@@ -131,6 +137,31 @@ const career = [
     </div>
   </section>
 
+  <!-- The workforce -->
+  <section class="wrap pt-20 grid gap-10">
+    <div class="flex flex-wrap justify-between items-end gap-4">
+      <div class="grid gap-3 max-w-[60ch]">
+        <p class="eyebrow" style="color: var(--amber)">The workforce</p>
+        <h2 class="display text-4xl sm:text-5xl leading-tight">{words(w.teams).replace(/^./, (c) => c.toUpperCase())} teams, each on its own clock</h2>
+      </div>
+      <a href="/workforce" class="link">Meet all {w.agents} agents <span aria-hidden="true">→</span></a>
+    </div>
+    <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0 m-0">
+      {teams.map((t) => (
+        <li>
+          <a href={`/workforce#${t.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} class="group flex items-center justify-between gap-4 p-5 rounded-xl border no-underline h-full"
+             style="background: var(--card); border-color: var(--rule); color: var(--ink)">
+            <span class="grid gap-1">
+              <span class="font-semibold">{t.name}</span>
+              <span class="text-sm" style="color: var(--muted)">{shift(t.shift)}</span>
+            </span>
+            <span class="display num text-3xl" style="color: var(--amber)" aria-label={`${t.crew.length} agents`}>{t.crew.length}</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
   <!-- What the lab builds -->
   <section id="work" class="wrap py-20 grid gap-10">
     <div class="grid gap-3 max-w-[60ch]">
@@ -166,6 +197,7 @@ const career = [
           <div><dt class="text-sm" style="color: var(--night-muted)">Posts by the agents</dt><dd class="display num text-4xl">{fmt(at.posts)}</dd></div>
         </dl>
         <p class="text-sm" style="color: var(--night-muted)">Updated {day(metrics.generated_at.replace("+00:00", "Z"))}. Sources: LinkedIn analytics, my public profile and our posting records.</p>
+        <p><a href="/growth" class="btn btn-secondary">See the full analytics</a></p>
       </div>
 
       <figure class="m-0 rounded-2xl border p-6" style="background: var(--night-2); border-color: var(--night-rule)">
@@ -173,22 +205,7 @@ const career = [
           <span class="font-semibold">Impressions per month</span>
           <span class="text-sm" style="color: var(--night-muted)">Last 12 months</span>
         </figcaption>
-        <svg class="dg" viewBox="0 0 600 260" role="img" aria-label={`Monthly LinkedIn impressions for the last 12 months. The highest month had ${fmt(peak)}.`}>
-          <line x1="0" y1="220" x2="600" y2="220" class="axis" />
-          {months.map((m, i) => {
-            const h = Math.max(2, (m.totals.impressions / peak) * 180);
-            const x = 10 + i * 49;
-            const agents = m.month >= "2026-10";
-            return (
-              <g>
-                <title>{`${monthName(m.month)} ${m.month.slice(0, 4)}: ${fmt(m.totals.impressions)} impressions`}</title>
-                <rect x={x} y={220 - h} width="34" height={h} rx="4" fill={agents ? "#f4a640" : "#3d5272"} />
-                <text x={x + 17} y="242" text-anchor="middle" class="tm">{monthName(m.month)}</text>
-              </g>
-            );
-          })}
-          <text x={10 + (months.findIndex((m) => m.month === "2026-10")) * 49 + 17} y="20" text-anchor="middle" class="tA">Agents started</text>
-        </svg>
+        <ImpressionsChart months={months} />
       </figure>
     </div>
   </section>
@@ -200,10 +217,11 @@ const career = [
         <p class="eyebrow" style="color: var(--amber)">Lab notebook</p>
         <h2 class="display text-4xl sm:text-5xl leading-tight">Latest from the lab</h2>
       </div>
+      <a href="/notebook" class="link">Read all {log.length} entries <span aria-hidden="true">→</span></a>
     </div>
     <ol class="grid md:grid-cols-3 gap-5 list-none p-0 m-0">
       {latest.map((e) => (
-        <li class="grid gap-3 content-start p-7 rounded-xl border" style="background: var(--card); border-color: var(--rule)">
+        <li class="grid gap-3 content-start p-7 rounded-xl border" style="background: var(--card); border-color: var(--rule)" data-dated>
           <div class="flex justify-between items-center gap-3 text-sm">
             <time style="color: var(--muted)">{e.d}</time>
             {e.c && <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold" style="background: var(--amber-soft); color: var(--amber)">{e.c}</span>}
@@ -222,6 +240,7 @@ const career = [
         <p class="eyebrow" style="color: var(--amber)">Career</p>
         <h2 class="display text-4xl sm:text-5xl leading-tight">More than ten years of building software that does real work</h2>
         <p style="color: var(--muted)">I started with automation, data platforms and production systems. Today I build AI agents.</p>
+        <p><a href="/about" class="link">Read the full story <span aria-hidden="true">→</span></a></p>
       </div>
       <ol class="grid gap-0 list-none p-0 m-0">
         {career.map((c) => (
@@ -246,6 +265,17 @@ const career = [
       <div class="flex flex-wrap gap-4 pt-2">
         <a href={facts.links[0]!.url} class="btn btn-primary">Talk to me on LinkedIn</a>
         <a href={facts.links[1]!.url} class="btn btn-secondary">See the code on GitHub</a>
+      </div>
+      <div class="grid gap-4 pt-10 w-full">
+        <p class="eyebrow" style="color: var(--night-muted)">Coming next</p>
+        <ul class="grid md:grid-cols-2 gap-4 list-none p-0 m-0 w-full">
+          {next.map((n) => (
+            <li class="grid gap-1 p-5 rounded-xl border" style="background: var(--night-2); border-color: var(--night-rule)">
+              <span class="font-semibold">{n.title}</span>
+              <span style="color: var(--night-muted)" class="text-[15px]">{n.text}</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   </section>

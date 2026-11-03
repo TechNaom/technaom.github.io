@@ -1,0 +1,35 @@
+---
+import { fmt, monthShort } from "../lib/format";
+
+interface Month { month: string; totals: { impressions: number } }
+interface Props { months: Month[] }
+const { months } = Astro.props;
+const peak = Math.max(...months.map((m) => m.totals.impressions));
+const W = 600, base = 220, top = 40, bw = 34, step = (W - 20) / months.length;
+const start = months.findIndex((m) => m.month >= "2026-10");
+// Gridlines at round values
+const tick = peak > 10000 ? 5000 : peak > 2000 ? 1000 : 500;
+const ticks = Array.from({ length: Math.floor(peak / tick) }, (_, i) => (i + 1) * tick);
+const y = (v: number) => base - (v / peak) * (base - top);
+---
+<svg class="dg" viewBox={`0 0 ${W} 260`} role="img" aria-label={`Monthly LinkedIn impressions for the last ${months.length} months. The highest month had ${fmt(peak)}.`}>
+  {ticks.map((t) => (
+    <g>
+      <line x1="0" x2={W} y1={y(t)} y2={y(t)} stroke="#1f2d45" stroke-width="1" />
+      <text x={W} y={y(t) - 5} text-anchor="end" class="tm">{fmt(t / 1000)}k</text>
+    </g>
+  ))}
+  <line x1="0" y1={base} x2={W} y2={base} class="axis" />
+  {months.map((m, i) => {
+    const h = Math.max(2, base - y(m.totals.impressions));
+    const x = 10 + i * step;
+    return (
+      <g>
+        <title>{`${monthShort(m.month)} ${m.month.slice(0, 4)}: ${fmt(m.totals.impressions)} impressions`}</title>
+        <rect x={x} y={base - h} width={bw} height={h} rx="4" fill={start >= 0 && i >= start ? "#f4a640" : "#3d5272"} />
+        <text x={x + bw / 2} y="242" text-anchor="middle" class="tm">{monthShort(m.month)}</text>
+      </g>
+    );
+  })}
+  {start >= 0 && <text x={10 + start * step + bw / 2} y="20" text-anchor="middle" class="tA">Agents started</text>}
+</svg>
