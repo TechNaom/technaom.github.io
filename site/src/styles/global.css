@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+/* Blueprint: deep-ink feature bands with a faint grid, clean cool-paper reading sections,
+   one amber line for the path a post travels. The same tokens drive the diagrams. */
+:root {
+  --paper: #f5f7fa;
+  --card: #ffffff;
+  --ink: #132034;
+  --muted: #56637a;
+  --rule: #d9e0ea;
+  --amber: #b25a08;          /* amber on paper: 4.9:1 */
+  --amber-bright: #f4a640;   /* amber on ink */
+  --amber-soft: #fcebd5;
+  --cyan: #1d6b87;
+  --cyan-bright: #7fd0ea;
+
+  --night: #0c1422;
+  --night-2: #121d30;
+  --night-ink: #e8edf5;
+  --night-muted: #9aa8be;
+  --night-rule: #2b3a52;
+  --night-band: #16233a;
+
+  --display: "Instrument Serif", Georgia, serif;
+  --body: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0f1828; --card: #142034; --ink: #e8edf5; --muted: #9aa8be; --rule: #2b3a52;
+    --amber: #f4a640; --amber-soft: #3a2a14; --cyan: #7fd0ea; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0f1828; --card: #142034; --ink: #e8edf5; --muted: #9aa8be; --rule: #2b3a52;
+  --amber: #f4a640; --amber-soft: #3a2a14; --cyan: #7fd0ea; color-scheme: dark;
+}
+
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
+body { background: var(--paper); color: var(--ink); font: 17px/1.65 var(--body); -webkit-font-smoothing: antialiased; }
+h1, h2, h3 { text-wrap: balance; }
+:focus-visible { outline: 2px solid var(--amber-bright); outline-offset: 3px; border-radius: 4px; }
+
+.wrap { max-width: 1200px; margin-inline: auto; padding-inline: 20px; }
+.display { font-family: var(--display); font-weight: 400; letter-spacing: -0.01em; }
+.eyebrow { font: 500 12.5px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* Night band: the blueprint world */
+.night { background-color: var(--night); color: var(--night-ink); color-scheme: dark;
+  background-image: linear-gradient(var(--night-band) 1px, transparent 1px), linear-gradient(90deg, var(--night-band) 1px, transparent 1px);
+  background-size: 32px 32px; }
+
+/* Buttons: one primary (amber), one secondary (cyan outline) */
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 6px; font-weight: 600; font-size: 16px; text-decoration: none; transition: transform .15s ease, background-color .15s ease; }
+.btn:hover { transform: translateY(-1px); }
+.btn-primary { background: var(--amber-bright); color: #1a1205; }
+.btn-primary:hover { background: #ffb85a; }
+.btn-secondary { border: 1.5px solid var(--cyan-bright); color: var(--cyan-bright); }
+.btn-secondary:hover { background: rgba(127, 208, 234, .1); }
+.btn-ink { background: var(--ink); color: var(--paper); }
+.link { color: var(--amber); font-weight: 600; text-decoration: none; }
+.link:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Diagram vocabulary (inline SVG on night panels) */
+.dg { display: block; width: 100%; height: auto; color: var(--night-ink); }
+.dg .t { fill: var(--night-ink); font: 500 13px var(--body); }
+.dg .tm { fill: var(--night-muted); font: 400 12px var(--body); }
+.dg .mono { font-family: var(--mono); font-size: 11.5px; }
+.dg .cap { fill: var(--night-muted); font: 500 11px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.dg .big { fill: var(--night-ink); font: 400 22px var(--display); }
+.dg .box { fill: var(--night-2); stroke: var(--night-rule); stroke-width: 1.2; }
+.dg .boxA { fill: #3a2a14; stroke: var(--amber-bright); stroke-width: 1.4; }
+.dg .boxC { fill: #13303d; stroke: var(--cyan-bright); stroke-width: 1.2; }
+.dg .band { fill: var(--night-band); }
+.dg .ln { stroke: var(--night-muted); stroke-width: 1.4; fill: none; }
+.dg .lnA { stroke: var(--amber-bright); stroke-width: 2.2; fill: none; }
+.dg .lnC { stroke: var(--cyan-bright); stroke-width: 1.6; fill: none; }
+.dg .dash { stroke-dasharray: 5 5; }
+.dg .axis { stroke: var(--night-rule); stroke-width: 1.2; }
+.dg .ah { fill: var(--night-muted); }
+.dg .ahA { fill: var(--amber-bright); }
+.dg .ahC { fill: var(--cyan-bright); }
+.dg .dotA { fill: var(--amber-bright); }
+.dg .dotC { fill: var(--cyan-bright); }
+.dg .dotX { fill: #ff8a80; }
+.dg .tA { fill: var(--amber-bright); font: 600 12px var(--body); }
+.dg .tC { fill: var(--cyan-bright); font: 600 12px var(--body); }
+.dg .tX { fill: #ff8a80; font: 600 12px var(--body); }
+
+/* The flowing pulse on the hero diagram */
+.flow { stroke-dasharray: 6 10; animation: flow 1.6s linear infinite; }
+@keyframes flow { to { stroke-dashoffset: -32; } }

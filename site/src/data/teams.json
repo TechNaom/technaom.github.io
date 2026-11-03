@@ -1,0 +1,209 @@
+[
+  {
+    "name": "Leadership",
+    "shift": "08:00 IST · Daily",
+    "about": "Practical leadership for people who build with technology and AI: true stories, verified quotes from leaders and management thinkers, and lessons, each with a card designed to match.",
+    "crew": [
+      [
+        "Planner",
+        "Chooses the day's story, quote or lesson."
+      ],
+      [
+        "Quote scout",
+        "Searches Wikiquote and the web for leaders' own words."
+      ],
+      [
+        "Verifier",
+        "Proves every quote is real before it is used."
+      ],
+      [
+        "Writer",
+        "Writes only from verified facts."
+      ],
+      [
+        "Card maker",
+        "Designs the matching visual."
+      ],
+      [
+        "Critic",
+        "Rejects anything generic or unproven."
+      ],
+      [
+        "Healer",
+        "Finds the root cause of a missed post and fixes it within minutes."
+      ]
+    ]
+  },
+  {
+    "name": "AI interview question",
+    "shift": "12:00 IST · Daily",
+    "about": "One real question from an AI Architect or AI Developer interview, as a candidate reported it, answered at architect level. The company is named only when the candidate's report names it.",
+    "crew": [
+      [
+        "Interview scout",
+        "Searches candidates' interview reports from the last year, never question banks or prep portals."
+      ],
+      [
+        "Checker",
+        "Confirms in code that the question is in the report, word for word."
+      ],
+      [
+        "Writer",
+        "Explains what is being tested, a strong answer and the common mistakes."
+      ],
+      [
+        "Card maker",
+        "Puts the question on the card."
+      ],
+      [
+        "Architect reviewer",
+        "Rejects an answer that is wrong or too shallow."
+      ],
+      [
+        "Healer",
+        "Moves to the next topic and finds another question if a run fails."
+      ]
+    ]
+  },
+  {
+    "name": "AI news digest",
+    "shift": "16:00 IST · Daily",
+    "about": "The day's top AI updates in one post, every claim traced to its source. The longest-serving team.",
+    "crew": [
+      [
+        "News collector",
+        "Gathers the top ten AI updates and drops repeats."
+      ],
+      [
+        "Writer",
+        "Drafts the digest in my voice."
+      ],
+      [
+        "Quality gate",
+        "Checks every claim against its source and rewrites once if needed."
+      ]
+    ]
+  },
+  {
+    "name": "Tech learning",
+    "shift": "23:30 IST · Daily",
+    "about": "Tier lists, comparisons and explainers, researched from the last month's sources.",
+    "crew": [
+      [
+        "Planner",
+        "Chooses the topic and the format."
+      ],
+      [
+        "Researcher",
+        "Collects fresh, independent sources."
+      ],
+      [
+        "Writer",
+        "Writes only from those sources."
+      ],
+      [
+        "Carousel maker",
+        "Turns the post into slides."
+      ],
+      [
+        "Critic",
+        "Checks tiers, claims and consistency."
+      ],
+      [
+        "Healer",
+        "Finds the root cause of a missed post and fixes it within minutes."
+      ]
+    ]
+  },
+  {
+    "name": "Brand analytics",
+    "shift": "Mondays and Thursdays",
+    "about": "Measures how the brand is growing and publishes the numbers on this site, with every figure traceable to its source.",
+    "crew": [
+      [
+        "Analytics fetcher",
+        "Collects followers, impressions and engagement from LinkedIn, plus every post the workforce made."
+      ],
+      [
+        "Brand analyst",
+        "Writes the summary; a code check rejects any number that is not in the data."
+      ],
+      [
+        "Site publisher",
+        "Updates this site and confirms the new numbers are live."
+      ]
+    ]
+  },
+  {
+    "name": "LinkedIn insights",
+    "shift": "Sundays",
+    "about": "Studies what makes public posts on AI and leadership perform, then tells each team what to change. Every claim is checked against the numbers before any team sees it.",
+    "crew": [
+      [
+        "Trend scout",
+        "Plans the week's searches across six themes, within strict spending limits."
+      ],
+      [
+        "Insights analyst",
+        "Explains the statistics and the engagement model in plain words."
+      ],
+      [
+        "Content strategist",
+        "Turns verified findings into changes for each team; code rejects advice that is not backed by a strong result."
+      ]
+    ]
+  },
+  {
+    "name": "Distribution",
+    "shift": "After every post",
+    "about": "Shares every post on Bluesky, Dev.to, Facebook and X about ten minutes after it goes out on LinkedIn, one post at a time on each channel: the same post, with only LinkedIn wording adjusted.",
+    "crew": [
+      [
+        "Ledger reader",
+        "Picks up each new post with its text and card."
+      ],
+      [
+        "Bluesky publisher",
+        "Shares a 300-character version with the card and links to follow."
+      ],
+      [
+        "Dev.to publisher",
+        "Shares the interview and learning posts as full articles."
+      ],
+      [
+        "Facebook publisher",
+        "Shares the whole post with its card on the TechNaom AI Labs page."
+      ],
+      [
+        "X publisher",
+        "Shares a short version with no links, at most four posts a day."
+      ]
+    ]
+  },
+  {
+    "name": "Operations",
+    "shift": "09:00 IST · Daily",
+    "about": "Keeps the whole workforce cheap and healthy, with nobody watching dashboards.",
+    "crew": [
+      [
+        "Cost controller",
+        "Reports yesterday's spend per workflow and per model every morning."
+      ],
+      [
+        "Anomaly watcher",
+        "Compares yesterday with the 28 days before it and raises an alert only when something is far from usual."
+      ]
+    ]
+  },
+  {
+    "name": "Comment copilot",
+    "shift": "On call",
+    "about": "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
+    "crew": [
+      [
+        "Comment drafter",
+        "Offers a short, a medium and a long version, never gushing."
+      ]
+    ]
+  }
+]

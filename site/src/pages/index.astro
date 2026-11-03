@@ -1,0 +1,252 @@
+---
+import Base from "../layouts/Base.astro";
+import facts from "../data/facts.json";
+import log from "../data/log.json";
+import metrics from "../../../data/brand-metrics.json";
+
+const w = facts.workforce;
+const fmt = (n: number) => n.toLocaleString("en-GB");
+const day = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const monthName = (ym: string) => MONTHS[Number(ym.slice(5, 7)) - 1]!;
+
+const proof = [
+  { n: fmt(w.agents), label: "AI agents in production" },
+  { n: fmt(w.postsPerDay * w.platforms), label: `Posts a day across ${w.platforms === 5 ? "five" : w.platforms} platforms` },
+  { n: fmt(facts.bofa.awards), label: "Awards at Bank of America, including Platinum" },
+  { n: fmt(facts.bofa.hoursSaved), label: "Engineer-hours saved a year at Bank of America" },
+];
+
+const at = metrics.all_time;
+const months = metrics.months.slice(-12);
+const peak = Math.max(...months.map((m) => m.totals.impressions));
+
+const lab = [
+  {
+    eyebrow: "Live every day",
+    title: "Digital workforce",
+    text: `${w.teams === 9 ? "Nine" : w.teams} agent teams research, write, check and publish on their own. Each has its own schedule, repairs its own missed runs and is tested every week.`,
+    href: "/architecture",
+    cta: "See how it works",
+  },
+  {
+    eyebrow: "Open research",
+    title: "Can an open model become a reliable coding agent?",
+    text: "A study of Gemma 4 on real software tasks, with planted bugs that test whether the tester can be fooled.",
+    href: "https://github.com/TechNaom/gemma4-agentic-swe",
+    cta: "Read the research",
+  },
+  {
+    eyebrow: "Free for everyone",
+    title: `${facts.repos.courses} free courses`,
+    text: "From Python to AI security, MCP and LLM evaluation, built for engineers who learn by doing.",
+    href: "https://github.com/TechNaom?tab=repositories&q=for-everyone",
+    cta: "Browse the courses",
+  },
+];
+
+const latest = log.slice(0, 3).map((e) => ({ ...e, lead: e.p.split(/(?<=\.)\s/)[0] }));
+
+const career = [
+  { when: "Oct 2026 – present", org: "Minfy", role: "AI Developer Lead", text: "I lead a team of four engineers building agentic GenAI solutions on AWS." },
+  { when: "Aug – Oct 2026", org: "ValueMomentum", role: "GenAI Solution Architect", text: "I designed the agent factory behind a client's 20-agent programme, delivered in six to eight months instead of two years." },
+  { when: "Apr 2021 – Jul 2026", org: "Bank of America", role: "AVP, GenAI and Automation Lead", text: `I saved about ${fmt(facts.bofa.hoursSaved)} engineer-hours a year, founded the prompt-engineering team and won ${facts.bofa.awards} awards in five years.` },
+];
+---
+<Base title="Home" description={`${facts.name} builds AI systems that do real work: a digital workforce of ${w.agents} agents that writes, checks and publishes every day, measured at every step.`}>
+
+  <!-- Hero -->
+  <section class="night">
+    <div class="wrap grid lg:grid-cols-[1.05fr_1fr] gap-12 items-center py-16 lg:py-24">
+      <div class="grid gap-7">
+        <p class="eyebrow" style="color: var(--amber-bright)">AI R&amp;D lab · {facts.location}</p>
+        <h1 class="display text-[44px] sm:text-6xl lg:text-[72px] leading-[1.02]">A digital workforce that runs itself</h1>
+        <p class="text-lg sm:text-xl max-w-[56ch]" style="color: var(--night-muted)">
+          I'm {facts.name}, {facts.role}. In my R&amp;D lab, {w.agents} AI agents research, write, check and publish
+          {w.postsPerDay === 4 ? " four" : ` ${w.postsPerDay}`} posts a day on {w.platforms === 5 ? "five" : w.platforms} platforms, and I measure every step.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a href="/architecture" class="btn btn-primary">See how it works</a>
+          <a href={facts.links[0]!.url} class="btn btn-secondary">Get in touch</a>
+        </div>
+      </div>
+
+      <figure class="m-0">
+        <svg class="dg" viewBox="0 0 560 450" role="img" aria-label="How one post moves through the workforce: a clock starts the team, agents write it, a critic checks it, and it is published on LinkedIn and then four other platforms.">
+          <defs>
+            <marker id="ha" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" class="ahA" /></marker>
+          </defs>
+          <rect x="1" y="1" width="558" height="448" rx="16" fill="#121d30" stroke="#2b3a52" />
+          <g transform="translate(28 26)">
+            <rect width="26" height="26" rx="6" fill="#16233a" /><path d="M6 19V7l7 5.5L20 7v12" fill="none" stroke="#f4a640" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" />
+            <text x="38" y="18" class="t" style="font-size:15px">Digital workforce</text>
+          </g>
+          <g transform="translate(452 28)">
+            <rect width="80" height="24" rx="12" fill="#3a2a14" stroke="#f4a640" />
+            <circle cx="16" cy="12" r="4" class="dotA"><animate attributeName="opacity" values="1;.25;1" dur="1.8s" repeatCount="indefinite" /></circle>
+            <text x="28" y="16.5" class="tA">Live</text>
+          </g>
+
+          <!-- spine -->
+          <path d="M114 136 V176 M114 226 V266 M114 316 V356" class="lnA flow" />
+
+          <!-- stages -->
+          <rect x="28" y="90" width="172" height="46" rx="9" class="box" /><text x="44" y="111" class="t">Clock</text><text x="44" y="127" class="tm">Four slots a day</text>
+          <rect x="28" y="180" width="172" height="46" rx="9" class="boxA" /><text x="44" y="201" class="t">Agent team</text><text x="44" y="217" class="tm">Planner, scouts, writer</text>
+          <rect x="28" y="270" width="172" height="46" rx="9" class="boxA" /><text x="44" y="291" class="t">Critic</text><text x="44" y="307" class="tm">Four judges</text>
+          <rect x="28" y="360" width="172" height="46" rx="9" class="boxA" /><text x="44" y="381" class="t">LinkedIn</text><text x="44" y="397" class="tm">Then four more platforms</text>
+
+          <!-- branches -->
+          <path d="M200 113 H244" class="lnA" marker-end="url(#ha)" />
+          <path d="M200 203 H244" class="lnA" marker-end="url(#ha)" />
+          <path d="M200 293 H244" class="lnA" marker-end="url(#ha)" />
+          <path d="M200 383 H244" class="lnA" marker-end="url(#ha)" />
+
+          <!-- callouts -->
+          <g>
+            <rect x="250" y="84" width="282" height="58" rx="8" fill="#0c1422" stroke="#2b3a52" />
+            <text x="266" y="108" class="t">Each team has its own clock, so one<tspan x="266" dy="19" class="cont">failure never stops another.</tspan></text>
+            <rect x="250" y="174" width="282" height="58" rx="8" fill="#0c1422" stroke="#2b3a52" />
+            <text x="266" y="198" class="t">Agents research and write in my<tspan x="266" dy="19" class="cont">voice, from verified facts only.</tspan></text>
+            <rect x="250" y="264" width="282" height="58" rx="8" fill="#0c1422" stroke="#2b3a52" />
+            <text x="266" y="288" class="t">A weak post is never published; the<tspan x="266" dy="19" class="cont">slot re-runs and tries again.</tspan></text>
+            <rect x="250" y="354" width="282" height="58" rx="8" fill="#0c1422" stroke="#2b3a52" />
+            <text x="266" y="378" class="t">X, Bluesky, Facebook and Dev.to<tspan x="266" dy="19" class="cont">follow at the same times every day.</tspan></text>
+          </g>
+        </svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Proof strip -->
+  <section aria-label="Key numbers" class="border-b" style="border-color: var(--rule)">
+    <div class="wrap grid grid-cols-2 lg:grid-cols-4">
+      {proof.map((p, i) => (
+        <div class={`py-9 px-2 sm:px-6 grid gap-1 ${i ? "lg:border-l" : ""} ${i % 2 ? "border-l lg:border-l" : ""}`} style="border-color: var(--rule)">
+          <span class="display num text-5xl">{p.n}</span>
+          <span style="color: var(--muted)" class="text-[15px] leading-snug">{p.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- What the lab builds -->
+  <section id="work" class="wrap py-20 grid gap-10">
+    <div class="grid gap-3 max-w-[60ch]">
+      <p class="eyebrow" style="color: var(--amber)">What the lab builds</p>
+      <h2 class="display text-4xl sm:text-5xl leading-tight">Systems that do real work, and the research behind them</h2>
+    </div>
+    <div class="grid md:grid-cols-3 gap-5">
+      {lab.map((c) => (
+        <a href={c.href} class="group grid gap-3 content-start p-7 rounded-xl border no-underline transition hover:-translate-y-0.5"
+           style="background: var(--card); border-color: var(--rule); color: var(--ink)">
+          <span class="eyebrow" style="color: var(--muted)">{c.eyebrow}</span>
+          <h3 class="text-xl font-semibold leading-snug">{c.title}</h3>
+          <p style="color: var(--muted)">{c.text}</p>
+          <span class="link mt-2">{c.cta} <span aria-hidden="true" class="inline-block transition group-hover:translate-x-1">→</span></span>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <!-- Measured, not claimed -->
+  <section class="night">
+    <div class="wrap py-20 grid lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
+      <div class="grid gap-5">
+        <p class="eyebrow" style="color: var(--amber-bright)">Measured, not claimed</p>
+        <h2 class="display text-4xl sm:text-5xl leading-tight">The workforce grows the brand it writes for</h2>
+        <p style="color: var(--night-muted)" class="max-w-[52ch]">
+          The agents started posting on 11 Oct 2026. My analytics agents collect these numbers from LinkedIn twice a week,
+          and code rejects any figure that is not in the data.
+        </p>
+        <dl class="grid grid-cols-3 gap-6 mt-2">
+          <div><dt class="text-sm" style="color: var(--night-muted)">Followers</dt><dd class="display num text-4xl">{fmt(at.followers)}</dd></div>
+          <div><dt class="text-sm" style="color: var(--night-muted)">Impressions, past year</dt><dd class="display num text-4xl">{fmt(at.impressions)}</dd></div>
+          <div><dt class="text-sm" style="color: var(--night-muted)">Posts by the agents</dt><dd class="display num text-4xl">{fmt(at.posts)}</dd></div>
+        </dl>
+        <p class="text-sm" style="color: var(--night-muted)">Updated {day(metrics.generated_at.replace("+00:00", "Z"))}. Sources: LinkedIn analytics, my public profile and our posting records.</p>
+      </div>
+
+      <figure class="m-0 rounded-2xl border p-6" style="background: var(--night-2); border-color: var(--night-rule)">
+        <figcaption class="flex justify-between items-baseline mb-4">
+          <span class="font-semibold">Impressions per month</span>
+          <span class="text-sm" style="color: var(--night-muted)">Last 12 months</span>
+        </figcaption>
+        <svg class="dg" viewBox="0 0 600 260" role="img" aria-label={`Monthly LinkedIn impressions for the last 12 months. The highest month had ${fmt(peak)}.`}>
+          <line x1="0" y1="220" x2="600" y2="220" class="axis" />
+          {months.map((m, i) => {
+            const h = Math.max(2, (m.totals.impressions / peak) * 180);
+            const x = 10 + i * 49;
+            const agents = m.month >= "2026-10";
+            return (
+              <g>
+                <title>{`${monthName(m.month)} ${m.month.slice(0, 4)}: ${fmt(m.totals.impressions)} impressions`}</title>
+                <rect x={x} y={220 - h} width="34" height={h} rx="4" fill={agents ? "#f4a640" : "#3d5272"} />
+                <text x={x + 17} y="242" text-anchor="middle" class="tm">{monthName(m.month)}</text>
+              </g>
+            );
+          })}
+          <text x={10 + (months.findIndex((m) => m.month === "2026-10")) * 49 + 17} y="20" text-anchor="middle" class="tA">Agents started</text>
+        </svg>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Lab notebook -->
+  <section id="notebook" class="wrap py-20 grid gap-10">
+    <div class="flex flex-wrap justify-between items-end gap-4">
+      <div class="grid gap-3 max-w-[60ch]">
+        <p class="eyebrow" style="color: var(--amber)">Lab notebook</p>
+        <h2 class="display text-4xl sm:text-5xl leading-tight">Latest from the lab</h2>
+      </div>
+    </div>
+    <ol class="grid md:grid-cols-3 gap-5 list-none p-0 m-0">
+      {latest.map((e) => (
+        <li class="grid gap-3 content-start p-7 rounded-xl border" style="background: var(--card); border-color: var(--rule)">
+          <div class="flex justify-between items-center gap-3 text-sm">
+            <time style="color: var(--muted)">{e.d}</time>
+            {e.c && <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold" style="background: var(--amber-soft); color: var(--amber)">{e.c}</span>}
+          </div>
+          <h3 class="text-lg font-semibold leading-snug">{e.t}</h3>
+          <p style="color: var(--muted)">{e.lead}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Career -->
+  <section id="career" class="border-t" style="border-color: var(--rule)">
+    <div class="wrap py-20 grid lg:grid-cols-[1fr_1.6fr] gap-12">
+      <div class="grid gap-3 content-start">
+        <p class="eyebrow" style="color: var(--amber)">Career</p>
+        <h2 class="display text-4xl sm:text-5xl leading-tight">More than ten years of building software that does real work</h2>
+        <p style="color: var(--muted)">I started with automation, data platforms and production systems. Today I build AI agents.</p>
+      </div>
+      <ol class="grid gap-0 list-none p-0 m-0">
+        {career.map((c) => (
+          <li class="grid sm:grid-cols-[180px_1fr] gap-2 sm:gap-8 py-7 border-b" style="border-color: var(--rule)">
+            <span class="text-sm pt-1" style="color: var(--muted)">{c.when}</span>
+            <div class="grid gap-1.5">
+              <h3 class="text-lg font-semibold">{c.org} <span class="font-normal" style="color: var(--muted)">· {c.role}</span></h3>
+              <p style="color: var(--muted)">{c.text}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Back the lab -->
+  <section class="night">
+    <div class="wrap py-20 grid gap-6 justify-items-start">
+      <p class="eyebrow" style="color: var(--amber-bright)">Back the lab</p>
+      <h2 class="display text-4xl sm:text-5xl leading-tight max-w-[22ch]">Build the next digital employees with me</h2>
+      <p style="color: var(--night-muted)" class="max-w-[60ch]">I'm looking for partners, sponsors and early users for the next builds. Each one ships in public, with measured results.</p>
+      <div class="flex flex-wrap gap-4 pt-2">
+        <a href={facts.links[0]!.url} class="btn btn-primary">Talk to me on LinkedIn</a>
+        <a href={facts.links[1]!.url} class="btn btn-secondary">See the code on GitHub</a>
+      </div>
+    </div>
+  </section>
+</Base>

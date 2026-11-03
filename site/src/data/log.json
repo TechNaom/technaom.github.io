@@ -1,0 +1,163 @@
+[
+  {
+    "d": "3 Nov 2026",
+    "t": "Each team now has its own scheduler, and each agent its own test",
+    "p": "The five agent teams used to share one scheduler, so a single mistake could delay every team. Each team now has its own exact-time trigger, and every post re-runs itself within minutes if it has not gone out. Every post on every channel now ends with six follow links, Facebook included. The first per-agent tests also found two real problems: the interview reviewer raised false alarms on both clean answers it was shown, and one model never answered when it had nothing to report. After the fixes, the reviewer raised no false alarms in three runs and still caught both planted mistakes.",
+    "c": "Shipped"
+  },
+  {
+    "d": "3 Nov 2026",
+    "t": "Every post now reaches five platforms, on time",
+    "p": "X joined Bluesky, Dev.to and Facebook, and every post now ends with the same five follow links. The cross-posts had been started by a scheduler that ran one to seven hours late on 2 November, so they moved to the same exact-time trigger as the posts themselves: each post now goes out about ten minutes after LinkedIn, one at a time on each channel and never as a burst of old posts.",
+    "c": "Shipped"
+  },
+  {
+    "d": "2 Nov 2026",
+    "t": "Tracing caught the cost report counting some calls twice",
+    "p": "While switching on tracing for the insights team, its trace showed each Claude Haiku call twice: once from the agent framework and once from a newer version of the model provider's own library. Across the workforce, 20 calls in a week had been counted twice, about 6% of the reported spend. The traces now keep one record per call, and the daily cost report skips the old duplicates, so past and future numbers are both right.",
+    "c": "Shipped"
+  },
+  {
+    "d": "2 Nov 2026",
+    "t": "The teams now learn from each other",
+    "p": "The insights team writes a weekly brief of what works, which the content teams can read as advice, and every published post is now logged with the advice it used. Brand analytics adds how each post did, so the teams will see whether the advice actually helps before it is switched on for every slot.",
+    "c": "Shipped"
+  },
+  {
+    "d": "2 Nov 2026",
+    "t": "Every post now reaches four platforms",
+    "p": "A distribution team shares each LinkedIn post on Bluesky, Dev.to and Facebook about twenty minutes after it goes out. The post stays the same; only LinkedIn wording such as “repost” or “connections” is adjusted, and each channel gets one follow block. The first cross-posts went out on 1 November, and each post goes to each channel exactly once.",
+    "c": "Shipped"
+  },
+  {
+    "d": "1 Nov 2026",
+    "t": "An insights engine studies what works on LinkedIn",
+    "p": "Three agents study public posts on AI and leadership every Sunday. The first run analysed 257 posts: posts themed on leadership drew a median engagement of 113 against 33 for the rest, and posts with an image 98 against 33. Code checks every claim against the numbers; the first run caught the agents inventing advice twice, and both were rejected before any team saw them.",
+    "c": "Shipped"
+  },
+  {
+    "d": "1 Nov 2026",
+    "t": "An anomaly watcher checks the pipelines every morning",
+    "p": "Each morning it compares the day before with the previous 28 days for every workflow: model calls, tokens, cost and how often a slot had to be rerun. It raises an alert only when something is at least three times the usual value and above a minimum, so small changes never trigger it.",
+    "c": "Shipped"
+  },
+  {
+    "d": "31 Oct 2026",
+    "t": "A noon post failed, and was healed and posted by 12:06",
+    "p": "The first interview post wrote a good draft but failed at 12:00 on a small configuration bug: a label colour was read as a number. The healer reran the slot at 12:05 and it was posted at 12:06. The bug was fixed the same day, and a label problem can no longer stop a post.",
+    "c": "Shipped"
+  },
+  {
+    "d": "31 Oct 2026",
+    "t": "The first interview question post: 104 impressions and 2 comments in an hour",
+    "p": "A real question from a candidate's interview report, answered at architect level, drew 104 impressions and 2 comments within its first hour, including a reply from a reader outside my network who picked out one of the points. The motivation post it replaced drew about 29 impressions and no comments.",
+    "c": "Result"
+  },
+  {
+    "d": "31 Oct 2026",
+    "t": "A brand analytics team joins: growth, measured every day",
+    "p": "Three new agents measure how the brand is growing and publish it on this site with nobody involved. The fetcher collects followers and connections every morning and downloads the LinkedIn analytics export every Monday: 66,942 impressions and 1,067 engagements in the past year, with October's impressions nearly 19 times September's. The analyst writes the summary, and a code check rejects any number that is not in the data. The publisher updates the site and confirms the new numbers are live.",
+    "c": "Shipped"
+  },
+  {
+    "d": "31 Oct 2026",
+    "t": "Real interview questions, checked by code",
+    "p": "The 12:00 IST team now posts one real AI Architect or AI Developer interview question a day, answered at architect level. A scout searches only candidates' own interview reports from the last year (Reddit, Glassdoor, AmbitionBox, Blind, LeetCode Discuss, personal blogs), never question banks. The model picks a question, then plain code checks it: it must appear word for word in the report, a swapped term fails, and a company is named only when the report names it as the interviewer. An architect-level reviewer then checks the answer. The morning team now writes about leadership for people in tech and AI.",
+    "c": "Shipped"
+  },
+  {
+    "d": "29 Oct 2026",
+    "t": "Certified by IIT Patna: Generative AI & Agentic AI for Developers",
+    "p": "Completed the six-month certificate course from the Indian Institute of Technology Patna (Continuing Education Programme), covering generative AI and agentic AI for developers. The same ideas run in production here every day: agents that plan, write, check, heal and publish on their own.",
+    "c": "Milestone"
+  },
+  {
+    "d": "27 Oct 2026",
+    "t": "A cost controller joins the team",
+    "p": "Every morning at 09:00 IST it reads token usage from both Langfuse accounts and reports spend per workflow and per model. First report: the whole workforce cost about one US dollar for the month so far.",
+    "c": "Shipped"
+  },
+  {
+    "d": "27 Oct 2026",
+    "t": "AI code-review bench: Claude Haiku catches 14 of 14 planted bugs",
+    "p": "14 real bugs from my own agent code, re-introduced as ordinary-looking pull requests, plus 2 correct changes to count false alarms. Claude Haiku caught all 14, including all 10 critical or high ones, with no false alarms. The automated judge first scored it 10 of 14; reading the reviews by hand showed all 4 misses were the judge's errors. Commercial reviewers are next on the same bench.",
+    "c": "Preliminary"
+  },
+  {
+    "d": "27 Oct 2026",
+    "t": "An AI reviewer improved the code on day one",
+    "p": "On its first real pull request, CodeRabbit found three genuine issues in the comment copilot: no timeout per AI provider, a blank panel when no draft passed the checks, and wrong length limits in the live test. All three were fixed before merging.",
+    "c": "Shipped"
+  },
+  {
+    "d": "26 Oct 2026",
+    "t": "Self-healing: no scheduled post ends up skipped",
+    "p": "If a post is not out 5 minutes after its slot, a healer reads the failed run, finds the root cause, changes it (another quote or story, a stronger writer, or republishing a draft that had passed) and posts, exactly once per slot. First live heal: the 12 PM post failed at 12:00 and was healed and published at 12:05 with nobody involved.",
+    "c": "Shipped"
+  },
+  {
+    "d": "26 Oct 2026",
+    "t": "No single AI provider can stop a post",
+    "p": "Every agent now falls back across three providers: open models on Groq, then Gemini Flash, then Claude Haiku. The same day, Groq's daily limit ran out and the backups kept every draft flowing. A missed slot also emails an alert 30 minutes after its time.",
+    "c": "Shipped"
+  },
+  {
+    "d": "26 Oct 2026",
+    "t": "Evals for every agent",
+    "p": "Each run scores itself on its trace (first-try pass, rewrites, why drafts fail). A set of 17 real past mistakes checks the guardrails on every code change: 100% precision and recall. A weekly exam re-runs each writer on frozen real inputs, and every post I approve is recorded as a human score.",
+    "c": "Shipped"
+  },
+  {
+    "d": "27 Oct 2026",
+    "t": "Observability moved to Langfuse v4",
+    "p": "Langfuse switched to an observations-first model. Every model call now carries its workflow name, and model prices are registered, so tokens and cost show per workflow and per model. Last 10 days: about 430,000 tokens across all teams for roughly 25 US cents.",
+    "c": "Shipped"
+  },
+  {
+    "d": "27 Oct 2026",
+    "t": "This site goes live",
+    "p": "A public home for the lab: the workforce, architecture, research notebook, all 46 repositories and the full journey. From today it is updated with every piece of R&D.",
+    "c": "Shipped"
+  },
+  {
+    "d": "27 Oct 2026",
+    "t": "Claude Certified Architect – Professional: hands-on preparation begins",
+    "p": "Ten labs, one per exam domain, each ending in a measured result. First hard practice exam: 26 of 30. Practice exams are set harder than the real one."
+  },
+  {
+    "d": "25 Oct 2026",
+    "t": "Full run on 68 tasks: the baseline agent resolves half",
+    "p": "Gemma 4 with the standard tools resolved 34 of 68 real software tasks (50%, 95% CI 38–62%). The 10-task pilot had suggested 80%, a reminder never to trust the set you tuned on.",
+    "c": "Preliminary"
+  },
+  {
+    "d": "25 Oct 2026",
+    "t": "The content team goes fully autonomous",
+    "p": "Three agent teams now research, write, check and publish on schedule from the cloud, with a watchdog, cost caps and a trace of every step.",
+    "c": "Shipped"
+  },
+  {
+    "d": "25 Oct 2026",
+    "t": "Agents ignore tools they are not told to use",
+    "p": "Across 33 software-engineering tasks, an agent given optional code-graph tools called them zero times. Resolution matched the agent without them.",
+    "c": "Preliminary"
+  },
+  {
+    "d": "24 Oct 2026",
+    "t": "First post written entirely by agents",
+    "p": "A verified Marcus Aurelius quote and a licensed photo, picked, checked and published by the agent team. The critic sent the first draft back as generic.",
+    "c": "Shipped"
+  },
+  {
+    "d": "23 Oct 2026",
+    "t": "The test checker can be fooled",
+    "p": "Planting bugs in correct fixes shows that some of them still pass the benchmark's tests, so some ‘solved’ results are not real.",
+    "c": "Preliminary"
+  },
+  {
+    "d": "15 Oct 2026",
+    "t": "Gemma 4 agent study starts",
+    "p": "Can an open model on one accelerator become a reliable coding agent? A record-and-replay harness, a bug-planting check and a tool ablation, run on Kaggle GPUs.",
+    "c": "Research"
+  }
+]

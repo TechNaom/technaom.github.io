@@ -1,0 +1,274 @@
+[
+  [
+    "gemma4-agentic-swe",
+    "Gemma 4 agentic SWE",
+    "Can an open model on one accelerator become a reliable coding agent? Harness, bug-planting check and tool ablation on Kaggle GPUs.",
+    "Research",
+    "public",
+    "Research"
+  ],
+  [
+    "ace-review-bench",
+    "AI code-review bench",
+    "Three commercial AI code reviewers tested on real bugs taken from my own agent code.",
+    "Research",
+    "private",
+    "Research"
+  ],
+  [
+    "agentic-content-engine-design",
+    "Agent engine design",
+    "The design of a multi-agent content engine on open-weight models, measured against a production workflow.",
+    "Research",
+    "public",
+    "Design"
+  ],
+  [
+    "autonomous-ai-workflow-field-guide",
+    "Autonomous AI field guide",
+    "Shipping an AI workflow to production: reliability, observability, cost, security, governance, evaluation.",
+    "Research",
+    "public",
+    "Guide"
+  ],
+  [
+    "linkedin-branding-engine",
+    "AI news digest engine",
+    "The 4 PM crew: collects the day's AI news, writes, fact-checks every claim and publishes.",
+    "Agent systems",
+    "private",
+    "Live"
+  ],
+  [
+    "agentic-content-engine",
+    "Agentic content engine",
+    "LangGraph agent teams for leadership, AI interview questions and tech learning, fully autonomous with self-healing, a watchdog and cost caps.",
+    "Agent systems",
+    "private",
+    "Live"
+  ],
+  [
+    "ai-agent-platform",
+    "AI agent platform",
+    "Multi-agent and multi-RAG platform with evaluation and observability built in.",
+    "Agent systems",
+    "private",
+    "Build"
+  ],
+  [
+    "healthcare-interop-platform",
+    "Healthcare interop platform",
+    "HIPAA-aligned HL7 v2 and FHIR (R4/R5) interoperability platform.",
+    "Agent systems",
+    "private",
+    "Build"
+  ],
+  [
+    "enterprise-knowledge-assistant",
+    "Enterprise knowledge assistant",
+    "Advanced RAG over company documents: hybrid retrieval, RRF, LLM re-ranking, MMR, conversation memory.",
+    "Agent systems",
+    "public",
+    "Build"
+  ],
+  [
+    "rag-projects",
+    "RAG from scratch",
+    "End-to-end RAG over a banking policy corpus: chunking, retrieval, generation and evaluation.",
+    "Agent systems",
+    "public",
+    "Build"
+  ],
+  [
+    "manohar-genai-lab",
+    "GenAI lab",
+    "Production-grade automation tools built with Python, LLMs and prompt engineering.",
+    "Agent systems",
+    "public",
+    "Build"
+  ],
+  [
+    "linkedin-news-agent",
+    "News agent v1",
+    "The first news agent: Tavily search, multi-LLM routing, automatic LinkedIn posting.",
+    "Agent systems",
+    "private",
+    "Archive"
+  ],
+  [
+    "ai-news-linkedin-integration",
+    "Slack-to-LinkedIn on Lambda",
+    "The very first version: AI news from Slack to LinkedIn on AWS Lambda.",
+    "Agent systems",
+    "private",
+    "Archive"
+  ],
+  [
+    "github-repo-observability",
+    "Repo observability",
+    "Traffic, stars, forks and trends across all my public repositories.",
+    "Agent systems",
+    "private",
+    "Design"
+  ],
+  [
+    "repo-to-youtube-pipeline",
+    "Repo to YouTube",
+    "Agents that turn course chapters into short videos and publish them.",
+    "Agent systems",
+    "private",
+    "Design"
+  ],
+  [
+    "content-promotion-engine",
+    "Content promotion engine",
+    "Multi-channel distribution with tracking and human-approved engagement.",
+    "Agent systems",
+    "private",
+    "Design"
+  ],
+  [
+    "genai-for-everyone",
+    "GenAI for Everyone",
+    "7 weeks, 40 live sessions: LLMs, prompting, RAG, agents, evaluation, safety and deployment.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "genai-live-sessions",
+    "GenAI live sessions",
+    "Day-by-day recaps and the exact live-build prompts from every session.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "python-for-everyone",
+    "Python for Everyone",
+    "Interactive Python from zero to job-ready, with instant-check quizzes and projects.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "rag-for-everyone",
+    "RAG for Everyone",
+    "Retrieval-augmented generation, taught visually and hands-on.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "agentic-ai-for-everyone",
+    "Agentic AI for Everyone",
+    "A visual, engineering-first course on building agents.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "mcp-for-everyone",
+    "MCP for Everyone",
+    "Build and secure MCP servers and clients, and think like an architect.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "ai-coding-agents-for-everyone",
+    "AI Coding Agents for Everyone",
+    "Claude Code, Cursor and Copilot in practice, then build your own with the Agent SDK and MCP.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "llm-evaluation-for-everyone",
+    "LLM Evaluation for Everyone",
+    "Measuring, testing and trusting LLM systems.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "ai-engineering-for-everyone",
+    "AI Engineering for Everyone",
+    "The production-engineering discipline for LLM systems.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "context-engineering-for-everyone",
+    "Context Engineering for Everyone",
+    "Getting the right information into the model at the right time.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "ai-security-for-everyone",
+    "AI Security for Everyone",
+    "Prompt injection, data leaks and how to defend AI systems.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "devops-for-everyone",
+    "DevOps for Everyone",
+    "CI/CD, containers and cloud for people new to DevOps.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "git-actually",
+    "Git, Actually",
+    "Practise real git, GitHub and CI/CD in your own repo, with a bot that checks your work.",
+    "Free courses",
+    "public",
+    "Course"
+  ],
+  [
+    "open-source-contributions",
+    "Open-source log",
+    "User stories, architecture notes and PR status for my open-source work, starting with Langfuse.",
+    "Open source",
+    "public",
+    "Live"
+  ],
+  [
+    "langfuse",
+    "Langfuse (fork)",
+    "A working fork of the open-source LLM observability platform.",
+    "Open source",
+    "public",
+    "Fork"
+  ],
+  [
+    "langfuse-python",
+    "Langfuse Python SDK (fork)",
+    "A working fork of the Langfuse Python SDK.",
+    "Open source",
+    "public",
+    "Fork"
+  ],
+  [
+    "docker-k8s-terraform-poc",
+    "Docker, K8s and Terraform",
+    "One small API through Docker, Kubernetes and Terraform, free in a Codespace.",
+    "Builds",
+    "public",
+    "Build"
+  ],
+  [
+    "tap-duel",
+    "Tap Duel",
+    "A two-player tap race, Kohli vs Rohit, built in Flutter and live on the web and Android.",
+    "Builds",
+    "public",
+    "Live"
+  ]
+]

@@ -1,0 +1,29 @@
+{
+  "_note": "The one source of truth for every fact on the site. Pages read these values; the copy check fails the build if a page states a different number.",
+  "name": "Manohar Papasani",
+  "role": "AI Developer Lead at Minfy",
+  "location": "Hyderabad",
+  "site": "https://manoharpapasani.pages.dev",
+  "workforce": {
+    "agents": 36,
+    "teams": 9,
+    "postsPerDay": 4,
+    "platforms": 5,
+    "schedulers": 7,
+    "healWindowMin": 90,
+    "goals": [
+      { "agents": 100, "by": "31 Jan 2027" },
+      { "agents": 200, "by": "Oct 2027" }
+    ]
+  },
+  "repos": { "total": 50, "public": 31, "courses": 13 },
+  "bofa": { "years": 5, "awards": 28, "platinum": 1, "gold": 8, "silver": 7, "bronze": 12, "hoursSaved": 14300 },
+  "links": [
+    { "name": "LinkedIn", "url": "https://www.linkedin.com/in/manohar-papasani-b89916aa", "handle": "Manohar Papasani" },
+    { "name": "GitHub", "url": "https://github.com/TechNaom", "handle": "TechNaom" },
+    { "name": "Bluesky", "url": "https://bsky.app/profile/manoharpapa.bsky.social", "handle": "@manoharpapa.bsky.social" },
+    { "name": "X", "url": "https://x.com/ManoharPap", "handle": "@ManoharPap" },
+    { "name": "Dev.to", "url": "https://dev.to/technaom", "handle": "technaom" },
+    { "name": "Facebook", "url": "https://www.facebook.com/ManoharPapasani1982", "handle": "TechNaom AI Labs" }
+  ]
+}

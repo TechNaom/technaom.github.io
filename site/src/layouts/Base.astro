@@ -1,0 +1,94 @@
+---
+import "../styles/global.css";
+import facts from "../data/facts.json";
+
+interface Props {
+  title: string;
+  description: string;
+  path?: string;
+}
+const { title, description, path = "/" } = Astro.props;
+const pageTitle = path === "/" ? `${facts.name} · AI R&D lab` : `${title} · ${facts.name}`;
+const url = new URL(path, facts.site).toString();
+const nav = [
+  { href: "/architecture", label: "Architecture" },
+  { href: "/#work", label: "Work" },
+  { href: "/#notebook", label: "Lab notebook" },
+  { href: "/#career", label: "Career" },
+];
+const built = new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "Asia/Kolkata" });
+const linkedin = facts.links[0]!.url;
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={url} />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={url} />
+  <meta name="theme-color" content="#0c1422" />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230c1422'/%3E%3Cpath d='M7 22V10l9 7 9-7v12' fill='none' stroke='%23f4a640' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    "@context": "https://schema.org", "@type": "Person", name: facts.name, jobTitle: facts.role,
+    address: { "@type": "PostalAddress", addressLocality: facts.location, addressCountry: "IN" },
+    url: facts.site, sameAs: facts.links.map((l) => l.url),
+  })} />
+</head>
+<body>
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-primary">Skip to content</a>
+
+  <header class="night sticky top-0 z-40 border-b" style="border-color: var(--night-rule)">
+    <div class="wrap flex items-center gap-6 h-16">
+      <a href="/" class="flex items-center gap-3 font-semibold no-underline" style="color: var(--night-ink)">
+        <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#16233a" /><path d="M7 22V10l9 7 9-7v12" fill="none" stroke="#f4a640" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" /></svg>
+        <span class="tracking-wide">{facts.name}</span>
+      </a>
+      <nav aria-label="Main" class="hidden md:flex items-center gap-7 ml-auto text-[15px]">
+        {nav.map((n) => (
+          <a href={n.href} class="no-underline hover:underline underline-offset-4" style="color: var(--night-ink)"
+             aria-current={Astro.url.pathname === n.href ? "page" : undefined}>{n.label}</a>
+        ))}
+      </nav>
+      <a href={linkedin} class="btn btn-primary ml-auto md:ml-2 !py-2.5 !px-4 text-[15px]">Get in touch</a>
+      <details class="md:hidden relative">
+        <summary class="list-none cursor-pointer p-2 rounded-md" aria-label="Menu" style="color: var(--night-ink)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18" /></svg>
+        </summary>
+        <nav aria-label="Main" class="absolute right-0 mt-3 w-56 grid p-2 rounded-xl border shadow-2xl" style="background: var(--night-2); border-color: var(--night-rule)">
+          {nav.map((n) => <a href={n.href} class="px-3 py-2.5 rounded-md no-underline hover:bg-white/5" style="color: var(--night-ink)">{n.label}</a>)}
+        </nav>
+      </details>
+    </div>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer class="night">
+    <div class="wrap py-14 grid gap-10 md:grid-cols-[1.2fr_1fr]">
+      <div class="grid gap-3 content-start">
+        <p class="display text-3xl">{facts.name}</p>
+        <p style="color: var(--night-muted)" class="max-w-[46ch]">I'm an AI Developer Lead at Minfy, and I build a digital workforce in my independent R&amp;D lab in {facts.location}.</p>
+      </div>
+      <div class="grid gap-3 content-start">
+        <p class="eyebrow" style="color: var(--night-muted)">Follow the work</p>
+        <ul class="grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-2">
+          {facts.links.map((l) => (
+            <li><a href={l.url} class="no-underline hover:underline underline-offset-4" style="color: var(--night-ink)" rel="me noopener">{l.name}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div class="wrap pb-10 text-sm" style="color: var(--night-muted)">
+      <p>Updated {built}. Built with Astro, and kept current by my digital employees.</p>
+    </div>
+  </footer>
+</body>
+</html>
