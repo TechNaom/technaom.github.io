@@ -99,6 +99,48 @@ button, .btn { font: 600 14px/1 var(--body); border-radius: 4px; padding: 12px 1
 .topnav nav a { color: var(--muted); text-decoration: none; font-size: 14px; white-space: nowrap; }
 .topnav nav a:hover { color: var(--gold); }
 
+
+/* blueprint panel: the architecture diagrams keep their own dark world inside the light site */
+.bp { --bg:#0c1422; --panel:#121d30; --ink:#e6ebf3; --muted:#93a1b8; --line:#2c3a52; --band:#16233a;
+  --accent:#f4a640; --accent-soft:#3a2a14; --cool:#6cc3df; --cool-soft:#13303d; --alert:#ff8a80;
+  --bp-display:"Instrument Serif", Georgia, serif; --bp-body:"IBM Plex Sans", system-ui, sans-serif; --bp-mono:"IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: dark; color: var(--ink); background: var(--bg);
+  background-image: linear-gradient(var(--band) 1px, transparent 1px), linear-gradient(90deg, var(--band) 1px, transparent 1px);
+  background-size: 32px 32px; border-radius: 18px; padding: clamp(18px, 4vw, 40px); display: grid; gap: 48px; font: 16px/1.6 var(--bp-body); }
+.bp .bp-sec { display: grid; gap: 16px; }
+.bp .head { display: grid; gap: 6px; max-width: 760px; }
+.bp .num { font: 500 12px/1 var(--bp-mono); color: var(--muted); letter-spacing: .08em; }
+.bp h2 { font: 400 clamp(26px, 3.2vw, 36px)/1.1 var(--bp-display); margin: 0; color: var(--ink); text-wrap: balance; text-transform: none; letter-spacing: 0; }
+.bp .head p { margin: 0; color: var(--muted); max-width: 65ch; }
+.bp figure { margin: 0; background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+.bp .scroll { overflow-x: auto; padding: 20px; }
+.bp svg { display: block; width: 100%; height: auto; min-width: 900px; color: var(--ink); }
+.bp figcaption { border-top: 1px solid var(--line); padding: 14px 20px; font-size: 14px; color: var(--muted); }
+.bp figcaption b { color: var(--ink); font-weight: 600; }
+/* SVG vocabulary, driven by the page tokens */
+.bp .t { fill: var(--ink); font: 500 13px var(--bp-body); }
+.bp .tm { fill: var(--muted); font: 400 12px var(--bp-body); }
+.bp .mono { font-family: var(--bp-mono); font-size: 11.5px; }
+.bp .cap { fill: var(--muted); font: 500 11px var(--bp-mono); letter-spacing: .08em; text-transform: uppercase; }
+.bp .big { fill: var(--ink); font: 400 22px var(--bp-display); }
+.bp .box { fill: var(--panel); stroke: var(--line); stroke-width: 1.2; }
+.bp .boxA { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.4; }
+.bp .boxC { fill: var(--cool-soft); stroke: var(--cool); stroke-width: 1.2; }
+.bp .band { fill: var(--band); }
+.bp .ln { stroke: var(--muted); stroke-width: 1.4; fill: none; }
+.bp .lnA { stroke: var(--accent); stroke-width: 2.2; fill: none; }
+.bp .lnC { stroke: var(--cool); stroke-width: 1.6; fill: none; }
+.bp .dash { stroke-dasharray: 5 5; }
+.bp .axis { stroke: var(--line); stroke-width: 1.2; }
+.bp .ah { fill: var(--muted); }
+.bp .ahA { fill: var(--accent); }
+.bp .ahC { fill: var(--cool); }
+.bp .dotA { fill: var(--accent); }
+.bp .dotC { fill: var(--cool); }
+.bp .dotX { fill: var(--alert); }
+.bp .tA { fill: var(--accent); font: 600 12px var(--bp-body); }
+.bp .tC { fill: var(--cool); font: 600 12px var(--bp-body); }
+.bp .tX { fill: var(--alert); font: 600 12px var(--bp-body); }
 /* architecture diagrams */
 .diagram { background: var(--stage); border: 1px solid var(--rule); border-radius: 8px; padding: clamp(16px, 3vw, 24px); display: flex; flex-direction: column; gap: 16px; box-shadow: 0 1px 3px rgba(16,24,40,.06); }
 .diagram h3 { margin: 0; font: 600 20px/1.25 var(--display); }
@@ -341,6 +383,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   .duty::before { animation: none; }
 }
 </style>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 <header class="topnav"><div class="in"><a class="brand" href="#top"><i aria-hidden="true"></i>Manohar Papasani</a><nav aria-label="Sections"><a href="#workforce">Workforce</a><a href="#architecture">Architecture</a><a href="#notebook">Lab notebook</a><a href="#open">Repositories</a><a href="#credentials">Credentials</a><a href="#story">Journey</a><a href="#back">Contact</a></nav></div></header>
@@ -434,6 +477,321 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <span class="reel">Reel 2 · Architecture</span>
     <h2>How the digital workforce runs</h2>
     <p class="lede">The systems behind the work: what triggers each shift, which models and tools the agents use, where quality is checked, and how every step is traced.</p>
+    <div class="bp">
+<!-- 1. Seven silos -->
+<div class="bp-sec">
+  <div class="head">
+    <span class="num">01 · SYSTEM MAP</span>
+    <h2>Seven silos, and no row calls another</h2>
+    <p>Each team has its own exact-time trigger on Cloudflare, its own workflow on GitHub Actions and its own agents. If one team breaks, the other six do not notice.</p>
+  </div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1200 650" role="img" aria-label="Seven independent pipelines. Each row runs from its own Cloudflare trigger to its own GitHub workflow to its own agent team to its output. The four post teams publish to LinkedIn; the cross-posting team reads post records and publishes to X, Bluesky, Facebook and Dev.to.">
+      <defs>
+        <marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+        <marker id="m1a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ahA"/></marker>
+        <marker id="m1c" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ahC"/></marker>
+      </defs>
+      <!-- column heads -->
+      <text x="20" y="34" class="cap">When (IST)</text>
+      <text x="170" y="34" class="cap">Clock · Cloudflare Worker</text>
+      <text x="420" y="34" class="cap">Run · GitHub Actions</text>
+      <text x="655" y="34" class="cap">Agents · LangGraph</text>
+      <text x="920" y="34" class="cap">Output</text>
+
+      <!-- row bands -->
+      <g>
+        <rect x="10" y="52" width="870" height="64" rx="10" class="band"/>
+        <rect x="10" y="124" width="870" height="64" rx="10" class="band"/>
+        <rect x="10" y="196" width="870" height="64" rx="10" class="band"/>
+        <rect x="10" y="268" width="870" height="64" rx="10" class="band"/>
+        <rect x="10" y="340" width="870" height="64" rx="10" class="band"/>
+        <rect x="10" y="412" width="870" height="64" rx="10" class="band"/>
+        <rect x="10" y="484" width="870" height="64" rx="10" class="band"/>
+      </g>
+
+      <!-- Row 0 leadership -->
+      <text x="24" y="80" class="t">8:00 AM</text><text x="24" y="98" class="tm">Leadership</text>
+      <rect x="160" y="64" width="200" height="40" rx="8" class="box"/><text x="172" y="89" class="t mono">ace-leadership-trigger</text>
+      <rect x="410" y="64" width="190" height="40" rx="8" class="box"/><text x="422" y="89" class="t mono">motivation-daily.yml</text>
+      <rect x="645" y="64" width="210" height="40" rx="8" class="boxA"/><text x="658" y="89" class="t">Leadership team</text>
+      <path d="M360 84 H404" class="ln" marker-end="url(#m1)"/><path d="M600 84 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 84 H908" class="lnA" marker-end="url(#m1a)"/>
+
+      <!-- Row 1 interview -->
+      <text x="24" y="152" class="t">12:00 PM</text><text x="24" y="170" class="tm">AI interview Q&amp;A</text>
+      <rect x="160" y="136" width="200" height="40" rx="8" class="box"/><text x="172" y="161" class="t mono">ace-interview-trigger</text>
+      <rect x="410" y="136" width="190" height="40" rx="8" class="box"/><text x="422" y="161" class="t mono">interview.yml</text>
+      <rect x="645" y="136" width="210" height="40" rx="8" class="boxA"/><text x="658" y="161" class="t">Interview team</text>
+      <path d="M360 156 H404" class="ln" marker-end="url(#m1)"/><path d="M600 156 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 156 H908" class="lnA" marker-end="url(#m1a)"/>
+
+      <!-- Row 2 news -->
+      <text x="24" y="224" class="t">4:00 PM</text><text x="24" y="242" class="tm">AI news digest</text>
+      <rect x="160" y="208" width="200" height="40" rx="8" class="box"/><text x="172" y="233" class="t mono">lbe-trigger</text>
+      <rect x="410" y="208" width="190" height="40" rx="8" class="box"/><text x="422" y="233" class="t mono">daily.yml</text>
+      <rect x="645" y="208" width="210" height="40" rx="8" class="boxA"/><text x="658" y="233" class="t">News pipeline + Haiku gate</text>
+      <path d="M360 228 H404" class="ln" marker-end="url(#m1)"/><path d="M600 228 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 228 H908" class="lnA" marker-end="url(#m1a)"/>
+
+      <!-- Row 3 learning -->
+      <text x="24" y="296" class="t">11:30 PM</text><text x="24" y="314" class="tm">Tech learning</text>
+      <rect x="160" y="280" width="200" height="40" rx="8" class="box"/><text x="172" y="305" class="t mono">ace-learning-trigger</text>
+      <rect x="410" y="280" width="190" height="40" rx="8" class="box"/><text x="422" y="305" class="t mono">motivation.yml</text>
+      <rect x="645" y="280" width="210" height="40" rx="8" class="boxA"/><text x="658" y="305" class="t">Learning team</text>
+      <path d="M360 300 H404" class="ln" marker-end="url(#m1)"/><path d="M600 300 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 300 H908" class="lnA" marker-end="url(#m1a)"/>
+
+      <!-- LinkedIn -->
+      <rect x="914" y="64" width="150" height="256" rx="12" class="boxA"/>
+      <text x="989" y="182" text-anchor="middle" class="big">LinkedIn</text>
+      <text x="989" y="204" text-anchor="middle" class="tm">4 posts a day</text>
+
+      <!-- Row 4 analytics -->
+      <text x="24" y="368" class="t">5:35 AM</text><text x="24" y="386" class="tm">Mon and Thu</text>
+      <rect x="160" y="352" width="200" height="40" rx="8" class="box"/><text x="172" y="377" class="t mono">ace-brand-analytics-…</text>
+      <rect x="410" y="352" width="190" height="40" rx="8" class="box"/><text x="422" y="377" class="t mono">brand-analytics.yml</text>
+      <rect x="645" y="352" width="210" height="40" rx="8" class="box"/><text x="658" y="377" class="t">Brand analytics agents</text>
+      <path d="M360 372 H404" class="ln" marker-end="url(#m1)"/><path d="M600 372 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 372 H908" class="ln" marker-end="url(#m1)"/>
+      <rect x="914" y="352" width="150" height="40" rx="8" class="box"/><text x="989" y="377" text-anchor="middle" class="t">Website metrics</text>
+
+      <!-- Row 5 operations -->
+      <text x="24" y="440" class="t">9:00 AM</text><text x="24" y="458" class="tm">Operations</text>
+      <rect x="160" y="424" width="200" height="40" rx="8" class="box"/><text x="172" y="449" class="t mono">ace-operations-trigger</text>
+      <rect x="410" y="424" width="190" height="40" rx="8" class="box"/><text x="422" y="443" class="t mono">cost-report · anomaly</text><text x="422" y="457" class="tm mono">weekly-evals (Sun)</text>
+      <rect x="645" y="424" width="210" height="40" rx="8" class="box"/><text x="658" y="449" class="t">Cost, anomaly, eval agents</text>
+      <path d="M360 444 H404" class="ln" marker-end="url(#m1)"/><path d="M600 444 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 444 H908" class="ln" marker-end="url(#m1)"/>
+      <rect x="914" y="424" width="150" height="40" rx="8" class="box"/><text x="989" y="449" text-anchor="middle" class="t">Reports and alerts</text>
+
+      <!-- Row 6 cross-posting -->
+      <text x="24" y="512" class="t">+10 to +90 min</text><text x="24" y="530" class="tm">After every slot</text>
+      <rect x="160" y="496" width="200" height="40" rx="8" class="box"/><text x="172" y="521" class="t mono">promo-trigger</text>
+      <rect x="410" y="496" width="190" height="40" rx="8" class="box"/><text x="422" y="521" class="t mono">distribute.yml</text>
+      <rect x="645" y="496" width="210" height="40" rx="8" class="boxC"/><text x="658" y="521" class="t">Promotion engine</text>
+      <path d="M360 516 H404" class="ln" marker-end="url(#m1)"/><path d="M600 516 H639" class="ln" marker-end="url(#m1)"/>
+      <path d="M855 516 H908" class="lnC" marker-end="url(#m1c)"/>
+      <g>
+        <rect x="914" y="490" width="62" height="24" rx="6" class="boxC"/><text x="945" y="506" text-anchor="middle" class="t">X</text>
+        <rect x="982" y="490" width="82" height="24" rx="6" class="boxC"/><text x="1023" y="506" text-anchor="middle" class="t">Bluesky</text>
+        <rect x="914" y="518" width="82" height="24" rx="6" class="boxC"/><text x="955" y="534" text-anchor="middle" class="t">Facebook</text>
+        <rect x="1002" y="518" width="62" height="24" rx="6" class="boxC"/><text x="1033" y="534" text-anchor="middle" class="t">Dev.to</text>
+      </g>
+
+      <!-- the one read-only link -->
+      <path d="M1064 192 H1150 V516 H1070" class="lnC dash" marker-end="url(#m1c)"/>
+      <text x="1158" y="300" class="tC" transform="rotate(90 1158 300)">same post, read-only, staggered</text>
+
+      <!-- foot -->
+      <line x1="10" y1="580" x2="1190" y2="580" class="axis"/>
+      <text x="20" y="608" class="tm">Shared by no one: each row has its own Worker, timer, workflow, self-heal and alerts. A GitHub watchdog checks all of them on a separate clock.</text>
+      <text x="20" y="630" class="tm">No post is scheduled by GitHub cron: Cloudflare fires on the minute, GitHub only runs the work.</text>
+    </svg>
+    </div>
+    <figcaption><b>Seven pipelines, one per row.</b> The amber lines are the four daily posts; the blue line is cross-posting, the only link between rows, and it only reads post records.</figcaption>
+  </figure>
+</div>
+
+<!-- 2. Inside a team -->
+<div class="bp-sec">
+  <div class="head">
+    <span class="num">02 · INSIDE A POST TEAM</span>
+    <h2>Every post is written, checked and either published or dropped</h2>
+    <p>The leadership team as it runs in code: a LangGraph state graph. Routing is decided in code, not by the model, so a weak post is skipped instead of published.</p>
+  </div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1200 430" role="img" aria-label="The leadership agent graph: brief, planner, quote scout and verifier, writer, poster scout, critic, then publish. The verifier can send the quote scout back for another quote. The critic can send the post back to the writer once. Any step can end in skip.">
+      <defs>
+        <marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+        <marker id="m2a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ahA"/></marker>
+      </defs>
+      <!-- loops above -->
+      <path d="M445 150 C445 92, 345 92, 345 150" class="ln dash" marker-end="url(#m2)"/>
+      <text x="395" y="86" text-anchor="middle" class="tm">quote not verified: find another</text>
+      <path d="M965 150 C965 40, 595 40, 595 150" class="lnA dash" marker-end="url(#m2a)"/>
+      <text x="780" y="36" text-anchor="middle" class="tA">fails review: one rewrite, at most</text>
+
+      <!-- nodes -->
+      <g>
+        <rect x="20" y="150" width="110" height="60" rx="10" class="box"/><text x="75" y="176" text-anchor="middle" class="t">Brief</text><text x="75" y="194" text-anchor="middle" class="tm">insights</text>
+        <rect x="150" y="150" width="120" height="60" rx="10" class="box"/><text x="210" y="176" text-anchor="middle" class="t">Planner</text><text x="210" y="194" text-anchor="middle" class="tm">picks the theme</text>
+        <rect x="290" y="150" width="120" height="60" rx="10" class="box"/><text x="350" y="176" text-anchor="middle" class="t">Quote scout</text><text x="350" y="194" text-anchor="middle" class="tm">finds a quote</text>
+        <rect x="430" y="150" width="120" height="60" rx="10" class="box"/><text x="490" y="176" text-anchor="middle" class="t">Verifier</text><text x="490" y="194" text-anchor="middle" class="tm">checks Wikiquote</text>
+        <rect x="570" y="150" width="120" height="60" rx="10" class="boxA"/><text x="630" y="176" text-anchor="middle" class="t">Writer</text><text x="630" y="194" text-anchor="middle" class="tm">owner's voice</text>
+        <rect x="710" y="150" width="120" height="60" rx="10" class="box"/><text x="770" y="176" text-anchor="middle" class="t">Poster scout</text><text x="770" y="194" text-anchor="middle" class="tm">makes the card</text>
+        <rect x="850" y="150" width="130" height="60" rx="10" class="boxA"/><text x="915" y="176" text-anchor="middle" class="t">Critic</text><text x="915" y="194" text-anchor="middle" class="tm">four judges</text>
+        <rect x="1030" y="150" width="150" height="60" rx="10" class="boxA"/><text x="1105" y="176" text-anchor="middle" class="t">Publish</text><text x="1105" y="194" text-anchor="middle" class="tm">exactly once</text>
+      </g>
+      <path d="M130 180 H144" class="ln" marker-end="url(#m2)"/>
+      <path d="M270 180 H284" class="ln" marker-end="url(#m2)"/>
+      <path d="M410 180 H424" class="ln" marker-end="url(#m2)"/>
+      <path d="M550 180 H564" class="ln" marker-end="url(#m2)"/>
+      <path d="M690 180 H704" class="lnA" marker-end="url(#m2a)"/>
+      <path d="M830 180 H844" class="lnA" marker-end="url(#m2a)"/>
+      <path d="M980 180 H1024" class="lnA" marker-end="url(#m2a)"/>
+      <text x="1002" y="172" text-anchor="middle" class="tA">pass</text>
+
+      <!-- judges -->
+      <g>
+        <line x1="915" y1="210" x2="915" y2="236" class="ln"/>
+        <rect x="820" y="236" width="190" height="104" rx="10" class="box"/>
+        <text x="834" y="258" class="cap">Critic's judges</text>
+        <text x="834" y="280" class="t">Fact-checker</text>
+        <text x="834" y="298" class="t">Technical reviewer</text>
+        <text x="834" y="316" class="t">Consistency</text>
+        <text x="834" y="334" class="t">Generic-voice check</text>
+      </g>
+
+      <!-- skip -->
+      <path d="M210 210 V380" class="ln dash"/><path d="M490 210 V380" class="ln dash"/>
+      <path d="M630 210 V380" class="ln dash"/><path d="M915 340 V380" class="ln dash"/>
+      <rect x="150" y="380" width="790" height="36" rx="8" class="box"/>
+      <text x="166" y="403" class="t">Skip</text>
+      <text x="206" y="403" class="tm">nothing strong enough, quote unverifiable, or second review failed: the slot heals or stays empty, never weak</text>
+    </svg>
+    </div>
+    <figcaption><b>Same writer, critic and publisher in every team.</b> The interview team swaps the first three steps for an interview scout that finds a real reported question; the news team swaps them for a news scout.</figcaption>
+  </figure>
+</div>
+
+<!-- 3. Day timeline -->
+<div class="bp-sec">
+  <div class="head">
+    <span class="num">03 · ONE DAY</span>
+    <h2>Fixed slots, then a calm ripple to every platform</h2>
+    <p>Each post goes to LinkedIn on the minute. The other platforms follow one at a time, at the same offsets every day, and never as a burst of old posts.</p>
+  </div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1200 380" role="img" aria-label="A 24-hour timeline in IST: posts at 8:00 AM, 12:00 PM, 4:00 PM and 11:30 PM; operations at 9:00 AM, analytics at 5:35 AM on Mondays and Thursdays, billing at 11:45 PM. Below, one slot zoomed in: LinkedIn at zero, X at plus 10 minutes, Bluesky at plus 25, Facebook at plus 50 and Dev.to at plus 90.">
+      <!-- day axis: 0h at x=60, 24h at x=1140 (45px per hour) -->
+      <text x="60" y="30" class="cap">24 hours, IST</text>
+      <line x1="60" y1="110" x2="1140" y2="110" class="axis"/>
+      <g class="tm">
+        <text x="60" y="134" text-anchor="middle" class="tm mono">00</text>
+        <text x="330" y="134" text-anchor="middle" class="tm mono">06</text>
+        <text x="600" y="134" text-anchor="middle" class="tm mono">12</text>
+        <text x="870" y="134" text-anchor="middle" class="tm mono">18</text>
+        <text x="1140" y="134" text-anchor="middle" class="tm mono">24</text>
+      </g>
+      <!-- posts -->
+      <g>
+        <line x1="420" y1="70" x2="420" y2="110" class="lnA"/><circle cx="420" cy="110" r="7" class="dotA"/>
+        <text x="420" y="58" text-anchor="middle" class="tA">8:00 Leadership</text>
+        <line x1="600" y1="70" x2="600" y2="110" class="lnA"/><circle cx="600" cy="110" r="7" class="dotA"/>
+        <text x="600" y="58" text-anchor="middle" class="tA">12:00 Interview</text>
+        <line x1="780" y1="70" x2="780" y2="110" class="lnA"/><circle cx="780" cy="110" r="7" class="dotA"/>
+        <text x="780" y="58" text-anchor="middle" class="tA">16:00 AI news</text>
+        <line x1="1117.5" y1="70" x2="1117.5" y2="110" class="lnA"/><circle cx="1117.5" cy="110" r="7" class="dotA"/>
+        <text x="1110" y="58" text-anchor="end" class="tA">23:30 Learning</text>
+      </g>
+      <!-- background jobs -->
+      <g>
+        <circle cx="311" cy="110" r="4.5" class="dotC"/><text x="311" y="158" text-anchor="middle" class="tm">5:35 analytics (Mon, Thu)</text>
+        <circle cx="465" cy="110" r="4.5" class="dotC"/><text x="472" y="180" text-anchor="middle" class="tm">9:00 cost and anomaly checks</text>
+        <line x1="465" y1="116" x2="465" y2="166" class="ln dash"/>
+        <circle cx="1129" cy="110" r="4.5" class="dotC"/><text x="1129" y="158" text-anchor="end" class="tm">23:45 billing</text>
+      </g>
+
+      <!-- zoom -->
+      <path d="M1117.5 118 L1140 210 M1117.5 118 L60 210" class="axis dash"/>
+      <rect x="60" y="210" width="1080" height="150" rx="12" class="band"/>
+      <text x="80" y="236" class="cap">Every slot, zoomed in: minutes after the post</text>
+      <line x1="100" y1="300" x2="1100" y2="300" class="axis"/>
+      <!-- 0..100 min mapped to 100..1100 (10 px per minute) -->
+      <circle cx="100" cy="300" r="9" class="dotA"/><text x="100" y="276" text-anchor="middle" class="tA">LinkedIn</text><text x="100" y="330" text-anchor="middle" class="tm mono">+0</text>
+      <circle cx="200" cy="300" r="7" class="dotC"/><text x="200" y="276" text-anchor="middle" class="tC">X</text><text x="200" y="330" text-anchor="middle" class="tm mono">+10</text>
+      <circle cx="350" cy="300" r="7" class="dotC"/><text x="350" y="276" text-anchor="middle" class="tC">Bluesky</text><text x="350" y="330" text-anchor="middle" class="tm mono">+25</text>
+      <circle cx="600" cy="300" r="7" class="dotC"/><text x="600" y="276" text-anchor="middle" class="tC">Facebook</text><text x="600" y="330" text-anchor="middle" class="tm mono">+50</text>
+      <circle cx="1000" cy="300" r="7" class="dotC"/><text x="1000" y="276" text-anchor="middle" class="tC">Dev.to</text><text x="1000" y="330" text-anchor="middle" class="tm mono">+90</text>
+      <text x="1100" y="350" text-anchor="end" class="tm">At least 45 minutes between two posts on one platform · posts older than 12 hours are never sent</text>
+    </svg>
+    </div>
+    <figcaption><b>Four slots, five platforms, twenty posts a day.</b> Every post carries the same six follow links: LinkedIn, GitHub, Bluesky, X, Dev.to and Facebook. On X the links are written as handles, because X posts carry no links.</figcaption>
+  </figure>
+</div>
+
+<!-- 4. Self-heal -->
+<div class="bp-sec">
+  <div class="head">
+    <span class="num">04 · SELF-HEALING</span>
+    <h2>A missed slot repairs itself within minutes</h2>
+    <p>After each slot the team's own Worker checks every five minutes. If no run has succeeded and none is running, it starts another. Alerts fire only if healing has not worked.</p>
+  </div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1200 300" role="img" aria-label="Minutes after a slot from 0 to 90. The post is triggered at 0. Checks run every 5 minutes from plus 5 to plus 90 and start up to 4 healing runs. Alerts are sent at plus 30, plus 60 and plus 90 if the post still has not gone out. A GitHub watchdog runs on a separate clock.">
+      <!-- 0..90 min mapped to 100..1100 (11.11 px/min) -->
+      <text x="100" y="34" class="cap">Minutes after the slot</text>
+      <line x1="100" y1="120" x2="1100" y2="120" class="axis"/>
+      <circle cx="100" cy="120" r="10" class="dotA"/>
+      <text x="100" y="86" text-anchor="middle" class="tA">Trigger</text>
+      <text x="100" y="100" text-anchor="middle" class="tm">on the minute</text>
+      <g>
+        <circle cx="155.6" cy="120" r="3.5" class="dotC"/><circle cx="211.1" cy="120" r="3.5" class="dotC"/><circle cx="266.7" cy="120" r="3.5" class="dotC"/>
+        <circle cx="322.2" cy="120" r="3.5" class="dotC"/><circle cx="377.8" cy="120" r="3.5" class="dotC"/><circle cx="433.3" cy="120" r="3.5" class="dotC"/>
+        <circle cx="488.9" cy="120" r="3.5" class="dotC"/><circle cx="544.4" cy="120" r="3.5" class="dotC"/><circle cx="600" cy="120" r="3.5" class="dotC"/>
+        <circle cx="655.6" cy="120" r="3.5" class="dotC"/><circle cx="711.1" cy="120" r="3.5" class="dotC"/><circle cx="766.7" cy="120" r="3.5" class="dotC"/>
+        <circle cx="822.2" cy="120" r="3.5" class="dotC"/><circle cx="877.8" cy="120" r="3.5" class="dotC"/><circle cx="933.3" cy="120" r="3.5" class="dotC"/>
+        <circle cx="988.9" cy="120" r="3.5" class="dotC"/><circle cx="1044.4" cy="120" r="3.5" class="dotC"/><circle cx="1100" cy="120" r="3.5" class="dotC"/>
+      </g>
+      <text x="155.6" y="100" class="tC">a check every 5 minutes from +5</text>
+      <!-- alerts -->
+      <g>
+        <path d="M433.3 140 l7 9 l-7 9 l-7 -9 z" class="dotX"/><text x="433.3" y="180" text-anchor="middle" class="tX">+30 alert</text>
+        <path d="M766.7 140 l7 9 l-7 9 l-7 -9 z" class="dotX"/><text x="766.7" y="180" text-anchor="middle" class="tX">+60 alert</text>
+        <path d="M1100 140 l7 9 l-7 9 l-7 -9 z" class="dotX"/><text x="1100" y="180" text-anchor="end" class="tX">+90 final alert</text>
+      </g>
+      <text x="100" y="214" class="tm">Heal only when no run succeeded and none is running · at most 4 healing runs · posted exactly once, recorded in a ledger</text>
+      <line x1="100" y1="248" x2="1100" y2="248" class="ln dash"/>
+      <text x="100" y="274" class="t">GitHub watchdog</text>
+      <text x="230" y="274" class="tm">checks every pipeline on GitHub's own clock, so a Cloudflare problem cannot hide itself</text>
+    </svg>
+    </div>
+    <figcaption><b>Measured on 3 November:</b> the 12 PM post fired at 12:00:54 and the 4 PM post at 4:01, and every platform followed at its exact offset.</figcaption>
+  </figure>
+</div>
+
+<!-- 5. Quality loop -->
+<div class="bp-sec">
+  <div class="head">
+    <span class="num">05 · QUALITY LOOP</span>
+    <h2>Every agent is tested on its own, every week</h2>
+    <p>Each judge runs with its production prompt on planted mistakes and on clean answers. It must catch real faults without crying wolf, or the owner is alerted.</p>
+  </div>
+  <figure>
+    <div class="scroll">
+    <svg viewBox="0 0 1200 300" role="img" aria-label="The weekly loop: per-agent tests on Sunday, scored against two bars, a finding becomes a fix on a branch, continuous integration runs, the change is merged and tagged stable, and a rollback workflow can return to the last stable tag.">
+      <defs>
+        <marker id="m5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ah"/></marker>
+        <marker id="m5a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="ahA"/></marker>
+      </defs>
+      <g>
+        <rect x="20" y="70" width="190" height="80" rx="12" class="boxA"/><text x="36" y="100" class="t">Per-agent tests</text><text x="36" y="120" class="tm">Sundays, 2:00 AM</text><text x="36" y="138" class="tm">planted faults + clean cases</text>
+        <rect x="250" y="70" width="190" height="80" rx="12" class="box"/><text x="266" y="100" class="t">Score each agent</text><text x="266" y="120" class="tm">catches ≥ 75% of faults</text><text x="266" y="138" class="tm">false alarms ≤ 34%</text>
+        <rect x="480" y="70" width="190" height="80" rx="12" class="box"/><text x="496" y="100" class="t">Fix on a branch</text><text x="496" y="120" class="tm">prompt, schema or model</text><text x="496" y="138" class="tm">fallback</text>
+        <rect x="710" y="70" width="190" height="80" rx="12" class="box"/><text x="726" y="100" class="t">CI gate</text><text x="726" y="120" class="tm">lint, types, 228 tests,</text><text x="726" y="138" class="tm">scheduler tests</text>
+        <rect x="940" y="70" width="240" height="80" rx="12" class="boxA"/><text x="956" y="100" class="t">Merge, then tag stable</text><text x="956" y="120" class="tm">backup tag before every change,</text><text x="956" y="138" class="tm">one-click rollback</text>
+      </g>
+      <path d="M210 110 H244" class="lnA" marker-end="url(#m5a)"/>
+      <path d="M440 110 H474" class="ln" marker-end="url(#m5)"/>
+      <path d="M670 110 H704" class="ln" marker-end="url(#m5)"/>
+      <path d="M900 110 H934" class="ln" marker-end="url(#m5)"/>
+      <path d="M1060 150 V200 H115 V156" class="lnA dash" marker-end="url(#m5a)"/>
+      <text x="588" y="222" text-anchor="middle" class="tA">next Sunday, the fixed agent is measured again</text>
+      <text x="20" y="270" class="t">First finding, 3 November:</text>
+      <text x="200" y="270" class="tm">the interview reviewer flagged both clean answers. After the fix: no false alarms in three runs, both planted faults still caught.</text>
+    </svg>
+    </div>
+    <figcaption><b>Measured, not claimed.</b> A judge that crashes counts as a false alarm, so a broken agent can never pass its test.</figcaption>
+  </figure>
+</div>
+
+</div>
+    <p><a class="btn" href="/architecture">Open the diagrams on their own page</a></p>
     <div id="diagrams" style="display:flex;flex-direction:column;gap:18px"></div>
   </section>
 
@@ -805,39 +1163,6 @@ const ICON = {
 };
 const ARROW = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 8h11M9 4l4 4-4 4"/></svg>';
 const DIAGRAMS = [
-  { title: "The digital workforce platform",
-    about: "Every team runs on the same platform. A timer starts the shift, the agents work through a graph of steps, and nothing is published until it passes the gates.",
-    nodes: [
-      ["clock", "Schedule", ["Cloudflare cron at 08:00, 12:00, 16:00 and 23:30 IST", "GitHub Actions runners", "One post per shift, healed if missed"]],
-      ["graph", "Agent teams", ["LangGraph state graphs", "Planner, scouts, writer, critic", "Checkpoints in Postgres, resumable"]],
-      ["chip", "Models", ["Open models on Groq (Qwen, gpt-oss)", "Fallback to Gemini Flash, then Claude Haiku", "Any provider per role, by config"]],
-      ["db", "Tools and memory", ["Tavily web search", "Wikiquote, Wikipedia, Wikimedia Commons", "Neon Postgres + pgvector memory"]],
-      ["shield", "Quality gates", ["Quotes verified by two sources", "Critic: facts, style, no clichés", "One rewrite, otherwise skip"], "gate"],
-      ["send", "Publish", ["LinkedIn API: post, card, carousel", "Review record on GitHub"], "out"],
-    ],
-    xcut: ["Langfuse trace for every agent", "Watchdog and alerts", "Daily token caps", "Kill switch"] },
-  { title: "How the teams work together",
-    about: "Each team runs on its own, with its own keys, limits and alerts, so one team's failure never stops another. They share what they need through read-only records: a weekly brief of what works, and a ledger of every post.",
-    nodes: [
-      ["search", "LinkedIn insights", ["Sundays: studies public posts on AI and leadership", "Every claim checked against the numbers"]],
-      ["pen", "Content teams", ["08:00 leadership, 12:00 interview question, 23:30 learning", "Read the weekly brief as advice"]],
-      ["db", "Posts ledger", ["One record per published post", "Which team, which day, which advice"]],
-      ["send", "Distribution", ["Bluesky, Dev.to and Facebook", "About 20 minutes after each post"], "out"],
-      ["chart", "Brand analytics", ["Followers and impressions every week", "Shows whether the advice helped"]],
-    ],
-    loops: ["Results flow back to the insights team, which adjusts next week's brief"] },
-  { title: "One shift, step by step: leadership at 08:00",
-    about: "Seven digital employees hand the work along. Two loops keep quality up: an unverified quote sends the scout back, and a weak draft gets one rewrite; if a post still misses its slot, the healer fixes the cause and posts.",
-    nodes: [
-      ["clock", "Planner", ["Picks story, quote or lessons", "Chooses the theme"]],
-      ["search", "Quote scout", ["Searches with tools", "Collects candidates"]],
-      ["shield", "Verifier", ["Wikiquote or two independent sources", "No political figures"], "gate"],
-      ["pen", "Writer", ["Writes from verified facts only"]],
-      ["image", "Card maker", ["Builds the matching visual"]],
-      ["shield", "Critic", ["Checks facts, tone, hashtags"], "gate"],
-      ["send", "Publish", ["Posts to LinkedIn"], "out"],
-    ],
-    loops: ["Not verified: scout searches again", "Critic rejects: one rewrite, then skip the day"] },
   { title: "Research harness: Gemma 4 as a coding agent",
     about: "The setup behind the Gemma 4 study. A real software task goes in, the agent works inside a sandbox, and a test suite decides whether the fix is real. A second track plants bugs to test the tester.",
     nodes: [
