@@ -19,11 +19,11 @@
   "repos": { "total": 50, "public": 31, "courses": 13 },
   "bofa": { "years": 5, "awards": 28, "platinum": 1, "gold": 8, "silver": 7, "bronze": 12, "hoursSaved": 14300 },
   "links": [
-    { "name": "LinkedIn", "url": "https://www.linkedin.com/in/manohar-papasani-b89916aa", "handle": "Manohar Papasani" },
-    { "name": "GitHub", "url": "https://github.com/TechNaom", "handle": "TechNaom" },
-    { "name": "Bluesky", "url": "https://bsky.app/profile/manoharpapa.bsky.social", "handle": "@manoharpapa.bsky.social" },
-    { "name": "X", "url": "https://x.com/ManoharPap91329", "handle": "@ManoharPap91329" },
-    { "name": "Dev.to", "url": "https://dev.to/technaom", "handle": "technaom" },
-    { "name": "Facebook", "url": "https://www.facebook.com/ManoharPapasani1982", "handle": "TechNaom AI Labs" }
+    { "name": "LinkedIn", "url": "https://www.linkedin.com/in/manohar-papasani-b89916aa", "handle": "Manohar Papasani", "why": "Daily AI updates, four posts a day" },
+    { "name": "GitHub", "url": "https://github.com/TechNaom", "handle": "TechNaom", "why": "The AI projects I build, with the code" },
+    { "name": "Bluesky", "url": "https://bsky.app/profile/manoharpapa.bsky.social", "handle": "@manoharpapa.bsky.social", "why": "AI in short" },
+    { "name": "X", "url": "https://x.com/ManoharPap91329", "handle": "@ManoharPap91329", "why": "Quick AI takes" },
+    { "name": "Dev.to", "url": "https://dev.to/technaom", "handle": "technaom", "why": "Full AI articles" },
+    { "name": "Facebook", "url": "https://www.facebook.com/ManoharPapasani1982", "handle": "TechNaom AI Labs", "why": "Every post, every day" }
   ]
 }

@@ -256,6 +256,31 @@ const next = [
     </div>
   </section>
 
+  <!-- Follow the lab -->
+  <section id="follow" class="border-t" style="border-color: var(--rule)">
+    <div class="wrap py-20 grid gap-10">
+      <div class="grid gap-3 max-w-[60ch]">
+        <p class="eyebrow" style="color: var(--amber)">Follow the lab</p>
+        <h2 class="display text-4xl sm:text-5xl leading-tight">The same work, on six channels</h2>
+        <p style="color: var(--muted)">My digital employees publish every post on LinkedIn first, then share it on the other channels. Pick the one that suits you.</p>
+      </div>
+      <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 list-none p-0 m-0">
+        {facts.links.map((l) => (
+          <li>
+            <a href={l.url} rel="me noopener" class="channel grid gap-2 h-full p-6 rounded-xl border no-underline" style="background: var(--card); border-color: var(--rule); color: var(--ink)">
+              <span class="flex items-center justify-between gap-3">
+                <span class="text-xl font-semibold">{l.name}</span>
+                <span aria-hidden="true" style="color: var(--amber)">→</span>
+              </span>
+              <span style="color: var(--muted)">{l.why}</span>
+              <span class="mono text-xs" style="color: var(--muted)">{l.handle}</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
   <!-- Back the lab -->
   <section class="night">
     <div class="wrap py-20 grid gap-6 justify-items-start">
@@ -280,3 +305,9 @@ const next = [
     </div>
   </section>
 </Base>
+
+<style>
+  .channel { transition: border-color 0.2s, transform 0.2s; }
+  .channel:hover, .channel:focus-visible { border-color: var(--amber) !important; transform: translateY(-2px); }
+  @media (prefers-reduced-motion: reduce) { .channel { transition: none; } .channel:hover { transform: none; } }
+</style>

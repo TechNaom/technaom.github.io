@@ -54,7 +54,7 @@ h1, h2, h3 { text-wrap: balance; }
   background-size: 32px 32px; }
 
 /* Buttons: one primary (amber), one secondary (cyan outline) */
-.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 6px; font-weight: 600; font-size: 16px; text-decoration: none; transition: transform .15s ease, background-color .15s ease; }
+.btn { display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 6px; font-weight: 600; font-size: 16px; text-decoration: none; white-space: nowrap; transition: transform .15s ease, background-color .15s ease; }
 .btn:hover { transform: translateY(-1px); }
 .btn-primary { background: var(--amber-bright); color: #1a1205; }
 .btn-primary:hover { background: #ffb85a; }
