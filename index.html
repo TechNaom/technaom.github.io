@@ -289,7 +289,7 @@ h2 { margin: 0; font: 600 clamp(30px, 5vw, 48px)/1.1 var(--display); letter-spac
 .goal .row { display: flex; justify-content: space-between; gap: 12px; font: 400 13px var(--mono); color: var(--muted); flex-wrap: wrap; }
 .goal .row b { color: var(--text); font-weight: 500; }
 .meter { height: 10px; background: var(--stage); border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
-.meter i { display: block; height: 100%; width: 35%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
+.meter i { display: block; height: 100%; width: 38%; background: linear-gradient(90deg, var(--gold-deep), var(--gold)); }
 .teams { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
 .team { background: var(--stage); border: 1px solid var(--rule); border-radius: 8px; box-shadow: 0 1px 3px rgba(16,24,40,.06); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .team header { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
@@ -395,7 +395,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
       <p class="role">GenAI Lead &amp; AI Architect at Minfy · AI Systems Builder</p>
       <div class="intro-lede">
         <p class="lede-lead">I design and build AI systems that do real work.</p>
-        <p class="lede-body">I lead a team at Minfy building agentic GenAI solutions on AWS. In my R&amp;D lab, a digital workforce of <b id="agent-count">35</b> AI agents researches, writes, reviews and publishes around the clock, and I publish open research on making agents reliable. Before Minfy, I spent five years at Bank of America leading GenAI and automation for a delivery organisation of 100 to 150 people.</p>
+        <p class="lede-body">I lead a team at Minfy building agentic GenAI solutions on AWS. In my R&amp;D lab, a digital workforce of <b id="agent-count">38</b> AI agents researches, writes, reviews and publishes around the clock, and I publish open research on making agents reliable. Before Minfy, I spent five years at Bank of America leading GenAI and automation for a delivery organisation of 100 to 150 people.</p>
       </div>
       <div class="cta">
         <a class="btn solid" href="#workforce">See the work</a>
@@ -412,7 +412,7 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
   <div class="ticker" aria-label="Highlights">
     <div><small>Bank of America</small><b><em data-count="28">28</em></b><span>Awards in five years, for GenAI leadership and delivery</span><span class="medals"><i class="m-pt">1 Platinum</i><i class="m-au">8 Gold</i><i class="m-ag">7 Silver</i><i class="m-br">12 Bronze</i></span></div>
     <div><small>Bank of America</small><b><em data-count="14300">14,300</em></b><span>Engineer-hours saved every year with GenAI automation</span></div>
-    <div><small>In progress · goal 200</small><b><em data-count="35">35</em> <span class="of">/ 200</span></b><span>Digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="35 of 200 digital employees"><i style="width:17%"></i></span></div>
+    <div><small>In progress · goal 200</small><b><em data-count="38">38</em> <span class="of">/ 200</span></b><span>Digital employees on duty, building toward 200</span><span class="prog" role="img" aria-label="38 of 200 digital employees"><i style="width:19%"></i></span></div>
     <div><small>Certified · 2026</small><b>IIT <em>Patna</em></b><span>Generative &amp; Agentic AI for Developers, six months</span></div>
   </div>
 </section>
@@ -467,8 +467,8 @@ footer { max-width: 1080px; margin: 56px auto 0; padding-top: 18px; border-top: 
     <h2>Nobody here takes a day off</h2>
     <p class="lede">Every agent below runs on its own schedule in the cloud, with a quality gate before anything goes out and a trace of every step. The goal is 100 of them working together by 31 January 2027, and 200 within a year.</p>
     <div class="goal">
-      <div class="row"><span><b>35</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027 · <b>200</b> by Oct 2027</span></div>
-      <div class="meter" role="img" aria-label="35 of 100 agents"><i></i></div>
+      <div class="row"><span><b>38</b> on duty today</span><span>Goal <b>100</b> by 31 Jan 2027 · <b>200</b> by Oct 2027</span></div>
+      <div class="meter" role="img" aria-label="38 of 100 agents"><i></i></div>
     </div>
     <div class="teams" id="teams"></div>
   </section>
@@ -1024,6 +1024,8 @@ const TEAMS = [
     crew: [
       ["Cost controller", "Reports yesterday's spend per workflow and per model every morning."],
       ["Anomaly watcher", "Compares yesterday with the 28 days before it and raises an alert only when something is far from usual."],
+      ["Root cause analyst", "Studies every failed run, names the cause with the log lines that prove it, and emails a report."],
+      ["Bug fixer", "Makes the smallest code change that fixes a bug the analyst found, and opens a pull request only when every check passes."],
     ] },
   { name: "Comment copilot", shift: "On call",
     about: "Drafts comments in my own voice on posts in my feed. I choose, edit and post every one myself.",
@@ -1032,6 +1034,9 @@ const TEAMS = [
     ] },
 ];
 const LOG = [
+  { d: "5 Nov 2026", t: "Two new agents find and fix the cause of a failure", p: "When a post fails, a root cause analyst now gathers the evidence (the error lines, the changes since the last version that posted, and a check of every key), names the cause with the exact log lines that prove it, and emails a report. When the cause is a bug in the code, a bug fixer reads the code, makes the smallest change and runs every check before it opens a pull request. In the first tests, the analyst named the expired key behind the real 12:00 failure with high confidence and correctly kept it from the fixer, since no code change fixes a key. On a planted bug, the fixer restored the missing line on its first attempt, with every check passing.", c: "Shipped" },
+  { d: "5 Nov 2026", t: "An expired key stopped two posts, so a key can no longer stop one on its own", p: "The Claude key behind the writers' strongest fallback had a 30-day expiry and stopped working on 5 November. The fallback chain treated the rejected key as an ordinary error instead of moving to the next model, so the 12:00 post was missed. By 23:30 the free daily limits of the other models were used up as well, and that post went out at 00:15 with a new key. A rejected key now moves a run to the next provider at once, a check 30 minutes before every slot tests each key and the LinkedIn token, and a failed slot is retried on the last version that published.", c: "Shipped" },
+  { d: "5 Nov 2026", t: "Every post now links to this website", p: "Each LinkedIn post now ends with a link to this site after the six follow links, and the cross-posts on Facebook, Bluesky and Dev.to carry it too. X and Threads leave it out, because a bare domain counts as a link there.", c: "Shipped" },
   { d: "3 Nov 2026", t: "Each team now has its own scheduler, and each agent its own test", p: "The five agent teams used to share one scheduler, so a single mistake could delay every team. Each team now has its own exact-time trigger, and every post re-runs itself within minutes if it has not gone out. Every post on every channel now ends with six follow links, Facebook included. The first per-agent tests also found two real problems: the interview reviewer raised false alarms on both clean answers it was shown, and one model never answered when it had nothing to report. After the fixes, the reviewer raised no false alarms in three runs and still caught both planted mistakes.", c: "Shipped" },
   { d: "3 Nov 2026", t: "Every post now reaches five platforms, on time", p: "X joined Bluesky, Dev.to and Facebook, and every post now ends with the same five follow links. The cross-posts had been started by a scheduler that ran one to seven hours late on 2 November, so they moved to the same exact-time trigger as the posts themselves: each post now goes out about ten minutes after LinkedIn, one at a time on each channel and never as a burst of old posts.", c: "Shipped" },
   { d: "2 Nov 2026", t: "Tracing caught the cost report counting some calls twice", p: "While switching on tracing for the insights team, its trace showed each Claude Haiku call twice: once from the agent framework and once from a newer version of the model provider's own library. Across the workforce, 20 calls in a week had been counted twice, about 6% of the reported spend. The traces now keep one record per call, and the daily cost report skips the old duplicates, so past and future numbers are both right.", c: "Shipped" },
