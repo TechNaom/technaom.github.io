@@ -1,5 +1,11 @@
 [
   {
+    "d": "6 Nov 2026",
+    "t": "A post that quietly skipped now counts as a miss",
+    "p": "The 4 PM news post did not go out on 6 November, and nothing raised the alarm. The news search had started returning only two or three stories per query, so too few passed the source checks and the quality gate skipped the day on purpose. The self-healing check saw a run that had ended without an error and treated the day as done. Now a day counts as done only when the post is actually published, so a skipped day is retried on fresh news. The search goes deeper, a story that copies its source is rewritten once instead of dropped, and a thin day can publish three or four stories instead of none. The retry at 7 PM published the post. A root cause analyst now studies every run that does not publish. Shown the skipped 4 PM run, it named the thin search as the cause on its own, with the exact log lines.",
+    "c": "Shipped"
+  },
+  {
     "d": "5 Nov 2026",
     "t": "A root cause analyst and a bug fixer join the workforce",
     "p": "When a post fails, a root cause analyst now gathers the evidence (the error lines, the changes since the last version that posted, and a check of every key), names the cause with the exact log lines that prove it, and emails a report. When the cause is a bug in the code, a bug fixer reads the code, makes the smallest change and runs every check before it opens a pull request. In the first tests, the analyst named the expired key behind the real 12 PM failure with high confidence and correctly kept it from the fixer, since no code change fixes a key. On a planted bug, the fixer restored the missing line on its first attempt, with every check passing.",
