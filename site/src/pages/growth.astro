@@ -20,7 +20,8 @@ const lastMonth = metrics.months.at(-1)!.month;
 const notable = [...metrics.notable_days].sort((a, b) => b.impressions - a.impressions).slice(0, 6);
 const mix = metrics.engagement_mix;
 const act = metrics.activity_per_day;
-const tops = metrics.top_posts.filter((p) => /^https:\/\/www\.linkedin\.com\//.test(p.url)).slice(0, 5);
+// Optional: the analytics agents leave top_posts out when no post has a public link yet (6 Nov 2026).
+const tops = ((metrics as { top_posts?: { url: string; date: string; engagements: number }[] }).top_posts ?? []).filter((p) => /^https:\/\/www\.linkedin\.com\//.test(p.url)).slice(0, 5);
 const ww = metrics.what_works;
 ---
 <Base title="Brand growth" path="/growth" description="The LinkedIn growth my digital workforce produces, measured twice a week from LinkedIn's own numbers.">
@@ -111,6 +112,7 @@ const ww = metrics.what_works;
   </section>
 
   <section class="wrap py-16 grid lg:grid-cols-2 gap-12">
+    {tops.length > 0 && (
     <div class="grid gap-5 content-start">
       <SectionHead eyebrow="Top posts" title="The posts people engaged with most" />
       <ol class="grid gap-3 list-none p-0 m-0">
@@ -123,6 +125,7 @@ const ww = metrics.what_works;
         ))}
       </ol>
     </div>
+    )}
     <div class="grid gap-5 content-start">
       <SectionHead eyebrow="What works" title="Still learning, so nothing is claimed yet" />
       <p style="color: var(--muted)">

@@ -192,6 +192,14 @@
       [
         "Anomaly watcher",
         "Compares yesterday with the 28 days before it and raises an alert only when something is far from usual."
+      ],
+      [
+        "Root cause analyst",
+        "Studies every failed run, names the cause with the log lines that prove it, and emails a report."
+      ],
+      [
+        "Bug fixer",
+        "Makes the smallest code change that fixes a bug the analyst found, and opens a pull request only when every check passes."
       ]
     ]
   },

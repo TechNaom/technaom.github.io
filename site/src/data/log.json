@@ -1,5 +1,23 @@
 [
   {
+    "d": "5 Nov 2026",
+    "t": "A root cause analyst and a bug fixer join the workforce",
+    "p": "When a post fails, a root cause analyst now gathers the evidence (the error lines, the changes since the last version that posted, and a check of every key), names the cause with the exact log lines that prove it, and emails a report. When the cause is a bug in the code, a bug fixer reads the code, makes the smallest change and runs every check before it opens a pull request. In the first tests, the analyst named the expired key behind the real 12 PM failure with high confidence and correctly kept it from the fixer, since no code change fixes a key. On a planted bug, the fixer restored the missing line on its first attempt, with every check passing.",
+    "c": "Shipped"
+  },
+  {
+    "d": "5 Nov 2026",
+    "t": "An expired key stopped two posts, so a key can no longer stop one on its own",
+    "p": "The Claude key behind the writers' strongest fallback had a 30-day expiry and stopped working on 5 November. The fallback chain treated the rejected key as an ordinary error instead of moving to the next model, so the 12 PM post was missed. By 11:30 PM the free daily limits of the other models were used up as well, and that post went out at 12:15 AM with a new key. A rejected key now moves a run to the next provider at once, a check 30 minutes before every slot tests each key and the LinkedIn token, and a failed slot is retried on the last version that published.",
+    "c": "Shipped"
+  },
+  {
+    "d": "5 Nov 2026",
+    "t": "Every post now links to this website",
+    "p": "Each LinkedIn post now ends with a link to this site after the six follow links, and the cross-posts on Facebook, Bluesky and Dev.to carry it too. X and Threads leave it out, because a bare domain counts as a link there.",
+    "c": "Shipped"
+  },
+  {
     "d": "3 Nov 2026",
     "t": "Each team now has its own scheduler, and each agent its own test",
     "p": "The five agent teams used to share one scheduler, so a single mistake could delay every team. Each team now has its own exact-time trigger, and every post re-runs itself within minutes if it has not gone out. Every post on every channel now ends with six follow links, Facebook included. The first per-agent tests also found two real problems: the interview reviewer raised false alarms on both clean answers it was shown, and one model never answered when it had nothing to report. After the fixes, the reviewer raised no false alarms in three runs and still caught both planted mistakes.",

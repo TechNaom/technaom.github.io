@@ -1,7 +1,11 @@
 name: deploy-cloudflare
 
 # Publishes the site to https://manoharpapasani.pages.dev on every push to main.
-# GitHub Pages (technaom.github.io) keeps serving the same files.
+# Since 6 Nov 2026 production is site v2 (Astro, in site/). Every push rebuilds it, including
+# the brand analytics agents' commits to data/brand-metrics.json, which the pages read at build
+# time, so new numbers go live with nobody involved. If the build or the copy and facts gate
+# fails, nothing is deployed and the last good version stays live.
+# GitHub Pages (technaom.github.io) still serves the old single-page site from the repo root.
 on:
   push:
     branches: [main]
@@ -10,17 +14,35 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
     steps:
       - uses: actions/checkout@v4
-
-      - name: Collect the site files
-        run: mkdir -p public && cp index.html architecture.html public/ && cp -r assets public/ && cp -r data public/
-
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - name: Build
+        run: npx astro build
+      # Style, facts and spelling. Grammar runs on branches (site-check.yml), so a grammar
+      # service outage never holds back the analytics agents' updates.
+      - name: Copy and facts gate
+        run: node scripts/check-copy.mjs
+      - name: Keep the public data files (data/brand-metrics.json is read by others too)
+        run: cp -r ../data dist/
       - uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy public --project-name=manoharpapasani --branch=main
+          workingDirectory: site
+          command: pages deploy dist --project-name=manoharpapasani --branch=main
