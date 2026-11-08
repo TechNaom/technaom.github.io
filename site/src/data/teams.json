@@ -200,6 +200,18 @@
       [
         "Bug fixer",
         "Makes the smallest code change that fixes a bug the analyst found, and opens a pull request only when every check passes."
+      ],
+      [
+        "Test-writer",
+        "Before any fix, writes a test that fails because of the bug, so the fixer has to make it pass without touching it."
+      ],
+      [
+        "Reviewer",
+        "A different AI model reads the exact change and approves it only if it removes the cause, not just the symptom."
+      ],
+      [
+        "Release manager",
+        "Releases an approved fix only when every check has passed and no post is due, then keeps it only if the next post publishes."
       ]
     ]
   },
