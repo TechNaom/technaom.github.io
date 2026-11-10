@@ -1,5 +1,17 @@
 [
   {
+    "d": "10 Nov 2026",
+    "t": "A late backup posted the 4 PM news at dawn, and a Friday story drafter joined",
+    "p": "On 10 November the 4 PM news post went out at 5:52 in the morning. A backup run, meant for the evening before, started almost eight hours late, after midnight, found nothing posted for the new day and posted it early. The 4 PM run then saw the day was done and rightly posted nothing. Backup runs may now post only between 3:55 PM and midnight, and a test reproduces that morning. The same evening a new drafter joined: every Friday it writes one post in my own voice from this notebook, and only from this notebook, so nothing private can reach it. Code rejects any number that is not here and any link. I edit the draft and post it myself.",
+    "c": "Shipped"
+  },
+  {
+    "d": "8 Nov 2026",
+    "t": "A website link in every post cut reach to almost nothing",
+    "p": "Three days after a link to this website went into every LinkedIn post, impressions fell from 906 a day to 73, and new posts reached fewer than ten people each. I noticed one more sign: LinkedIn had stopped shortening the links in my posts, as it had done until then. Link-shortening came back the moment the website line was removed, and a test post reached 76 people within minutes. The likely reason is that free web addresses like this one are often used by scam sites, so link filters trust them less. The six follow links stayed, the website link came out of every LinkedIn post, and a test now fails if it returns. The website stays on the other channels.",
+    "c": "Result"
+  },
+  {
     "d": "8 Nov 2026",
     "t": "The bug-fixing team passed its first full drill",
     "p": "Three agents joined the team that fixes broken code: a test-writer, a reviewer and a release manager, which brings the workforce to 41. On a planted bug, the test-writer wrote a test that failed because of it, the bug fixer made that test pass with a one-line change, a different AI model reviewed and approved the change, and the release manager cleared it for release, all in about six minutes. The first two drills failed, and that was the point. A backup model kept calling a tool that does not exist, a second model refused its final answer for a technical reason, and the reviewer rejected a correct fix because it had not been given the facts that code had already checked. Each failure is now fixed and covered by a test. Shown two fixes that only hid the bug, the reviewer rejected both and explained why. Fixes still wait for my approval before they go live.",
