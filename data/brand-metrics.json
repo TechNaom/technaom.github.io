@@ -1,12 +1,12 @@
 {
- "generated_at": "2026-11-09T00:16+00:00",
+ "generated_at": "2026-11-11T18:24+00:00",
  "sources": [
   "public LinkedIn profile (Apify)",
   "LinkedIn analytics export",
   "our posting records"
  ],
  "all_time": {
-  "posts": 74,
+  "posts": 86,
   "impressions": 71904,
   "engagements": 1158,
   "new_followers": 640,
@@ -288,7 +288,7 @@
   {
    "month": "2026-11",
    "totals": {
-    "posts": 31,
+    "posts": 43,
     "impressions": 4619,
     "engagements": 89,
     "new_followers": 67
@@ -302,12 +302,12 @@
     "connections": 711
    },
    "change_vs_previous": {
-    "posts": -27.9,
+    "posts": 0,
     "impressions": -59.1,
     "engagements": -58,
     "new_followers": -51.8
    },
-   "days_observed": 9
+   "days_observed": 11
   }
  ],
  "daily": {
@@ -6557,10 +6557,22 @@
    [
     "2026-11-08",
     4
+   ],
+   [
+    "2026-11-09",
+    4
+   ],
+   [
+    "2026-11-10",
+    4
+   ],
+   [
+    "2026-11-11",
+    4
    ]
   ]
  },
- "summary": "The profile has 1,024 followers. Over the past year it earned 71,904 impressions. Manohar's AI agents have published 74 posts since 2026-10-11.",
+ "summary": "The profile has 1,024 followers. Over the past year it earned 71,904 impressions. Manohar's AI agents have published 86 posts since 2026-10-11.",
  "engagement_mix": {
   "items": 1648,
   "comments": 779,
@@ -6583,7 +6595,7 @@
   },
   "topics": [
    {
-    "name": "Career growth and workplace",
+    "name": "Career growth mindset",
     "share": 45,
     "comments": 128,
     "likes": 144,
@@ -6597,7 +6609,7 @@
     ]
    },
    {
-    "name": "AI and business strategy",
+    "name": "AI business impact",
     "share": 38,
     "comments": 103,
     "likes": 126,
@@ -6633,39 +6645,12 @@
   "min_posts": 100,
   "cv_r2": -0.065
  },
- "top_posts": [
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6",
-   "date": "2026-08-23",
-   "engagements": 127
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_milestone-growthjourney-avpsenioranalyst-share-7424147353625915392-I-jq",
-   "date": "2026-02-02",
-   "engagements": 45
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_im-happy-to-share-that-im-starting-a-new-ugcPost-7517906262999588864-Q3Bb",
-   "date": "2026-10-19",
-   "engagements": 33
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_python-course-presentation-ugcPost-7479575924405891072-2fOt",
-   "date": "2026-07-05",
-   "engagements": 29
-  },
-  {
-   "url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_genai-development-setup-2026-vs-code-share-7492244678143164416-TTZl",
-   "date": "2026-08-09",
-   "engagements": 27
-  }
- ],
  "notable_days": [
   {
    "day": "2026-10-19",
    "impressions": 559,
    "typical": 134,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_im-happy-to-share-that-im-starting-a-new-ugcPost-7517906262999588864-Q3Bb"
+   "post_url": null
   },
   {
    "day": "2026-10-11",
@@ -6677,7 +6662,7 @@
    "day": "2026-08-26",
    "impressions": 2099,
    "typical": 288,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_generativeai-genai-rag-share-7497254639373889536-CMt6"
+   "post_url": null
   },
   {
    "day": "2026-07-12",
@@ -6689,7 +6674,7 @@
    "day": "2026-07-05",
    "impressions": 1478,
    "typical": 32,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_python-course-presentation-ugcPost-7479575924405891072-2fOt"
+   "post_url": null
   },
   {
    "day": "2026-05-04",
@@ -6707,7 +6692,7 @@
    "day": "2026-02-03",
    "impressions": 521,
    "typical": 0,
-   "post_url": "https://www.linkedin.com/posts/manohar-papasani-b89916aa_milestone-growthjourney-avpsenioranalyst-share-7424147353625915392-I-jq"
+   "post_url": null
   }
  ],
  "impressions_week": {
