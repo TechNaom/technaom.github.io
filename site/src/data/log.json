@@ -1,5 +1,11 @@
 [
   {
+    "d": "18 Nov 2026",
+    "t": "Every agent stopped for three days, and the cause was billing, not a bug",
+    "p": "From 16 to 18 November no scheduled agent ran. The free monthly minutes on the service that runs them had run out, 2,257 used out of 2,000, and each job was refused in about four seconds before any of my code started. So nothing misbehaved; the agents were simply never allowed to begin. I moved to a paid plan with a hard spending cap, reran the missed 12 PM interview job, and it published to LinkedIn. The same evening the release, news and learning jobs ran cleanly again. One watcher stayed broken for a separate reason: a Kaggle tool update stopped installing a package it still needs, which is now fixed. The lesson is that a quiet system can mean a closed door rather than a failure, so the next step is to stop depending on one provider's minutes and move the schedule to my own cloud account, with a budget cap set first.",
+    "c": "Result"
+  },
+  {
     "d": "10 Nov 2026",
     "t": "A late backup posted the 4 PM news at dawn, and a Friday story drafter joined",
     "p": "On 10 November the 4 PM news post went out at 5:52 in the morning. A backup run, meant for the evening before, started almost eight hours late, after midnight, found nothing posted for the new day and posted it early. The 4 PM run then saw the day was done and rightly posted nothing. Backup runs may now post only between 3:55 PM and midnight, and a test reproduces that morning. The same evening a new drafter joined: every Friday it writes one post in my own voice from this notebook, and only from this notebook, so nothing private can reach it. Code rejects any number that is not here and any link. I edit the draft and post it myself.",
