@@ -34,7 +34,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## In flight
 
-- Feature lane: **3D neural network website** (requirements R9 to R18 in `prd.md`). Step: ignite, waiting for the owner's yes.
+- Feature lane: **3D neural network website** (requirements R9 to R18 in `prd.md`). Step: ignite approved by the owner ("Then proceed, go ahead", 2026-11-27); blueprint in progress.
 - Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
 
 ## Open questions
@@ -45,5 +45,6 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## Log
 
+- 2026-11-27 3D lane: ignite approved by the owner ("Then proceed, go ahead"). Blueprint started. The N4 numbers stay *(proposed)* until the owner changes them.
 - 2026-11-27 Owner chose for the 3D lane: all 7 pages, reusable views as the templates, a living neural network (not space), dark only, no deadline, quality first.
 - 2026-11-27 Joined Idea to Orbit; documents reconstructed from the code; 3D feature lane started at ignite.
