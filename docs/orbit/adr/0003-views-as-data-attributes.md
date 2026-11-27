@@ -16,7 +16,7 @@ content gets a quiet view.
 
 ## Decision
 Option A. The registry is a plain object in `site/src/lib/scene/views.js`; the choice is a pure function,
-`pickView(sections, viewportHeight)`, so it is unit tested.
+`pickView(sections, viewportHeight)` (contract in architecture.md, Implementation decisions, point 12), so it is unit tested.
 
 ## Why
 The least code per page, and it works wherever the site renders HTML. We give up type checking of the view name;

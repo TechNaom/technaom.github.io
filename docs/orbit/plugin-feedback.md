@@ -16,3 +16,19 @@ product. Each one is a candidate change to Idea to Orbit.
 - 2026-11-27 · ignite (existing product) · **"Run the tests" assumes the toolchain is there.** It took several
   tries (no Node, then a too-old Node, then a lock file without the Windows binary). Better: a step to record
   the toolchain and how to install it without changing lock files, in Settings.
+- 2026-11-27 · blueprint · **Adaptive runtime behaviour fights headless CI.** The design lowered quality and fell back on
+  slow frame rates; CI browsers have no graphics card, so every "scene draws" test would have seen the fallback. The
+  cold read caught it. Better: the blueprint template asks "what does the product change on its own at run time
+  (quality, retries, fallbacks), and how does a test pin it?"
+- 2026-11-27 · blueprint · **The architecture template has no place for test hooks.** Nothing asked how tests read
+  the product's state (here: attributes on `<html>`, a test-mode flag). Better: an "Observability for tests" row in
+  Interfaces for products with screens.
+- 2026-11-27 · blueprint · **Prior art by measurement, not by reputation.** Measuring bundle sizes (137 KB vs 14 KB)
+  and checking the last push (19 months) decided the library ADR. Better: for web products, the prior-art step says
+  "measure the cost the user pays (download size, start time), and check activity live".
+- 2026-11-27 · blueprint · **Screens need a visual-layers section.** Colours, tokens, z-order and what turns
+  see-through were unnamed, and would have hidden the 3D behind opaque sections. Better: a "Visual system" block in the
+  Screens section: tokens, layers, and what changes per state.
+- 2026-11-27 · blueprint · **A static mockup is not enough for motion.** The skill asks for "one static HTML page";
+  for a 3D or animated product the owner needs to see the motion. Better: allow a live mockup when motion is the point.
+- Evidence so far: the cold read found 20 gaps (9 would have caused a wrong build) in a design I believed complete.
