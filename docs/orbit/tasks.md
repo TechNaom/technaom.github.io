@@ -20,36 +20,36 @@ unless they start with `cd`.
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
-| T1 | Test harness and CI wiring | N5, N6 | `tests/unit/ci.test.mjs` reads `site-check.yml` and fails without the unit, Playwright and copy steps | `node --test tests/unit` passes; CI green on the lane branch | - | M | |
-| T2 | Scene data from `teams.json` | R9, R13 | `tests/unit/scene-data.test.mjs`: 9 teams, 41 agents, equals `facts.json`; hours; slugs | `node --test tests/unit` passes | T1 | S | |
-| T3 | View registry and `pickView` | R10, R18 | `tests/unit/views.test.mjs`: middle line, nesting, unknown name, progress | `node --test tests/unit` passes | T1 | S | |
-| T4 | Dark only, tokens and layers | R16, R17 | `tests/e2e/dark.spec.mjs`: `data-theme="dark"` and axe contrast on all 7 pages with JavaScript off | `npx playwright test dark` passes | T1 | M | |
-| T5 | `Universe.astro` and `boot.js`: decide, wait, load, fall back | R14, R17, N2, N3 | `tests/e2e/fallback.spec.mjs`: JavaScript off, WebGL off, chunk 500, data saver: state, no `u3d-on`, text visible | `npx playwright test fallback` passes | T2, T4 | M | |
-| T6 | Scene chunk: the network drawn | R9, R14, N3 | `tests/e2e/scene.spec.mjs`: `data-u3d-state="on"` and `u3d-on` on all 7 pages; `window.__u3d.data` equals the JSON; size and licence checks | `npx playwright test scene` and `node --test tests/unit` pass | T3, T5 | M | |
-| T7 | Lane preview and smoke test | R9, N5 | `tests/e2e/smoke.spec.mjs` run against `BASE_URL` | Smoke passes against `https://site-3d-lane.manoharpapasani.pages.dev` | T6 | S | |
+| T1 | Test harness and CI wiring | N5, N6 | `tests/unit/ci.test.mjs` reads `site-check.yml` and fails without the unit, Playwright and copy steps | `node --test tests/unit` passes; CI green on the lane branch | - | M | #1 |
+| T2 | Scene data from `teams.json` | R9, R13 | `tests/unit/scene-data.test.mjs`: 9 teams, 41 agents, equals `facts.json`; hours; slugs | `node --test tests/unit` passes | T1 | S | #2 |
+| T3 | View registry and `pickView` | R10, R18 | `tests/unit/views.test.mjs`: middle line, nesting, unknown name, progress | `node --test tests/unit` passes | T1 | S | #3 |
+| T4 | Dark only, tokens and layers | R16, R17 | `tests/e2e/dark.spec.mjs`: `data-theme="dark"` and axe contrast on all 7 pages with JavaScript off | `npx playwright test dark` passes | T1 | M | #4 |
+| T5 | `Universe.astro` and `boot.js`: decide, wait, load, fall back | R14, R17, N2, N3 | `tests/e2e/fallback.spec.mjs`: JavaScript off, WebGL off, chunk 500, data saver: state, no `u3d-on`, text visible | `npx playwright test fallback` passes | T2, T4 | M | #5 |
+| T6 | Scene chunk: the network drawn | R9, R14, N3 | `tests/e2e/scene.spec.mjs`: `data-u3d-state="on"` and `u3d-on` on all 7 pages; `window.__u3d.data` equals the JSON; size and licence checks | `npx playwright test scene` and `node --test tests/unit` pass | T3, T5 | M | #6 |
+| T7 | Lane preview and smoke test | R9, N5 | `tests/e2e/smoke.spec.mjs` run against `BASE_URL` | Smoke passes against `https://site-3d-lane.manoharpapasani.pages.dev` | T6 | S | #7 |
 
 ## M2 Views and story (cards written when M2 starts)
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
-| T8 | Camera per view, with `network` and `drift`; `data-scene` on every page from `screens.json` | R10 | e2e: scroll each route, `data-u3d-view` matches `screens.json` | Playwright passes | T6 | M | |
-| T9 | `dial` view and `StageLabels.astro`; home dial stage | R12, R13 | e2e: dial labels in HTML and placed; copy gate reads them | Playwright and copy gate pass | T8 | M | |
-| T10 | `journey` view, `journey.json`, tall stage with sticky card, scroll progress | R12, R13 | unit: progress; e2e: progress 0, 0.5, 1 screenshots | Playwright passes | T9 | M | |
-| T11 | Labels overlay: projection, hide behind camera, phone layout (under 900px) | R12, R13 | e2e at 1280×800 and 390×844: labels in viewport, none overlapping | Playwright passes | T10 | M | |
-| T12 | Quiet sections (`data-scene-quiet`) on workforce, architecture, notebook | R18 | e2e: opacity factor 0.4 on the named selectors | Playwright passes | T8 | S | |
-| T13 | Signals and reduced motion | R11, R15 | e2e: pulses counted in test mode; with `reducedMotion: "reduce"` none, camera jumps | Playwright passes | T8 | S | |
-| T14 | Views guide `src/lib/scene/README.md`; one page uses views with no script of its own | R10 | unit: every view named in the guide exists in the registry | `node --test tests/unit` passes | T8 | S | |
+| T8 | Camera per view, with `network` and `drift`; `data-scene` on every page from `screens.json` | R10 | e2e: scroll each route, `data-u3d-view` matches `screens.json` | Playwright passes | T6 | M | #8 |
+| T9 | `dial` view and `StageLabels.astro`; home dial stage | R12, R13 | e2e: dial labels in HTML and placed; copy gate reads them | Playwright and copy gate pass | T8 | M | #9 |
+| T10 | `journey` view, `journey.json`, tall stage with sticky card, scroll progress | R12, R13 | unit: progress; e2e: progress 0, 0.5, 1 screenshots | Playwright passes | T9 | M | #10 |
+| T11 | Labels overlay: projection, hide behind camera, phone layout (under 900px) | R12, R13 | e2e at 1280×800 and 390×844: labels in viewport, none overlapping | Playwright passes | T10 | M | #11 |
+| T12 | Quiet sections (`data-scene-quiet`) on workforce, architecture, notebook | R18 | e2e: opacity factor 0.4 on the named selectors | Playwright passes | T8 | S | #12 |
+| T13 | Signals and reduced motion | R11, R15 | e2e: pulses counted in test mode; with `reducedMotion: "reduce"` none, camera jumps | Playwright passes | T8 | S | #13 |
+| T14 | Views guide `src/lib/scene/README.md`; one page uses views with no script of its own | R10 | unit: every view named in the guide exists in the registry | `node --test tests/unit` passes | T8 | S | #14 |
 
 ## M3 Hardening and release (cards written when M3 starts)
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
-| T15 | Quality tiers, lite switch, stop on slow, context lost | N4, R17 | unit: tier rule (36 ms over 2 s, after 1 s, not hidden); e2e: forced slow frames fall back | Tests pass | T13 | M | |
-| T16 | Lighthouse CI with N4 assertions (warn until the owner confirms) | N4 | CI-file test for the `lhci` step | `npx lhci autorun` report in CI | T7 | S | |
-| T17 | Network check (only our origin and Google Fonts) and screenshots of the 7 routes | N3, R12 | e2e network log and screenshot baseline | Playwright passes | T11 | S | |
-| T18 | Release rehearsal: backup tag on `main`, revert rehearsed on a scratch branch | N5 | Script checks the tag exists and the revert builds | Rehearsal log in `JOURNAL.md` | T15-T17 | S | |
-| T19 | Test flight and owner UAT on the lane preview | all | The test-flight checklist | Owner's go | T18 | S | |
-| T20 | Merge, live smoke test, and a metrics commit deploys after the merge | N2, N6 | Smoke spec against the live URL; the next analytics commit's run | Both green | T19 | S | |
+| T15 | Quality tiers, lite switch, stop on slow, context lost | N4, R17 | unit: tier rule (36 ms over 2 s, after 1 s, not hidden); e2e: forced slow frames fall back | Tests pass | T13 | M | #15 |
+| T16 | Lighthouse CI with N4 assertions (warn until the owner confirms) | N4 | CI-file test for the `lhci` step | `npx lhci autorun` report in CI | T7 | S | #16 |
+| T17 | Network check (only our origin and Google Fonts) and screenshots of the 7 routes | N3, R12 | e2e network log and screenshot baseline | Playwright passes | T11 | S | #17 |
+| T18 | Release rehearsal: backup tag on `main`, revert rehearsed on a scratch branch | N5 | Script checks the tag exists and the revert builds | Rehearsal log in `JOURNAL.md` | T15-T17 | S | #18 |
+| T19 | Test flight and owner UAT on the lane preview | all | The test-flight checklist | Owner's go | T18 | S | #19 |
+| T20 | Merge, live smoke test, and a metrics commit deploys after the merge | N2, N6 | Smoke spec against the live URL; the next analytics commit's run | Both green | T19 | S | #20 |
 
 ## Coverage
 
@@ -89,7 +89,7 @@ Shared facts for every card:
 
 ### T1 Test harness and CI wiring
 
-Serves: N5, N6. Depends on: none. Size: M. Issue: <#>
+Serves: N5, N6. Depends on: none. Size: M. Issue: #1
 
 **Files**
 - Change: `site/package.json` (devDependencies, scripts), `site/package-lock.json`
@@ -143,7 +143,7 @@ keeps CI time down. Do not add `@lhci/cli` here (T16).
 
 ### T2 Scene data from `teams.json`
 
-Serves: R9, R13. Depends on: T1. Size: S. Issue: <#>
+Serves: R9, R13. Depends on: T1. Size: S. Issue: #2
 
 **Files**
 - Change: `site/src/lib/format.ts` (add `slug`, `hourOf`)
@@ -189,7 +189,7 @@ Importing JSON in Node 22: `import x from "./x.json" with { type: "json" }`.
 
 ### T3 View registry and `pickView`
 
-Serves: R10, R18. Depends on: T1. Size: S. Issue: <#>
+Serves: R10, R18. Depends on: T1. Size: S. Issue: #3
 
 **Files**
 - Create: `site/src/lib/scene/views.mjs`
@@ -223,7 +223,7 @@ sections are never candidates.
 
 ### T4 Dark only, tokens and layers
 
-Serves: R16, R17. Depends on: T1. Size: M. Issue: <#>
+Serves: R16, R17. Depends on: T1. Size: M. Issue: #4
 
 **Files**
 - Change: `site/src/layouts/Base.astro` (`<html lang="en-GB" data-theme="dark">`)
@@ -265,7 +265,7 @@ them in this task.
 
 ### T5 `Universe.astro` and `boot.js`
 
-Serves: R14, R17, N2, N3. Depends on: T2, T4. Size: M. Issue: <#>
+Serves: R14, R17, N2, N3. Depends on: T2, T4. Size: M. Issue: #5
 
 **Files**
 - Create: `site/src/components/Universe.astro`, `site/src/lib/scene/boot.mjs`, `site/src/lib/scene/scene.mjs` (a stub
@@ -311,7 +311,7 @@ import `three` statically, or three.js ends up in the boot bundle.
 
 ### T6 Scene chunk: the network drawn
 
-Serves: R9, R14, N3. Depends on: T3, T5. Size: M. Issue: <#>
+Serves: R9, R14, N3. Depends on: T3, T5. Size: M. Issue: #6
 
 **Files**
 - Create: `site/src/lib/scene/network.mjs`, `site/src/lib/scene/rng.mjs`
@@ -357,7 +357,7 @@ the first frame, so a throw during build leaves the page in fallback, never half
 
 ### T7 Lane preview and smoke test
 
-Serves: R9, N5. Depends on: T6. Size: S. Issue: <#>
+Serves: R9, N5. Depends on: T6. Size: S. Issue: #7
 
 **Files**
 - Create: `site/tests/e2e/smoke.spec.mjs`
