@@ -76,8 +76,9 @@ sequenceDiagram
    the dark design, and the stage label lists show as plain lists in their cards (R17).
 2. The chunk fails to load, or throws while building: `boot.js` catches it, does not add `u3d-on`, and the page is
    the same as in step 1.
-3. The frame rate stays under 30 for 2 seconds: switch to lite. Still under 30 on lite for 4 more seconds: stop the
-   loop, remove the canvas and `u3d-on`; the page is the same as in step 1 (ADR 0006).
+3. The average frame time passes 36 ms over 2 seconds (after the first second, never while hidden): switch to lite.
+   Still past it on lite for 4 more seconds: stop the loop, remove the canvas and `u3d-on`; the page is the same as in
+   step 1 (ADR 0006).
 4. The browser loses the WebGL context (`webglcontextlost`): the same as step 3.
 
 ## Data model
@@ -124,7 +125,7 @@ Dark only (R16). Every page is public; there are no roles and no refusals.
 | Work | `/work` | 50 repositories. One builder. | hero `network`; the rest `drift` | Repository links |
 | About | `/about` | From a farming village to a digital workforce | hero `network`; the rest `drift` | - |
 
-Mockup: to be agreed with the owner before the gate (see STATE). Browser tests load this table from
+Mockup: https://claude.ai/artifact/8Cz9QBJRagk74imGRMJk7i, agreed by the owner on 2026-11-27 ("that should be fine"); the real build keeps the home hero diagram (point 5) and fills the labels from the data. Browser tests load this table from
 `site/tests/screens.json`, written in the first build task.
 
 ## Compliance
@@ -146,7 +147,7 @@ Spending cap: not applicable, nothing is billed. At ten times the visitors the c
 |---|---|---|
 | No WebGL or the data saver | `boot.js` checks before loading | Static page, the chunk never loads (R17) |
 | The chunk fails to load or throws | `import()` rejects, or an error during build | Static page; nothing half-drawn, because `u3d-on` comes only after the first frame |
-| Slow device | Frame time over 33 ms for 2 seconds | Lite tier, then stop and fall back (ADR 0006) |
+| Slow device | Average frame time over 36 ms for 2 seconds (ADR 0006) | Lite tier, then stop and fall back (ADR 0006) |
 | WebGL context lost | `webglcontextlost` event | Stop and fall back |
 | A section with an unknown view | `pickView` | `drift`; a warning in debug mode |
 | A team added or removed in `teams.json` | Build | The scene and the labels follow automatically; a unit test checks counts match |

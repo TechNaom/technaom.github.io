@@ -34,7 +34,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## In flight
 
-- Feature lane: **3D neural network website** (requirements R9 to R18 in `prd.md`). Step: ignite approved by the owner ("Then proceed, go ahead", 2026-11-27); blueprint written (architecture.md, ADRs 0001 to 0006); mockup at https://claude.ai/artifact/8Cz9QBJRagk74imGRMJk7i waiting for the owner's review; cold read running.
+- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble**, `tasks.md` written (3 milestones, 20 tasks, M1 cards), cold read running.
 - Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
 
 ## Open questions
@@ -44,6 +44,8 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 - Orbit setup for the live site (health check, alerts) has not been reviewed. (blocks: nothing now)
 
 ## Log
+
+- 2026-11-27 3D lane: blueprint approved by the owner (no new vendor, account or bill; Rs 0; mockup agreed). The owner asked not to stop between stages ("No need to stop. Let's rock"); merges to `main` and the UAT still wait for the owner.
 
 - 2026-11-27 3D lane blueprint: architecture.md and ADRs 0001 to 0006 (three.js 0.187.0 from npm as a lazy chunk, views as data attributes, labels in HTML, node:test + Playwright + axe + Lighthouse CI, quality tiers). Mockup published for the owner. No new vendor, account or bill.
 - 2026-11-27 3D lane: ignite approved by the owner ("Then proceed, go ahead"). Blueprint started. The N4 numbers stay *(proposed)* until the owner changes them.

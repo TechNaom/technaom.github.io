@@ -31,4 +31,15 @@ product. Each one is a candidate change to Idea to Orbit.
   Screens section: tokens, layers, and what changes per state.
 - 2026-11-27 · blueprint · **A static mockup is not enough for motion.** The skill asks for "one static HTML page";
   for a 3D or animated product the owner needs to see the motion. Better: allow a live mockup when motion is the point.
+- 2026-11-27 · all gates · **"Don't stop" has no home.** The owner said "proceed, no need to stop, let's rock" at the
+  blueprint gate. The plugin has only "explicit yes per gate". Better: a **Pace** setting in STATE (`ask at every gate` or
+  `run on, stop only at`: new vendor or bill, merge to production, UAT), so a standing yes is recorded once and the
+  stops that must never be skipped stay named.
+- 2026-11-27 · assemble · **The task template assumes a new product.** Its first tasks (budget cap and alerts,
+  `.env.example`, walking skeleton deployed) do not fit a feature lane on a live static site with nothing billed.
+  Better: for a lane, "deployed" means the promotion environment (here the branch preview), and each standard first
+  task is either kept or marked "not needed" with the reason, as the PRD does for NFRs.
+- 2026-11-27 · assemble · **The cold read checks cards against the real code, not only the docs.** Point it at the
+  files the cards name (key names in data files, what the gate skips, how the bundler names chunks): those are where
+  the card's author guessed.
 - Evidence so far: the cold read found 20 gaps (9 would have caused a wrong build) in a design I believed complete.
