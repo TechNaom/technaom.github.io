@@ -1,0 +1,49 @@
+# Product state: Personal website (manoharpapasani.pages.dev)
+
+Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site launched on 2026-10-26)
+
+## Current
+
+- Stage: orbit (live) *(inferred: the site is built and deployed; Ignite and Blueprint are reconstructed, waiting for the owner's yes)*
+- Status: waiting for approval
+- Profile: startup (Cloudflare Pages free plan, nothing billed)
+
+## Settings
+
+- Code host: github, TechNaom/technaom.github.io *(read from the remote)*
+- Work branch: a branch per lane, merged into `main` *(inferred)*
+- Release branch: main (every push deploys production, `.github/workflows/deploy-cloudflare.yml`)
+- Promotion: branch push → preview at `https://<branch>.manoharpapasani.pages.dev` (`site-check.yml`) → owner UAT → merge to `main`
+- Builders: subagents
+- Fast tests: `cd site && npx astro check && npx astro build && node scripts/check-copy.mjs` (about 45 seconds on 2026-11-27, all green: 0 type errors, 7 pages, copy gate passed)
+- Full suite: the fast tests plus `node scripts/check-copy.mjs --grammar` (LanguageTool, runs in CI on branches)
+- CI: GitHub Actions; `site-check.yml` on every branch push, `deploy-cloudflare.yml` on `main`
+- Toolchain note: Node 22.12 or later. On Windows the lock file has no `@rolldown/binding-win32-x64-msvc`; install it with `npm i --no-save` so the lock file stays as CI expects.
+
+## Gates
+
+| Stage | Status | Approved by | Date |
+|---|---|---|---|
+| ignite | reconstructed, waiting for approval | | |
+| blueprint | reconstructed later (architecture.md not written yet) | | |
+| assemble | n/a (built before joining) | | |
+| build | n/a (built before joining) | | |
+| test-flight | n/a | | |
+| launch | live since 2026-10-26 | | |
+| orbit | not set up in Idea to Orbit terms | | |
+
+## In flight
+
+- Feature lane: **3D neural network website** (requirements R9 to R18 in `prd.md`). Step: ignite, waiting for the owner's yes.
+- Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
+
+## Open questions
+
+- The site says "four posts a day", but the 8 AM and 12 PM slots have been paused on purpose since 2026-11-24. Change `facts.json`? (blocks: nothing in the 3D lane; a separate fix)
+- Which real devices does the owner use for UAT (phone model, browsers)? (blocks: test-flight of the 3D lane)
+- Orbit setup for the live site (health check, alerts) has not been reviewed. (blocks: nothing now)
+
+## Log
+
+- 2026-11-27 Owner chose for the 3D lane: all 7 pages, reusable views as the templates, a living neural network (not space), dark only, no deadline, quality first.
+- 2026-11-27 Joined Idea to Orbit; documents reconstructed from the code; 3D feature lane started at ignite.
