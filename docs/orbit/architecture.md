@@ -30,7 +30,7 @@ flowchart TB
     pages --> uni
   end
   subgraph browser[In the visitor's browser]
-    html[Static HTML and CSS: always readable] --> boot[boot.js: checks WebGL, data saver, then waits for idle]
+    html[Static HTML and CSS: always readable] --> boot[boot.mjs: checks WebGL, data saver, then waits for idle]
     boot -->|dynamic import| chunk[scene chunk: three.js 0.187.0 + network + views]
     chunk --> pick[pickView: section in the middle]
     chunk --> tiers[quality tiers: full, lite]
@@ -42,10 +42,10 @@ flowchart TB
 | Container | Responsibility | Technology | Scales to zero? |
 |---|---|---|---|
 | Pages (7) | Content, as today; sections carry `data-scene` attributes | Astro | Static |
-| `Universe.astro` | Included once in `Base.astro`: the canvas, `<script type="application/json" id="u3d-data">`, the empty label overlay, and `boot.js` | Astro component | Static |
+| `Universe.astro` | Included once in `Base.astro`: the canvas, `<script type="application/json" id="u3d-data">`, the empty label overlay, and `boot.mjs` | Astro component | Static |
 | `StageLabels.astro` | Renders one stage's label list inside that stage's card, from the same data | Astro component | Static |
-| `boot.js` | Small, not lazy (the bundled `<script>` of `Universe.astro`): decides whether to start, starts after idle, sets the state attributes on `<html>` (point 3 below) | Plain JS, at most 3 KB gzipped | n/a |
-| Scene chunk | `network.js` (builds nodes and links from the data, seeded), `views.js` (registry and `pickView`), `scene.js` (render loop, camera, tiers, labels, signals) | three.js, lazy chunk | n/a |
+| `boot.mjs` | Small, not lazy (the bundled `<script>` of `Universe.astro`): decides whether to start, starts after idle, sets the state attributes on `<html>` (point 3 below) | Plain JS, at most 3 KB gzipped | n/a |
+| Scene chunk | `network.mjs` (builds nodes and links from the data, seeded), `views.mjs` (registry and `pickView`), `scene.mjs` (render loop, camera, tiers, labels, signals) | three.js, lazy chunk | n/a |
 | Tests and CI | `node --test` units, Playwright browser checks, axe, Lighthouse CI, the copy gate | GitHub Actions | Runs per push |
 
 ## Key flows
@@ -56,7 +56,7 @@ flowchart TB
 sequenceDiagram
   actor V as Visitor
   participant H as Static HTML
-  participant B as boot.js
+  participant B as boot.mjs
   participant S as Scene chunk
   V->>H: opens /
   H-->>V: text and layout (readable, no 3D yet)
@@ -72,9 +72,9 @@ sequenceDiagram
 ```
 
 ### Failure path: no WebGL, a failed chunk, or a slow phone
-1. `boot.js` finds no WebGL context, or the data saver: it never loads the chunk. The page stays as static HTML in
+1. `boot.mjs` finds no WebGL context, or the data saver: it never loads the chunk. The page stays as static HTML in
    the dark design, and the stage label lists show as plain lists in their cards (R17).
-2. The chunk fails to load, or throws while building: `boot.js` catches it, does not add `u3d-on`, and the page is
+2. The chunk fails to load, or throws while building: `boot.mjs` catches it, does not add `u3d-on`, and the page is
    the same as in step 1.
 3. The average frame time passes 36 ms over 2 seconds (after the first second, never while hidden): switch to lite.
    Still past it on lite for 4 more seconds: stop the loop, remove the canvas and `u3d-on`; the page is the same as in
@@ -88,8 +88,8 @@ sequenceDiagram
 | SceneData (`u3d-data`) | `version: 1`, `teams[]`, `journey[]`, `seed` | built from `teams.json` at build time | `Universe.astro` |
 | Team | `id` (the `slug()` the home page already uses for `/workforce#` anchors, moved into `lib/format.ts`), `name`, `when` (formatted by `shift()`), `crew` (count), `hour` (decimal, or `null` when not daily) | has `crew` agent nodes | `teams.json` |
 | JourneyStep | `id`, `name`, `detail`, `kind` (`step` or `platform`) | clock, team, critic, LinkedIn, then X, Bluesky, Facebook, Dev.to | `site/src/data/journey.json` (new; texts in point 7 below) |
-| Node (runtime) | `kind` (core, hub, agent, field, step), `team id`, position in each view | links to its hub; hubs to the core; field nodes to their nearest neighbours | `network.js` |
-| View | `name`, camera position and target, side offset, `dial` (0 to 1), `journey` (0 to 1), opacity | chosen per section | `views.js` |
+| Node (runtime) | `kind` (core, hub, agent, field, step), `team id`, position in each view | links to its hub; hubs to the core; field nodes to their nearest neighbours | `network.mjs` |
+| View | `name`, camera position and target, side offset, `dial` (0 to 1), `journey` (0 to 1), opacity | chosen per section | `views.mjs` |
 
 ## Interfaces
 
@@ -99,8 +99,8 @@ sequenceDiagram
 | `data-scene-labels` | HTML attribute | Shows that section's label list positioned in 3D | Stage sections |
 | `data-scene-quiet` | HTML attribute | Scene opacity × 0.4 | Dense sections (workforce cards, architecture, notebook) |
 | Label list | HTML | `<ol class="u3d-labels" data-for="dial|journey">` with `<li data-anchor="team:<id>|hour:<0,6,12,18>|step:<id>">` holding `<p class="lb-name">` and `<p class="lb-detail">` (block elements, so the copy gate reads two separate lines) | Scene positions copies of them; the copy gate reads them; screen readers read them |
-| `u3d-data` | JSON in a script tag | `{ "version": 1, "seed": 2026, "teams": [Team], "journey": [JourneyStep] }` | `boot.js`, the scene, unit tests |
-| `pickView(rects, viewportHeight)` | Pure function | Takes `{top, bottom, scene, labels, quiet}` per section; returns the view of the section that contains the middle line, else `drift` | Scene, unit tests |
+| `u3d-data` | JSON in a script tag | `{ "version": 1, "seed": 2026, "teams": [Team], "journey": [JourneyStep] }` | `boot.mjs`, the scene, unit tests |
+| `pickView(sections, viewportHeight)` | Pure function | Takes `{top, bottom, view, labels, quiet}` per section; returns `{view, labels, quiet, progress}` (point 12) | Scene, unit tests |
 | `?u3d=debug` | URL query | Shows the frame rate, the tier and the current view on screen | The owner |
 | `?u3d=test` | URL query | Pins the tier (full), turns off the automatic fallback, freezes idle motion (time stays 0), exposes `window.__u3d` | Playwright |
 | `html.u3d-on` | CSS class | Present only after the first frame; sections turn see-through only then | CSS |
@@ -145,7 +145,7 @@ Spending cap: not applicable, nothing is billed. At ten times the visitors the c
 
 | Failure | Detection | Recovery |
 |---|---|---|
-| No WebGL or the data saver | `boot.js` checks before loading | Static page, the chunk never loads (R17) |
+| No WebGL or the data saver | `boot.mjs` checks before loading | Static page, the chunk never loads (R17) |
 | The chunk fails to load or throws | `import()` rejects, or an error during build | Static page; nothing half-drawn, because `u3d-on` comes only after the first frame |
 | Slow device | Average frame time over 36 ms for 2 seconds (ADR 0006) | Lite tier, then stop and fall back (ADR 0006) |
 | WebGL context lost | `webglcontextlost` event | Stop and fall back |
@@ -159,15 +159,15 @@ Spending cap: not applicable, nothing is billed. At ten times the visitors the c
 
 | Requirement | Satisfied by |
 |---|---|
-| R9 | `network.js` from `u3d-data` (ADR 0001); unit test of counts |
-| R10 | `views.js`, `pickView`, data attributes (ADR 0003); a views guide `site/src/lib/scene/README.md` |
-| R11 | `scene.js` signals; off under reduced motion |
+| R9 | `network.mjs` from `u3d-data` (ADR 0001); unit test of counts |
+| R10 | `views.mjs`, `pickView`, data attributes (ADR 0003); a views guide `site/src/lib/scene/README.md` |
+| R11 | `scene.mjs` signals; off under reduced motion |
 | R12 | Home page stage sections and the `dial` and `journey` views |
 | R13 | Label lists in HTML (ADR 0004) and the copy gate |
-| R14 | `boot.js` idle start; lazy chunk on our domain (ADR 0002) |
-| R15 | `scene.js` still frames per scroll step under reduced motion |
+| R14 | `boot.mjs` idle start; lazy chunk on our domain (ADR 0002) |
+| R15 | `scene.mjs` still frames per scroll step under reduced motion |
 | R16 | Dark tokens on `<html>`; frosted cards; axe contrast check (ADR 0005) |
-| R17 | `boot.js` and the failure path; Playwright with WebGL off |
+| R17 | `boot.mjs` and the failure path; Playwright with WebGL off |
 | R18 | `data-scene-quiet` on dense sections |
 | N1, N9 | Cost table |
 | N2 | Failure path; the deploy workflow unchanged |
@@ -187,7 +187,7 @@ The answers:
    and opens pages with `?u3d=test`, which pins the tier, turns off the automatic fallback and freezes idle motion,
    so screenshots match on every run. The fallback itself is tested with `--disable-webgl`, and with a scene chunk
    request that answers 500.
-3. **State the tests can read,** on `<html>`: `data-u3d-state` (`idle`, `loading`, `on`, `fallback`, `off`), `data-u3d-view`,
+3. **State the tests can read,** on `<html>`: `data-u3d-state` (`idle`, `loading`, `on`, `fallback` when WebGL or the chunk fails, `off` when the data saver is on), `data-u3d-view`,
    `data-u3d-tier` (`full`, `lite`), and in debug and test mode `data-u3d-fps`. In test mode `window.__u3d` holds
    `{ data, view, tier, progress }`. Modes in Playwright: JavaScript off with `javaScriptEnabled: false`; WebGL off with
    `--disable-webgl`; reduced motion with `reducedMotion: "reduce"`; the data saver with an `addInitScript` that defines
@@ -217,7 +217,7 @@ The answers:
    for `astro check`. On Windows the builder installs with `npm install --save-exact`, then checks that the lock diff
    only adds these packages and their own dependencies (no optional platform bindings removed); CI's `npm ci` on Linux
    is the proof.
-9. **CI wiring,** in `site-check.yml` after the build: `node --test site/tests/unit`; the Playwright browser install with
+9. **CI wiring,** in `site-check.yml` after the build: `node --test tests/unit` (working directory `site`); the Playwright browser install with
    its cache; `npx playwright test` with `site/playwright.config.mjs` (tests in `site/tests/e2e`, `webServer` is
    `npx astro preview --port 8799`); `npx lhci autorun` with `site/lighthouserc.json`, whose N4 assertions **warn**
    while N4 is proposed and become errors once the owner confirms the numbers; then the preview deploy.
@@ -226,7 +226,7 @@ The answers:
 10. **First frame** means the first `render()`, one more animation frame, and the labels placed. Until then the canvas
     is at `opacity: 0`; then it fades in over 0.6 seconds (no fade with reduced motion).
 11. **Idle:** `requestIdleCallback` with a 2-second timeout, or `setTimeout` 300 ms after `load` where it is missing
-    (Safari). A size check in CI fails when `boot.js` passes 3 KB or the scene chunk passes 180 KB gzipped.
+    (Safari). A size check in CI fails when `boot.mjs` passes 3 KB or the scene chunk passes 180 KB gzipped.
 12. **`pickView(sections, viewportHeight)`** takes `[{ top, bottom, view, labels, quiet }]` and returns
     `{ view, labels, quiet, progress }`. The section that contains the middle line (`top <= mid < bottom`) wins; when
     sections nest, the innermost (the shortest) wins. `progress` is `clamp((0.75 * viewportHeight - top) / (0.8 * height), 0, 1)`

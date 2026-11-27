@@ -42,4 +42,4 @@ product. Each one is a candidate change to Idea to Orbit.
 - 2026-11-27 · assemble · **The cold read checks cards against the real code, not only the docs.** Point it at the
   files the cards name (key names in data files, what the gate skips, how the bundler names chunks): those are where
   the card's author guessed.
-- Evidence so far: the cold read found 20 gaps (9 would have caused a wrong build) in a design I believed complete.
+- Evidence so far: the blueprint cold read found 20 gaps (9 would have caused a wrong build) in a design I believed complete; the assemble cold read found 12 more in the M1 cards (6 important: a missing lane branch, a test that could not run, a check that would fail on day one, a port clash), all caught before any code.

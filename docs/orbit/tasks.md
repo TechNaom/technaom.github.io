@@ -2,8 +2,8 @@
 
 Version 1, 2026-11-27. Architecture: [architecture.md](architecture.md) (with Implementation decisions 1 to 20).
 PRD: [prd.md](prd.md), R9 to R18 and N1 to N6. Lane branch: `site-3d-lane` (the spike branch `site-3d` stays local,
-reference only, never merged). Every task is a pull request into `site-3d-lane`; the lane merges into `main` only
-after test flight and the owner's UAT.
+reference only, never merged). T1 creates `site-3d-lane` from `main`. Every task is then its own branch (`t<n>-<slug>`) and a pull request into
+`site-3d-lane`; the lane merges into `main` only after test flight and the owner's UAT.
 
 Shell for every command: Git Bash on Windows, or bash in CI. Paths use forward slashes. All commands run from `site/`
 unless they start with `cd`.
@@ -103,24 +103,29 @@ only).
 **Interfaces**
 - `npm run test:unit` = `node --test tests/unit`; `npm run test:e2e` = `playwright test`.
 - `tests/screens.json`: `[{ "route": "/", "heading": "A digital workforce that runs itself", "sections": [] }, ...]`,
-  one object per route in the Screens table of `architecture.md`, with the exact headings there; `sections` stays
-  empty until T8.
-- `playwright.config.mjs`: `testDir: "tests/e2e"`, `webServer: { command: "npx astro preview --port 8799", port: 8799,
-  reuseExistingServer: !process.env.CI }`, `use.baseURL: process.env.BASE_URL || "http://localhost:8799"`, one
-  project `chromium` with `launchOptions.args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"]`;
-  when `BASE_URL` is set, no `webServer`.
+  one object per route in the Screens table of `architecture.md`, with the exact headings there, except Work, whose
+  heading holds a count: write it as `"{repos} repositories. One builder."` and have the spec fill `{repos}` from
+  `facts.json` (`repos.total`; read the file for the real key). `sections` stays empty until T8.
+- `playwright.config.mjs`: `testDir: "tests/e2e"`, `webServer: { command: "npx astro preview --port 8798", port: 8798,
+  reuseExistingServer: false }` (8799 is the dev server's port), `use.baseURL: process.env.BASE_URL || "http://localhost:8798"`; two
+  projects: `chromium` with `launchOptions.args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"]` and
+  `testIgnore: /no-webgl/`, and `no-webgl` with `args: ["--disable-webgl", "--disable-webgl2"]` and
+  `testMatch: /no-webgl/` (T5 adds its spec); when `BASE_URL` is set, no `webServer`.
 
 **Steps**
+0. `git switch main && git pull --rebase && git switch -c site-3d-lane && git push -u origin site-3d-lane`, then
+   `git switch -c t1-test-harness`.
 1. Install, exact: `npm install --save-exact --save-dev @playwright/test@1.65.1 @axe-core/playwright@4.14.1`.
    Run `git diff --stat package-lock.json`. Expect: only additions.
-2. Write `tests/unit/ci.test.mjs`: reads `../.github/workflows/site-check.yml` as text and asserts it contains, in this
+2. Write `tests/unit/ci.test.mjs`: reads the workflow resolved from the test file,
+   `new URL("../../../.github/workflows/site-check.yml", import.meta.url)`, as text, and asserts it contains, in this
    order, `npx astro check`, `npx astro build`, `node --test tests/unit`, `npx playwright install --with-deps chromium`,
    `npx playwright test`, `node scripts/check-copy.mjs --grammar`, then `pages deploy`.
    Run `node --test tests/unit`. Expect: `# fail 1` (the unit and Playwright steps are missing).
 3. Edit `site-check.yml`: after Build add `Unit tests: node --test tests/unit`; cache `~/.cache/ms-playwright` keyed on
    `site/package-lock.json` with `actions/cache@v4`; `npx playwright install --with-deps chromium`;
    `npx playwright test`; upload `site/playwright-report` with `actions/upload-artifact@v4` when a step fails. Keep the
-   copy gate and the preview deploy last. Also add `tests/**` is under `site/**`, so the path filter already covers it.
+   copy gate and the preview deploy last. The path filter `site/**` already covers `site/tests/**`.
    Run `node --test tests/unit`. Expect: `# pass 1`, `# fail 0`.
 4. Write `tests/screens.json` and `tests/e2e/pages.spec.mjs`: for each route, `page.goto(route)`, the `h1` text equals
    `heading`, the response status is 200.
@@ -229,15 +234,20 @@ Serves: R16, R17. Depends on: T1. Size: M. Issue: <#>
 
 **Interfaces**
 - Tokens in the dark block of `global.css`: `--glass: rgba(20, 32, 52, .78)`, `--veil: rgba(12, 20, 34, .5)`.
-- Only under `html.u3d-on`: `body`, `.night` and sections using `var(--paper)` get `background: transparent` (night bands
-  `var(--veil)`), cards `background: var(--glass); backdrop-filter: blur(10px)`. Nothing under `u3d-on` applies in this
-  task's tests, because nothing adds the class yet.
+- Cards and paper sections set `style="background: var(--card)"` or `var(--paper)` inline (no `.card` class), so the
+  see-through look works by **redefining tokens**, never by selectors that fight inline styles:
+  `html.u3d-on { --paper: transparent; --card: var(--glass) }`, `html.u3d-on body { background: transparent }`,
+  `html.u3d-on .night { background: var(--veil) }`. The blur: `html.u3d-on [style*="var(--card)"] { backdrop-filter:
+  blur(10px) }`. Hero diagram (architecture point 5): `html.u3d-on .hero-diagram rect:first-of-type { fill-opacity: .55 }`;
+  find the home hero SVG in `src/pages/index.astro` and give it `class="hero-diagram"`. Nothing under `u3d-on` applies
+  in this task's tests, because nothing adds the class yet.
 - Layers: `#u3d-canvas { position: fixed; inset: 0; z-index: -1 }`, `#u3d-overlay { position: fixed; inset: 0;
   z-index: 1; pointer-events: none }`, `main, footer { position: relative; z-index: 2 }`, header stays `40`.
 
 **Steps**
-1. Write `dark.spec.mjs` with `test.use({ javaScriptEnabled: false })`: for each route in `screens.json`, `html` has
-  `data-theme="dark"`, and `new AxeBuilder({ page }).withRules(["color-contrast"]).analyze()` has 0 violations;
+1. Write `dark.spec.mjs` (JavaScript on: axe runs as a page script, and nothing starts a scene before T5; T5 moves
+   this check into the `no-webgl` project so it keeps testing the fallback look): for each route in `screens.json`,
+   `html` has `data-theme="dark"`, and `new AxeBuilder({ page }).withRules(["color-contrast"]).analyze()` has 0 violations;
   also with `colorScheme: "light"`, the computed `body` background is the dark token's value.
    Run `npx astro build && npx playwright test dark`. Expect: fails on `data-theme`.
 2. Set `data-theme="dark"` in `Base.astro`; add tokens and layers. Build and run again. Expect: passes, or lists
@@ -262,7 +272,7 @@ Serves: R14, R17, N2, N3. Depends on: T2, T4. Size: M. Issue: <#>
   in this task: `export async function start(canvas, data, opts) { throw new Error("not built yet") }`)
 - Change: `site/src/layouts/Base.astro` (`<Universe />` right after `<body>`'s skip link)
 - Change: `site/package.json` (`three@0.187.0` dependency, exact)
-- Test: `site/tests/e2e/fallback.spec.mjs`, `site/tests/unit/boot.test.mjs`
+- Test: `site/tests/e2e/fallback.spec.mjs`, `site/tests/e2e/no-webgl.spec.mjs`, `site/tests/unit/boot.test.mjs`
 
 **Tests that read these files:** `pages.spec.mjs`, `dark.spec.mjs` (every page now includes `Universe`).
 
@@ -270,23 +280,23 @@ Serves: R14, R17, N2, N3. Depends on: T2, T4. Size: M. Issue: <#>
 - `Universe.astro` renders: `<canvas id="u3d-canvas" aria-hidden="true">`, `<div id="u3d-overlay" aria-hidden="true">`,
   `<script type="application/json" id="u3d-data">` with `buildSceneData(teams, journey)`, and a bundled
   `<script>` that imports `boot.mjs` and calls `boot()`.
-- `shouldStart(env) → "start" | "off"` (pure, unit tested): `env = { webgl, saveData }`; `"off"` when `!webgl` or
-  `saveData`.
+- `shouldStart(env) → "start" | "off" | "fallback"` (pure, unit tested): `env = { webgl, saveData }`; `"off"` when
+  `saveData` (the visitor chose less data: no 3D, by choice), `"fallback"` when `!webgl`, else `"start"`.
 - `boot()`: sets `data-u3d-state="idle"`; `shouldStart` from a real `canvas.getContext("webgl2")` check and
-  `navigator.connection?.saveData`; on `"off"` sets `fallback` and returns. Else waits for `requestIdleCallback` (timeout
+  `navigator.connection?.saveData`; on `"off"` or `"fallback"` sets that state on `<html>` and returns. Else waits for `requestIdleCallback` (timeout
   2000) or `setTimeout(…, 300)` after `load`, sets `loading`, `await import("./scene.mjs")`, calls `start`; on any
   rejection or throw sets `fallback`, removes the canvas, never adds `u3d-on`. Mode from the URL: `?u3d=test` or
   `?u3d=debug`. In test mode sets `window.__u3d = { data, view: null, tier: "full", progress: 0 }` before `start`.
 
 **Steps**
 1. `npm install --save-exact three@0.187.0`; check the lock diff (only additions).
-2. Write `boot.test.mjs` for `shouldStart` (3 cases). Run `node --test tests/unit`. Expect: fails, module not found.
+2. Write `boot.test.mjs` for `shouldStart` (4 cases: webgl and no data saver, no webgl, data saver, both). Run `node --test tests/unit`. Expect: fails, module not found.
    Write `boot.mjs`. Expect: passes.
 3. Write `fallback.spec.mjs`, each on `/` and `/workforce`:
-   JavaScript off: `h1` visible, no `html.u3d-on`. WebGL off (a project or `browser.newContext` launched with
-   `--disable-webgl`): `data-u3d-state="fallback"`, canvas gone, `h1` visible. Chunk fails: `page.route("**/scene*.js",
+   JavaScript off: `h1` visible, no `html.u3d-on`. WebGL off: in its own file `tests/e2e/no-webgl.spec.mjs`, run by the `no-webgl` project from T1:
+   `data-u3d-state="fallback"`, canvas gone, `h1` visible; move T4's contrast check here too. Chunk fails: `page.route("**/scene*.js",
    r => r.fulfill({ status: 500 }))`, state `fallback`. Data saver: `addInitScript` defining `navigator.connection`
-   `{ saveData: true }`, state `fallback` and no request for the scene chunk. With the stub `scene.mjs`, the normal run
+   `{ saveData: true }`, state `off` and no request for the scene chunk. With the stub `scene.mjs`, the normal run
    also ends in `fallback`: assert that too, so T6 has a test to turn green.
    Build and run `npx playwright test fallback`. Expect: all pass.
 4. Run the copy gate: the `u3d-data` JSON is inside a `<script>` and must not be read as page text. If the gate reports
@@ -295,8 +305,8 @@ Serves: R14, R17, N2, N3. Depends on: T2, T4. Size: M. Issue: <#>
 
 **Done check:** `npx playwright test fallback && node --test tests/unit`. Expect: all pass.
 
-**Watch out:** The chunk's file name is hashed by Vite: route with a glob, and find the real name in `dist/_astro/`
-before writing the pattern. `boot` must stay under 3 KB gzipped (T6 adds the size check). The bundled script must not
+**Watch out:** Vite 8 (Rolldown) hashes the lazy chunk, expected as `_astro/scene.[hash].js`: after this task's build,
+list `dist/_astro/` and use the real name in the route glob (`**/_astro/scene*.js`). `boot` must stay under 3 KB gzipped (T6 adds the size check). The bundled script must not
 import `three` statically, or three.js ends up in the boot bundle.
 
 ### T6 Scene chunk: the network drawn
@@ -306,7 +316,8 @@ Serves: R9, R14, N3. Depends on: T3, T5. Size: M. Issue: <#>
 **Files**
 - Create: `site/src/lib/scene/network.mjs`, `site/src/lib/scene/rng.mjs`
 - Change: `site/src/lib/scene/scene.mjs` (real `start`)
-- Change: `site/astro.config.mjs` (only if the licence comment is stripped: keep legal comments)
+- Change: `site/astro.config.mjs` (only if the licence comment is stripped: Vite 8 minifies with Oxc through Rolldown;
+  look up its current option for keeping legal comments in the Vite 8 docs, and set it under `vite.build`)
 - Test: `site/tests/unit/network.test.mjs`, `site/tests/e2e/scene.spec.mjs`, `site/tests/unit/bundle.test.mjs`
 
 **Tests that read these files:** `fallback.spec.mjs` (its normal-run case flips from `fallback` to `on`: update that
@@ -319,19 +330,22 @@ one assertion in this task).
   hubs to the core, field nodes to their 2 nearest field neighbours.
 - `start(canvas, data, { mode }) → Promise<{ stop() }>`: builds three.js objects (instanced meshes for nodes, one
   `LineSegments` buffer for links, unlit materials, pixel ratio capped at 1.5), renders, then after one more animation
-  frame sets `data-u3d-state="on"`, `data-u3d-tier="full"`, adds `html.u3d-on` and fades the canvas in over 0.6 s.
+  frame sets `data-u3d-state="on"`, `data-u3d-tier="full"`, adds `html.u3d-on` and fades the canvas in over 0.6 s (no fade when `prefers-reduced-motion: reduce`).
   Idle rotation is off in test mode. Pauses on `visibilitychange` when hidden.
 
 **Steps**
-1. `network.test.mjs`: with seed 2026, node counts by kind equal 1, 9, 41, 120; every agent links to its team's hub;
+1. `network.test.mjs`: with seed 2026, node counts by kind equal 1, `data.teams.length`, the crew sum, and `FIELD_NODES` (exported from `network.mjs`, 120); every agent links to its team's hub;
    two builds with the same seed give equal positions. Run: fails. Write `rng.mjs`, `network.mjs`. Run: passes.
 2. `scene.spec.mjs` with `?u3d=test`, for every route in `screens.json`: `data-u3d-state` becomes `on` within 10 s,
    `html` has class `u3d-on`, `window.__u3d.data` deep-equals the parsed `#u3d-data`, no console errors. Flip the
    normal-run case in `fallback.spec.mjs` to expect `on`. Run: fails. Write `scene.mjs`. Run: passes.
-3. `bundle.test.mjs` (runs after a build; skips with a clear message when `dist/` is missing): the boot script is at
+3. `bundle.test.mjs` (runs after a build; skips with a clear message when `dist/` is missing): the boot script is the
+   `dist/_astro/*.js` file, or the inline `<script type="module">` in `dist/index.html`, that refers to `u3d-data`; it is at
    most 3 KB gzipped, the chunk containing three.js at most 180 KB gzipped and contains
-   `SPDX-License-Identifier: MIT` or `@license`; no file under `dist/` loads from another origin except
-   `fonts.googleapis.com` and `fonts.gstatic.com`.
+   `SPDX-License-Identifier: MIT` or `@license`; in every `dist/**/*.html`, the resources the browser fetches (`script[src]`, `link[rel=stylesheet|preload|modulepreload|icon]`,
+   `img[src]`, `source[src]`, and `url(...)` in inline `<style>`) are on our own origin or `fonts.googleapis.com` /
+   `fonts.gstatic.com`; links (`a[href]`), `canonical`, `og:*` and ld+json are not fetches and are ignored. T17 checks the
+   real network log in a browser.
 4. Fast tests, unit tests, all Playwright tests. Expect: green. Screenshot `/` at 1280×800 in test mode and attach it to
    the pull request.
 

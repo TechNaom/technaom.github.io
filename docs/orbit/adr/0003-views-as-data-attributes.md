@@ -15,7 +15,7 @@ content gets a quiet view.
 | C. A script per page that drives the scene | Full control, but 3D code on every page (breaks R10) | Rs 0 | High | None | One page's bug only |
 
 ## Decision
-Option A. The registry is a plain object in `site/src/lib/scene/views.js`; the choice is a pure function,
+Option A. The registry is a plain object in `site/src/lib/scene/views.mjs`; the choice is a pure function,
 `pickView(sections, viewportHeight)` (contract in architecture.md, Implementation decisions, point 12), so it is unit tested.
 
 ## Why
