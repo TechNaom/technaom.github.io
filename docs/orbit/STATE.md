@@ -35,7 +35,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## In flight
 
-- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T5 done (PR #25); T6 done (PR #26); T7 done (PR #27): the lane preview https://site-3d-lane.manoharpapasani.pages.dev passes the smoke test. M1 built and branch-reviewed (fixes PR #28). M2 cards written and cold-read twice. T8 done (PR #29). Next: T9 (dial stage and labels). Owner 2026-11-28: lean mode; one free-worker trial on T14. Note for T8: on a phone, nodes sit over the intro text and buttons. Notes for T8 from T6's re-check: redraw after `webglcontextrestored`; boot's fallback should also remove `data-u3d-tier`.
+- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T5 done (PR #25); T6 done (PR #26); T7 done (PR #27): the lane preview https://site-3d-lane.manoharpapasani.pages.dev passes the smoke test. M1 built and branch-reviewed (fixes PR #28). M2 cards written and cold-read twice. T8 done (PR #29); T9 done (PR #30). Next: T10 (journey stage). Owner 2026-11-28: lean mode; one free-worker trial on T14. Note for T8: on a phone, nodes sit over the intro text and buttons. Notes for T8 from T6's re-check: redraw after `webglcontextrestored`; boot's fallback should also remove `data-u3d-tier`.
 - Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
 
 ## Open questions
@@ -48,6 +48,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## Log
 
+- 2026-11-28 3D lane T9 done (PR #30): home dial stage, teams on a 24-hour dial, labels in the HTML (copy gate reads them), nodes morph between views. 55 unit + 54 browser tests.
 - 2026-11-28 3D lane T8 done (PR #29): camera per view from data-scene; phones stand back 1.6x and look 5 units higher so the network clears the hero text; context lost falls back. 50 unit + 51 browser tests.
 - 2026-11-28 3D lane T7 done (PR #27): smoke test against the lane preview, 7 pass; fails against production (no 3D), as it should.
 - 2026-11-28 3D lane T6 done (PR #26): the network draws (instanced nodes, one line buffer, 132 KB gz chunk); boot aborts a late start; 42 unit + 44 browser tests.
