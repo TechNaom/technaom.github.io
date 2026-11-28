@@ -37,20 +37,22 @@
   --amber: #f4a640; --amber-soft: #3a2a14; --cyan: #7fd0ea; color-scheme: dark;
 }
 /* Dark only (R16): Base.astro sets data-theme="dark" for every visitor; the light values above stay unused. */
-:root[data-theme="dark"] { --glass: rgba(20, 32, 52, .78); --veil: rgba(12, 20, 34, .5); }
+:root[data-theme="dark"] { --glass: rgba(20, 32, 52, .78); --veil: rgba(12, 20, 34, .5); --paper-solid: #0f1828; }
 
 /* The 3D layers (architecture point 4): canvas behind, labels above it, content above both. */
 #u3d-canvas { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
 #u3d-overlay { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-main, footer { position: relative; z-index: 2; }
+html.u3d-on main, html.u3d-on footer { position: relative; z-index: 2; }
 
 /* Only once the scene has drawn its first frame does the page turn see-through. Cards and paper
-   sections set their background inline, so the tokens are redefined rather than overridden. */
-html.u3d-on { --paper: transparent; --card: var(--glass); }
+   sections set their background inline, so the tokens are redefined rather than overridden; the
+   selector matches the dark theme's own, so it wins. Text never uses --paper: see --paper-solid. */
+:root[data-theme="dark"].u3d-on { --paper: transparent; --card: var(--glass); }
 html.u3d-on body { background: transparent; }
 html.u3d-on .night { background-color: var(--veil); }
 html.u3d-on [style*="var(--card)"] { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 html.u3d-on .hero-diagram rect:first-of-type { fill-opacity: .55; }
+html.u3d-on .sticky[style*="var(--paper)"] { background: var(--veil) !important; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation: none !important; transition: none !important; } }
@@ -75,7 +77,7 @@ h1, h2, h3 { text-wrap: balance; }
 .btn-primary:hover { background: #ffb85a; }
 .btn-secondary { border: 1.5px solid var(--cyan-bright); color: var(--cyan-bright); }
 .btn-secondary:hover { background: rgba(127, 208, 234, .1); }
-.btn-ink { background: var(--ink); color: var(--paper); }
+.btn-ink { background: var(--ink); color: var(--paper-solid, var(--paper)); }
 .link { color: var(--amber); font-weight: 600; text-decoration: none; }
 .link:hover { text-decoration: underline; text-underline-offset: 3px; }
 
