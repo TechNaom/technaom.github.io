@@ -148,8 +148,8 @@ const next = [
   </section>
 
   <!-- Dial stage: the teams on a 24-hour clock (R12). The labels are the HTML list; the scene shows copies. -->
-  <section id="dial-stage" data-scene="dial" data-scene-labels class="wrap py-24 grid lg:grid-cols-[minmax(0,26rem)_1fr] gap-10 items-center">
-    <div class="grid gap-4 p-8 rounded-2xl border" style="background: var(--card); border-color: var(--rule)">
+  <section id="dial-stage" data-scene="dial" data-scene-labels class="wrap py-24 grid lg:grid-cols-[minmax(0,26rem)_1fr] gap-10 content-start min-h-[160vh] lg:min-h-0 lg:content-center lg:items-center">
+    <div data-scene-card class="grid gap-4 p-8 rounded-2xl border" style="background: var(--card); border-color: var(--rule)">
       <p class="eyebrow" style="color: var(--amber)">Around the clock</p>
       <h2 class="display text-4xl leading-tight">Every team on a 24-hour dial</h2>
       <p style="color: var(--muted)">Teams with a daily start time sit on the inner ring, at their hour. The others run after each post, on set weekdays or on call, and sit on the outer ring.</p>
@@ -160,7 +160,7 @@ const next = [
   <!-- Journey stage: one post's path, played by scrolling (R12). Tall, with a sticky card that stays readable. -->
   <section id="journey-stage" data-scene="journey" data-scene-labels class="relative" style="height: 170vh">
     <div class="sticky top-24 wrap py-10">
-      <div class="grid gap-4 p-8 rounded-2xl border max-w-[26rem]" style="background: var(--card); border-color: var(--rule)">
+      <div data-scene-card class="grid gap-4 p-8 rounded-2xl border max-w-[26rem]" style="background: var(--card); border-color: var(--rule)">
         <p class="eyebrow" style="color: var(--amber)">One post, start to finish</p>
         <h2 class="display text-4xl leading-tight">Follow a post through the workforce</h2>
         <p style="color: var(--muted)">A clock starts the team, the agents write, the critic checks, and the post goes to LinkedIn first, then to {words(journey.filter((s) => s.kind === "platform").length)} more platforms.</p>
