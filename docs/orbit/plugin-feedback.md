@@ -42,4 +42,19 @@ product. Each one is a candidate change to Idea to Orbit.
 - 2026-11-27 · assemble · **The cold read checks cards against the real code, not only the docs.** Point it at the
   files the cards name (key names in data files, what the gate skips, how the bundler names chunks): those are where
   the card's author guessed.
+- 2026-11-28 · build · **Lean mode works, with numbers.** Agent tokens per task fell from 182k (T1, full loop) to
+  28k (S tasks: built solo, one combined check shared by two tasks) and 103k (an M UI task with two checks), and
+  the checks still caught real bugs. Better: make lean mode the default for S tasks, and report the supervisor's
+  own tokens too, or solo builds look free.
+- 2026-11-28 · build · **Test the states the product can enter before the code that enters them exists.** A style
+  rule for "scene on" lost to the theme's rule on specificity, so it would never have applied; no test reached
+  that state. Forcing the state in a test (adding the class by hand) found it, and a bug the reviewer named
+  behind it. Better: the card template asks "which states does this change style or affect, and how does a test
+  force each one now?"
+- 2026-11-28 · build · **A test that cannot fail for the named bug is a bad test.** The first version of that test
+  passed although the reviewer had named a real bug; breaking the code on purpose showed why. The red-flag row
+  exists; better: the code check asks the checker to name, for each fix, the test that would fail without it.
+- 2026-11-28 · toolchain · **Editors and shells re-encode files.** A shell edit garbled a character and the
+  product's own gate did not notice. Better: the builder brief says "edit as UTF-8 with the file tools; check
+  `git diff` shows only the intended lines".
 - Evidence so far: the blueprint cold read found 20 gaps (9 would have caused a wrong build) in a design I believed complete; the assemble cold read found 12 more in the M1 cards (6 important: a missing lane branch, a test that could not run, a check that would fail on day one, a port clash), all caught before any code.
