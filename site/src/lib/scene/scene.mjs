@@ -17,6 +17,7 @@ const MAX_PIXEL_RATIO = 1.5;
 const FADE_MS = 600;
 const MOVE_MS = 800;
 const PHONE_MAX = 900;
+const QUIET = 0.4; // a quiet section dims the scene to this share of its view's opacity (R18)
 const BACKGROUND = 0x0f1828; // --paper in the dark theme
 
 // Colours come from the site's dark palette (--amber, --cyan, --muted).
@@ -164,6 +165,16 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       journey.pulse.position.set(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t);
     };
 
+    // Opacity per view and quiet sections (R18): on the materials, never on canvas.style (that is the fade-in).
+    const materials = disposables.filter((d) => d.isMaterial).map((m) => ({ m, base: m.opacity }));
+    for (const { m } of materials) m.transparent = true;
+    let quiet = null;
+    let opacity = 1;
+    const applyOpacity = (f) => {
+      opacity = f;
+      for (const { m, base } of materials) m.opacity = base * f;
+    };
+
     // Stage labels (T11): copies of the stage's HTML list, placed next to their anchors on every drawn frame.
     // The overlay is aria-hidden; the list stays in the page for screen readers and the copy gate.
     const overlay = doc.getElementById?.("u3d-overlay") ?? null;
@@ -308,6 +319,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
         buildLabels(stageEl, win.innerWidth < PHONE_MAX);
       }
       const nowPhone = win.innerWidth < PHONE_MAX;
+      const viewChanged = picked.view !== view;
       if (picked.view !== view || nowPhone !== phone) {
         const first = view === null;
         view = picked.view;
@@ -325,7 +337,13 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       }
       journey.group.visible = view === "journey" && picked.labels && !!journey.pulse;
       if (journey.group.visible) placePulse(picked.progress);
-      if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move });
+      if (picked.quiet !== quiet || viewChanged) {
+        quiet = picked.quiet;
+        if (quiet) html.setAttribute("data-u3d-quiet", "");
+        else html.removeAttribute("data-u3d-quiet");
+        applyOpacity(viewFor(view).opacity * (quiet ? QUIET : 1));
+      }
+      if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move, quiet, opacity });
     };
 
     const draw = () => renderer && renderer.render(scene, camera);

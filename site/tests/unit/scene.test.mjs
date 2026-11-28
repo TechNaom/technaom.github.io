@@ -40,6 +40,7 @@ function fakePage({ renderThrows = false } = {}) {
     querySelectorAll(sel) { return sel === "[data-scene]" ? this.sections : []; },
     documentElement: {
       setAttribute: (k, v) => (attrs[k] = v),
+      removeAttribute: (k) => delete attrs[k],
       classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c) },
     },
     addEventListener: docL.addEventListener, removeEventListener: docL.removeEventListener,
@@ -208,4 +209,21 @@ test("if clean-up throws on a lost context, onLost still runs", async () => {
   p.renderer.dispose = () => { throw new Error("context gone"); };
   assert.throws(() => p.canvasL.fire("webglcontextlost"));
   assert.equal(lost, 1);
+});
+
+test("a quiet drift section dims the materials to 0.7 x 0.4; the network view is full strength", async () => {
+  const p = fakePage();
+  p.win.__u3d = {}; // the probe boot sets in test mode
+  const quietDrift = { rect: { top: 0, bottom: 900 }, getAttribute: (k) => (k === "data-scene" ? "drift" : null), hasAttribute: (k) => k === "data-scene-quiet", getBoundingClientRect() { return { ...this.rect }; } };
+  p.doc.sections = [quietDrift];
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer });
+  p.flush();
+  await pending;
+  assert.ok(Math.abs(p.win.__u3d.opacity - 0.28) < 1e-9);
+  assert.equal(p.attrs["data-u3d-quiet"], "");
+  quietDrift.rect = { top: 900, bottom: 1800 }; // scrolled away: nothing in the middle, so the default drift, not quiet
+  p.winL.fire("scroll");
+  p.flush();
+  assert.ok(Math.abs(p.win.__u3d.opacity - 0.7) < 1e-9);
+  assert.equal("data-u3d-quiet" in p.attrs, false);
 });

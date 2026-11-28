@@ -11,7 +11,7 @@ import Base from "../layouts/Base.astro";
   </section>
   <div class="night"><div class="wrap pb-20 grid gap-16">
 <!-- 1. Seven silos -->
-<section class="arch">
+<section class="arch" data-scene="journey" data-scene-quiet>
   <div class="head"><p class="eyebrow">01 · SYSTEM MAP</p><h2 class="display">Seven silos, and no row calls another</h2><p class="lede">Each team has its own exact-time trigger on Cloudflare, its own workflow on GitHub Actions and its own agents. If one team breaks, the other six do not notice.</p></div>
   <figure>
     <div class="scroll">
@@ -123,7 +123,7 @@ import Base from "../layouts/Base.astro";
 </section>
 
 <!-- 2. Inside a team -->
-<section class="arch">
+<section class="arch" data-scene="journey" data-scene-quiet>
   <div class="head"><p class="eyebrow">02 · INSIDE A POST TEAM</p><h2 class="display">Every post is written, checked and either published or dropped</h2><p class="lede">The leadership team as it runs in code: a LangGraph state graph. Routing is decided in code, not by the model, so a weak post is skipped instead of published.</p></div>
   <figure>
     <div class="scroll">
@@ -182,7 +182,7 @@ import Base from "../layouts/Base.astro";
 </section>
 
 <!-- 3. Day timeline -->
-<section class="arch">
+<section class="arch" data-scene="journey" data-scene-quiet>
   <div class="head"><p class="eyebrow">03 · ONE DAY</p><h2 class="display">Fixed slots, then a calm ripple to every platform</h2><p class="lede">Each post goes to LinkedIn on the minute. The other platforms follow one at a time, at the same offsets every day, and never as a burst of old posts.</p></div>
   <figure>
     <div class="scroll">
@@ -235,7 +235,7 @@ import Base from "../layouts/Base.astro";
 </section>
 
 <!-- 4. Self-heal -->
-<section class="arch">
+<section class="arch" data-scene="journey" data-scene-quiet>
   <div class="head"><p class="eyebrow">04 · SELF-HEALING</p><h2 class="display">A missed slot repairs itself within minutes</h2><p class="lede">After each slot the team's own Worker checks every five minutes. If no run has succeeded and none is running, it starts another. Alerts fire only if healing has not worked.</p></div>
   <figure>
     <div class="scroll">
@@ -272,7 +272,7 @@ import Base from "../layouts/Base.astro";
 </section>
 
 <!-- 5. Quality loop -->
-<section class="arch">
+<section class="arch" data-scene="journey" data-scene-quiet>
   <div class="head"><p class="eyebrow">05 · QUALITY LOOP</p><h2 class="display">Every agent is tested on its own, every week</h2><p class="lede">Each judge runs with its production prompt on planted mistakes and on clean answers. It must catch real faults without crying wolf, or the owner is alerted.</p></div>
   <figure>
     <div class="scroll">

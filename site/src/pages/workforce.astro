@@ -33,7 +33,7 @@ const pct = Math.round((w.agents / goal.agents) * 100);
     </div>
   </nav>
 
-  <div class="wrap py-16 grid gap-8">
+  <div id="teams" data-scene="dial" data-scene-quiet class="wrap py-16 grid gap-8">
     {teams.map((t) => (
       <section id={slug(t.name)} class="scroll-mt-32 grid lg:grid-cols-[340px_1fr] gap-8 p-8 rounded-2xl border" style="background: var(--card); border-color: var(--rule)">
         <div class="grid gap-3 content-start">

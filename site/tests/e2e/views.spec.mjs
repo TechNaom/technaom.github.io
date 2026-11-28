@@ -14,10 +14,17 @@ for (const { route, sections } of screens) {
       const count = await page.locator(selector).count();
       expect(count, `${selector} exists on ${route}`).toBeGreaterThan(0);
       for (let i = 0; i < count; i++) {
-        await page.locator(selector).nth(i).evaluate((el) => {
+        const reached = await page.locator(selector).nth(i).evaluate((el) => {
           const r = el.getBoundingClientRect();
           window.scrollBy({ top: r.top + r.height / 2 - innerHeight / 2, behavior: "instant" }); // the page scrolls smoothly by default
+          const now = el.getBoundingClientRect();
+          return Math.abs(now.top + now.height / 2 - innerHeight / 2) < 2;
         });
+        if (!reached) {
+          // The page ends first (a footer under a long last section): the middle line is in another section.
+          test.info().annotations.push({ type: "skipped check", description: `${selector} #${i} cannot reach the middle on ${route}` });
+          continue;
+        }
         await expect(html, `${selector} #${i} on ${route}`).toHaveAttribute("data-u3d-view", view);
       }
     }
