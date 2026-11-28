@@ -17,6 +17,7 @@ const MAX_PIXEL_RATIO = 1.5;
 const FADE_MS = 600;
 const MOVE_MS = 800;
 const PHONE_MAX = 900;
+const PULSES = 24; // signals in flight at once (R11): a fixed pool, no allocation per frame
 const QUIET = 0.4; // a quiet section dims the scene to this share of its view's opacity (R18)
 const BACKGROUND = 0x0f1828; // --paper in the dark theme
 
@@ -164,6 +165,48 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       const a = journey.points[step], b = journey.points[Math.min(step + 1, journey.points.length - 1)];
       journey.pulse.position.set(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t);
     };
+
+    // Signals (R11): small pulses travel along random links while the scene is idle-animating.
+    const pulseRand = mulberry32((data.seed ?? 2026) + 1);
+    const pulseGeo = new IcosahedronGeometry(0.09, 1);
+    const pulseMat = new MeshBasicMaterial({ color: 0xe8f6fc });
+    const pulseMesh = new InstancedMesh(pulseGeo, pulseMat, PULSES);
+    pulseMesh.frustumCulled = false;
+    disposables.push(pulseGeo, pulseMat, pulseMesh);
+    world.add(pulseMesh);
+    const pulseState = Array.from({ length: PULSES }, () => ({ link: 0, t: 1, speed: 0 })); // t >= 1: free
+    let pulses = 0;
+    const pulseDummy = new Object3D();
+    const stepPulses = (dt) => {
+      if (!links.length) return;
+      for (let i = 0; i < PULSES; i++) { // a plain loop: no closures or arrays per frame
+        const st = pulseState[i];
+        if (st.t >= 1) {
+          if (pulseRand() > dt / 400) { // a free slot launches about once every 400 ms
+            pulseDummy.position.set(0, 0, -1000);
+            pulseDummy.updateMatrix();
+            pulseMesh.setMatrixAt(i, pulseDummy.matrix);
+            continue;
+          }
+          st.link = Math.floor(pulseRand() * links.length);
+          st.t = 0;
+          st.speed = 0.0004 + pulseRand() * 0.0006;
+          pulses++;
+        }
+        const link = links[st.link], a = link[0] * 3, b = link[1] * 3, k = st.t;
+        pulseDummy.position.set(
+          positions[a] + (positions[b] - positions[a]) * k,
+          positions[a + 1] + (positions[b + 1] - positions[a + 1]) * k,
+          positions[a + 2] + (positions[b + 2] - positions[a + 2]) * k,
+        );
+        st.t += dt * st.speed;
+        pulseDummy.updateMatrix();
+        pulseMesh.setMatrixAt(i, pulseDummy.matrix);
+      }
+      pulseMesh.instanceMatrix.needsUpdate = true;
+      if (probe) probe.pulses = pulses;
+    };
+    pulseState.forEach((_, i) => { pulseDummy.position.set(0, 0, -1000); pulseDummy.updateMatrix(); pulseMesh.setMatrixAt(i, pulseDummy.matrix); });
 
     // Opacity per view and quiet sections (R18): on the materials, never on canvas.style (that is the fade-in).
     const materials = disposables.filter((d) => d.isMaterial).map((m) => ({ m, base: m.opacity }));
@@ -333,6 +376,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
           if (!first || view !== "network") setPositions(target);
         } else {
           move = { from: pose, to, posFrom: positions, posTo: target, t0: null };
+          if (probe) probe.eased = (probe.eased ?? 0) + 1; // eased moves started (none in test mode or reduced motion)
         }
       }
       journey.group.visible = view === "journey" && picked.labels && !!journey.pulse;
@@ -343,7 +387,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
         else html.removeAttribute("data-u3d-quiet");
         applyOpacity(viewFor(view).opacity * (quiet ? QUIET : 1));
       }
-      if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move, quiet, opacity });
+      if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move, quiet, opacity, pulses });
     };
 
     const draw = () => renderer && renderer.render(scene, camera);
@@ -362,7 +406,11 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
         if (probe) probe.moving = !!move;
       }
       apply();
-      if (rotate && last) world.rotation.y += Math.min(t - last, 50) * 0.00004;
+      if (rotate && last) {
+        const dt = Math.min(t - last, 50);
+        world.rotation.y += dt * 0.00004;
+        stepPulses(dt); // idle signals run only where idle rotation does: never in test mode or under reduced motion
+      }
       last = t;
       draw();
       placeLabels();
