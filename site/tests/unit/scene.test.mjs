@@ -20,7 +20,7 @@ function listeners() {
   };
 }
 
-function fakePage({ renderThrows = false } = {}) {
+function fakePage({ renderThrows = false, reduced = false } = {}) {
   const canvasL = listeners();
   const attrs = {};
   const classes = new Set();
@@ -32,7 +32,7 @@ function fakePage({ renderThrows = false } = {}) {
     devicePixelRatio: 3, innerWidth: 800, innerHeight: 600,
     requestAnimationFrame: (fn) => (frames.set(nextId, fn), nextId++),
     cancelAnimationFrame: (id) => frames.delete(id),
-    matchMedia: () => ({ matches: false }),
+    matchMedia: (q) => ({ matches: reduced && q.includes("reduce") }),
     addEventListener: winL.addEventListener, removeEventListener: winL.removeEventListener,
   };
   const doc = {
@@ -237,4 +237,29 @@ test("the network view is at full strength", async () => {
   await pending;
   assert.equal(p.win.__u3d.opacity, 1);
   assert.equal("data-u3d-quiet" in p.attrs, false);
+});
+
+test("reduced motion: no idle loop, no pulses, even in normal mode", async () => {
+  const p = fakePage({ reduced: true });
+  p.win.__u3d = {};
+  const pending = start(p.canvas, data, { mode: "normal", makeRenderer: p.makeRenderer });
+  p.flush();
+  const { stop } = await pending;
+  for (let i = 0; i < 3; i++) p.flush();
+  assert.equal(p.frames.size, 0, "no loop queued");
+  assert.equal(p.win.__u3d.pulses, 0);
+  stop();
+});
+
+test("normal mode launches pulses along the links as frames run", async () => {
+  const p = fakePage();
+  p.win.__u3d = {};
+  let t = 0;
+  const flushAt = () => { const due = [...p.frames]; p.frames.clear(); t += 400; due.forEach(([, fn]) => fn(t)); };
+  const pending = start(p.canvas, data, { mode: "normal", makeRenderer: p.makeRenderer });
+  flushAt();
+  const { stop } = await pending;
+  for (let i = 0; i < 20; i++) flushAt();
+  assert.ok(p.win.__u3d.pulses > 0, `pulses launched: ${p.win.__u3d.pulses}`);
+  stop();
 });
