@@ -6,7 +6,9 @@
     "dev": "astro dev --port 8799",
     "build": "astro build",
     "preview": "astro preview --port 8799",
-    "check": "astro check"
+    "check": "astro check",
+    "test:unit": "node --test tests/unit/*.test.mjs",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.12",
