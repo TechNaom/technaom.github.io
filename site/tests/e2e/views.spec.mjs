@@ -6,6 +6,7 @@ test.use({ viewport: { width: 1280, height: 800 } });
 
 for (const { route, sections } of screens) {
   test(`${route}: the view follows the section in the middle of the screen`, async ({ page }) => {
+    test.setTimeout(60_000); // home has four stages; CI browsers have no graphics card
     await page.goto(`${route}?u3d=test`);
     const html = page.locator("html");
     await expect(html).toHaveAttribute("data-u3d-state", "on", { timeout: 15_000 });
@@ -15,7 +16,7 @@ for (const { route, sections } of screens) {
       for (let i = 0; i < count; i++) {
         await page.locator(selector).nth(i).evaluate((el) => {
           const r = el.getBoundingClientRect();
-          window.scrollBy(0, r.top + r.height / 2 - innerHeight / 2);
+          window.scrollBy({ top: r.top + r.height / 2 - innerHeight / 2, behavior: "instant" }); // the page scrolls smoothly by default
         });
         await expect(html, `${selector} #${i} on ${route}`).toHaveAttribute("data-u3d-view", view);
       }

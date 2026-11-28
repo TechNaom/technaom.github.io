@@ -163,7 +163,7 @@ const next = [
       <div class="grid gap-4 p-8 rounded-2xl border max-w-[26rem]" style="background: var(--card); border-color: var(--rule)">
         <p class="eyebrow" style="color: var(--amber)">One post, start to finish</p>
         <h2 class="display text-4xl leading-tight">Follow a post through the workforce</h2>
-        <p style="color: var(--muted)">A clock starts the team, the agents write, the critic checks, and the post goes to LinkedIn first, then to four more platforms.</p>
+        <p style="color: var(--muted)">A clock starts the team, the agents write, the critic checks, and the post goes to LinkedIn first, then to {words(journey.filter((s) => s.kind === "platform").length)} more platforms.</p>
         <StageLabels for="journey" label="The steps of one post" items={journeyItems} />
       </div>
     </div>

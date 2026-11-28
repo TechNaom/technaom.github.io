@@ -12,9 +12,11 @@ test("scrolling through the journey stage moves progress from its start to 1, ne
   for (let i = 0; i <= 4; i++) {
     // From the stage's top at the screen's middle to its bottom at the screen's bottom.
     const y = top - 400 + ((height - 400) * i) / 4;
-    await page.evaluate((y) => scrollTo(0, y), y);
+    // Jump (the page scrolls smoothly by default), then wait two frames so the scene has read the new layout.
+    const at = await page.evaluate((y) => { scrollTo({ top: y, behavior: "instant" }); return scrollY; }, y);
+    await page.waitForFunction((at) => Math.abs(scrollY - at) < 1, at);
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
     await expect(page.locator("html")).toHaveAttribute("data-u3d-view", "journey");
-    await page.waitForFunction(() => window.__u3d && window.__u3d.view === "journey");
     seen.push(await page.evaluate(() => window.__u3d.progress));
   }
   expect(seen[0]).toBeLessThanOrEqual(0.25);
