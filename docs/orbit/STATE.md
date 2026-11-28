@@ -35,7 +35,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## In flight
 
-- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T4 PR #24 waiting on CI. Next: T5.
+- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T4 done (PR #24). Next: T5.
 - Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
 
 ## Open questions
