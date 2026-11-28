@@ -301,6 +301,19 @@ had to make, and whether the review found problems. The token meter compares it 
 - T20: the lane-to-main pull request runs site-check (pull requests into `main` now run it), and the live smoke test
   runs after the merge, because `deploy-cloudflare.yml` deploys main after only the build and the copy gate.
 
+## M3 notes from the M2 branch review (2026-11-29), for the M3 cards
+
+- T15: a frame-rate readout in debug mode (`__u3d.fps` and `data-u3d-fps`, for N4's 30 and 50); cap idle motion at
+  30 fps and pause rotation and pulses while a quiet section is in the middle; read stage-card rects in
+  `readSections`, not every frame; two scratch buffers for the morph (no Float32Array per frame); raise `--glass`
+  alpha whenever blur is off (lite tier); replace the hard-coded `data-u3d-tier="full"`; route tier changes through
+  `applyOpacity`; split `scene.mjs` into small modules (camera and morph, labels, pulses) with state at the top.
+- T17: contrast must be judged against the brightest scene colour (#e8f6fc) seen through each backing, not only
+  `?u3d=test` screenshots (they freeze pulses); add R12 screenshots (journey progress 0, 0.5, 1; desktop and phone).
+- T19 (UAT question for the owner): on phones the dial shows team names only and the HTML list is hidden, so a sighted
+  phone visitor never sees team times. Keep, or show the schedule on tap?
+- CI time: fold the quiet checks into the views loop (one scene start per route instead of two).
+
 ## M3 Hardening and release (cards written when M3 starts)
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
