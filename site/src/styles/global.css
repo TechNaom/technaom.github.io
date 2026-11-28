@@ -52,7 +52,7 @@ html.u3d-on { background-color: var(--paper-solid); } /* behind the canvas while
 html.u3d-on body { background: transparent; }
 html.u3d-on .night { background-color: var(--veil); }
 html.u3d-on [style*="var(--card)"] { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
-html.u3d-on .hero-diagram rect:first-of-type { fill-opacity: .55; }
+html.u3d-on .hero-frame { fill-opacity: .55; }
 html.u3d-on .sticky[style*="var(--paper)"] { background: var(--veil) !important; backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 
 html { scroll-behavior: smooth; }

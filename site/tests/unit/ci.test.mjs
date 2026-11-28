@@ -37,7 +37,16 @@ test("no gate can fail quietly, and the job has a time limit", () => {
 
 test("a cached Playwright browser skips the full install but still gets its system packages", () => {
   assert.match(workflow, /id:\s*pw\b/);
-  assert.match(workflow, /restore-keys:/);
+  // Keyed on the Playwright version, not the whole lock file: an unrelated dependency bump must not miss,
+  // and no restore-keys fallback (a fallback hit reinstalls and saves an ever-growing cache).
+  assert.match(workflow, /key:\s*playwright-\$\{\{ runner\.os \}\}-\$\{\{ steps\.pwv\.outputs\.version \}\}/);
+  assert.doesNotMatch(workflow, /restore-keys:/);
   assert.match(workflow, /if:\s*steps\.pw\.outputs\.cache-hit != 'true'\s*\n\s*run: npx playwright install --with-deps chromium/);
   assert.match(workflow, /if:\s*steps\.pw\.outputs\.cache-hit == 'true'\s*\n\s*run: npx playwright install-deps chromium/);
+});
+
+test("one run per change: task branches run on push, pull requests only into main, superseded runs cancelled", () => {
+  assert.match(workflow, /pull_request:\s*\n\s*branches:\s*\[main\]/);
+  assert.match(workflow, /pull_request:[\s\S]*?paths:[^\n]*\.github\/workflows\/site-check\.yml/);
+  assert.match(workflow, /concurrency:\s*\n\s*group:\s*site-check-\$\{\{ github\.event_name \}\}-\$\{\{ github\.ref \}\}\s*\n\s*cancel-in-progress:\s*true/);
 });
