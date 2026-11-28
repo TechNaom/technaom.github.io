@@ -3,6 +3,8 @@
 // background nodes in a loose shell further out.
 
 export const FIELD_NODES = 120;
+/** At most this many agents per team, whatever the data says. */
+export const MAX_CREW = 64;
 
 const HUB_RING = 6;
 const AGENT_RADIUS = 1.6;
@@ -36,7 +38,8 @@ export function buildNetwork(data, rand) {
     const hub = [Math.cos(angle) * HUB_RING, tilt, Math.sin(angle) * HUB_RING];
     const hubIndex = nodes.push({ kind: "hub", team: team.id, pos: vec(...hub) }) - 1;
     links.push([0, hubIndex]);
-    for (let a = 0; a < team.crew; a++) {
+    const crew = Math.min(Math.max(Math.trunc(Number(team.crew)) || 0, 0), MAX_CREW);
+    for (let a = 0; a < crew; a++) {
       const [x, y, z] = inShell(rand, AGENT_RADIUS * 0.6, AGENT_RADIUS);
       const i = nodes.push({ kind: "agent", team: team.id, pos: vec(hub[0] + x, hub[1] + y, hub[2] + z) }) - 1;
       links.push([hubIndex, i]);

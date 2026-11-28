@@ -34,6 +34,7 @@ function nodeMeshes(nodes, disposables) {
     const material = new MeshBasicMaterial({ color: look.color, transparent: kind === "field", opacity: kind === "field" ? 0.6 : 1 });
     disposables.push(geometry, material);
     const mesh = new InstancedMesh(geometry, material, mine.length);
+    disposables.push(mesh);
     mine.forEach((n, i) => {
       dummy.position.set(n.pos[0], n.pos[1], n.pos[2]);
       dummy.updateMatrix();
@@ -60,10 +61,12 @@ function linkLines(nodes, links, disposables) {
 }
 
 /**
- * start(canvas, data, { mode }) → Promise<{ stop() }>.
- * mode "test" turns idle rotation off, so screenshots and checks see a still scene.
+ * start(canvas, data, { mode, signal }) → Promise<{ stop() }>.
+ * mode "test" keeps the scene still (no idle rotation), so checks and screenshots see one picture.
+ * signal: boot aborts it when it stops waiting; the scene then stops itself and never turns "on".
+ * makeRenderer exists for unit tests (Node has no WebGL).
  */
-export async function start(canvas, data, { mode = "normal" } = {}) {
+export async function start(canvas, data, { mode = "normal", signal, makeRenderer } = {}) {
   const doc = canvas.ownerDocument;
   const win = doc.defaultView;
   const html = doc.documentElement;
@@ -77,6 +80,7 @@ export async function start(canvas, data, { mode = "normal" } = {}) {
     if (stopped) return;
     stopped = true;
     if (raf) win.cancelAnimationFrame(raf);
+    raf = 0;
     for (const undo of cleanups.splice(0)) undo();
     for (const d of disposables.splice(0)) d.dispose();
     if (renderer) {
@@ -85,9 +89,14 @@ export async function start(canvas, data, { mode = "normal" } = {}) {
       renderer = null;
     }
   };
+  const gone = () => stopped || signal?.aborted || !canvas.isConnected;
 
   try {
-    renderer = new WebGLRenderer({ canvas, antialias: true, powerPreference: "low-power" });
+    if (signal?.aborted) throw new Error("aborted before start");
+    signal?.addEventListener("abort", stop, { once: true });
+    cleanups.push(() => signal?.removeEventListener("abort", stop));
+
+    renderer = makeRenderer ? makeRenderer(canvas) : new WebGLRenderer({ canvas, antialias: true, powerPreference: "low-power" });
     renderer.setPixelRatio(Math.min(win.devicePixelRatio || 1, MAX_PIXEL_RATIO));
     const scene = new Scene();
     scene.background = new Color(BACKGROUND);
@@ -100,48 +109,54 @@ export async function start(canvas, data, { mode = "normal" } = {}) {
     world.add(nodeMeshes(nodes, disposables), linkLines(nodes, links, disposables));
     scene.add(world);
 
-    const resize = () => {
-      const w = win.innerWidth, h = win.innerHeight;
-      renderer.setSize(w, h, false);
-      camera.aspect = w / Math.max(h, 1);
-      camera.updateProjectionMatrix();
-    };
-    resize();
-    win.addEventListener("resize", resize);
-    cleanups.push(() => win.removeEventListener("resize", resize));
-
-    const rotate = mode !== "test" && !win.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const reduced = !!win.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const rotate = mode !== "test" && !reduced;
     let last = 0;
+    const draw = () => renderer && renderer.render(scene, camera);
+    // A moving scene keeps a loop while the tab is visible; a still one draws only when something changes.
     const frame = (t) => {
       raf = 0;
       if (stopped) return;
       if (rotate && last) world.rotation.y += Math.min(t - last, 50) * 0.00004;
       last = t;
-      renderer.render(scene, camera);
-      if (!doc.hidden) raf = win.requestAnimationFrame(frame);
+      draw();
+      if (rotate && !doc.hidden) raf = win.requestAnimationFrame(frame);
     };
+    const requestDraw = () => {
+      if (!raf && !stopped && !doc.hidden) raf = win.requestAnimationFrame(frame);
+    };
+
+    const resize = () => {
+      const w = win.innerWidth, h = win.innerHeight;
+      renderer.setSize(w, h, false); // clears the drawing buffer: draw again
+      camera.aspect = w / Math.max(h, 1);
+      camera.updateProjectionMatrix();
+      requestDraw();
+    };
+    resize();
+    win.addEventListener("resize", resize);
+    cleanups.push(() => win.removeEventListener("resize", resize));
     const onVisibility = () => {
-      if (!doc.hidden && !raf && !stopped) {
-        last = 0;
-        raf = win.requestAnimationFrame(frame);
-      }
+      last = 0;
+      requestDraw();
     };
     doc.addEventListener("visibilitychange", onVisibility);
     cleanups.push(() => doc.removeEventListener("visibilitychange", onVisibility));
 
-    renderer.render(scene, camera); // a throw here (shader, context) lands in catch: the page stays static
+    if (raf) win.cancelAnimationFrame(raf), (raf = 0); // the first draw below replaces resize's request
+    draw(); // a throw here (shader, context) lands in catch: the page stays static
     // A background tab gets no animation frames; the frame above is drawn, so do not wait for one there.
     if (!doc.hidden) await nextFrame(win);
-    if (stopped) throw new Error("stopped before the first frame");
+    if (gone()) throw new Error("stopped before the first frame");
 
-    const reduced = win.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     canvas.style.opacity = "0";
     if (!reduced) canvas.style.transition = `opacity ${FADE_MS}ms ease`;
     html.setAttribute("data-u3d-tier", "full");
     html.classList.add("u3d-on");
     html.setAttribute("data-u3d-state", "on");
-    raf = win.requestAnimationFrame(frame);
-    win.requestAnimationFrame(() => (canvas.style.opacity = "1"));
+    if (rotate) requestDraw();
+    const fade = win.requestAnimationFrame(() => (canvas.style.opacity = "1"));
+    cleanups.push(() => win.cancelAnimationFrame(fade));
     return { stop };
   } catch (err) {
     stop();

@@ -73,3 +73,13 @@ test("a scene that starts keeps its own state; boot does not overwrite it", asyn
   assert.equal(p.attrs["data-u3d-state"], "on");
   assert.equal(p.canvas().removed, false);
 });
+
+test("when boot gives up on a slow start, it aborts the signal so the scene stops itself", async () => {
+  const p = fakePage();
+  let signal;
+  const load = async () => ({ start: (_c, _d, opts) => ((signal = opts.signal), new Promise(() => {})) });
+  await boot(p.doc, p.win, { load, limitMs: 50 });
+  assert.equal(p.attrs["data-u3d-state"], "fallback");
+  assert.ok(signal, "start received a signal");
+  assert.equal(signal.aborted, true);
+});
