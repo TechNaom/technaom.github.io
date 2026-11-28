@@ -3,14 +3,13 @@ import Base from "../layouts/Base.astro";
 import PageHero from "../components/PageHero.astro";
 import facts from "../data/facts.json";
 import teams from "../data/teams.json";
-import { shift, words } from "../lib/format";
+import { shift, slug, words } from "../lib/format";
 
 const w = facts.workforce;
 const crewCount = teams.reduce((n, t) => n + t.crew.length, 0);
 if (crewCount !== w.agents) throw new Error(`teams.json has ${crewCount} agents but facts.json says ${w.agents}`);
 const goal = w.goals[0]!;
 const pct = Math.round((w.agents / goal.agents) * 100);
-const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-");
 ---
 <Base title="Workforce" path="/workforce" description={`The ${w.agents} AI agents in ${words(w.teams)} teams that research, write, check and publish every day, and what each one does.`}>
   <PageHero crumb="Workforce" eyebrow="The digital workforce" title="Nobody here takes a day off"

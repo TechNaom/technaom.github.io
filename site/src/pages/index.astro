@@ -5,7 +5,7 @@ import log from "../data/log.json";
 import metrics from "../../../data/brand-metrics.json";
 import teams from "../data/teams.json";
 import ImpressionsChart from "../components/ImpressionsChart.astro";
-import { shift, words } from "../lib/format";
+import { shift, slug, words } from "../lib/format";
 
 const w = facts.workforce;
 const fmt = (n: number) => n.toLocaleString("en-GB");
@@ -149,7 +149,7 @@ const next = [
     <ul class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 list-none p-0 m-0">
       {teams.map((t) => (
         <li>
-          <a href={`/workforce#${t.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`} class="group flex items-center justify-between gap-4 p-5 rounded-xl border no-underline h-full"
+          <a href={`/workforce#${slug(t.name)}`} class="group flex items-center justify-between gap-4 p-5 rounded-xl border no-underline h-full"
              style="background: var(--card); border-color: var(--rule); color: var(--ink)">
             <span class="grid gap-1">
               <span class="font-semibold">{t.name}</span>

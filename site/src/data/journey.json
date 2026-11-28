@@ -1,0 +1,10 @@
+[
+  { "id": "clock", "name": "Clock", "detail": "Starts the team", "kind": "step" },
+  { "id": "team", "name": "Agent team", "detail": "Planner, scouts, writer", "kind": "step" },
+  { "id": "critic", "name": "Critic", "detail": "Four judges", "kind": "step" },
+  { "id": "linkedin", "name": "LinkedIn", "detail": "Published first", "kind": "step" },
+  { "id": "x", "name": "X", "detail": "", "kind": "platform" },
+  { "id": "bluesky", "name": "Bluesky", "detail": "", "kind": "platform" },
+  { "id": "facebook", "name": "Facebook", "detail": "", "kind": "platform" },
+  { "id": "devto", "name": "Dev.to", "detail": "", "kind": "platform" }
+]
