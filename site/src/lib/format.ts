@@ -13,16 +13,8 @@ export const day = (iso: string) => {
 export const monthShort = (ym: string) => MONTHS[Number(ym.slice(5, 7)) - 1]!;
 /** "2026-10" -> "October 2026" */
 export const monthLong = (ym: string) => `${LONG[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
-/** "08:00" -> "8:00 AM", "23:30" -> "11:30 PM" */
-export const time12 = (hhmm: string) => {
-  const [h, m] = hhmm.split(":").map(Number) as [number, number];
-  return `${((h + 11) % 12) + 1}:${String(m).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
-};
-/** "08:00 IST · Daily" -> "Daily, 8:00 AM IST"; other shifts unchanged */
-export const shift = (s: string) => {
-  const m = s.match(/^(\d{2}:\d{2}) IST · (\w+)/);
-  return m ? `${m[2]}, ${time12(m[1]!)} IST` : s;
-};
+// Text rules shared with the 3D scene data: one copy, in scene/data.mjs.
+export { slug, shift, time12, hourOf } from "./scene/data.mjs";
 const WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 /** Numbers under ten as words in prose */
 export const words = (n: number) => (n < 10 ? WORDS[n]! : fmt(n));
