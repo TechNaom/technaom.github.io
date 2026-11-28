@@ -1,0 +1,17 @@
+---
+// The 3D neural network behind every page (R9, R10): a canvas, an empty overlay for the labels, the scene
+// data from teams.json, and the small boot script. Included once, in Base.astro.
+import teams from "../data/teams.json";
+import journey from "../data/journey.json";
+import { buildSceneData } from "../lib/scene/data.mjs";
+
+// "<" escaped so the JSON can never close its own script element.
+const json = JSON.stringify(buildSceneData(teams, journey)).replace(/</g, "\\u003c");
+---
+<canvas id="u3d-canvas" aria-hidden="true"></canvas>
+<div id="u3d-overlay" aria-hidden="true"></div>
+<script type="application/json" id="u3d-data" set:html={json}></script>
+<script>
+  import { boot } from "../lib/scene/boot.mjs";
+  boot();
+</script>

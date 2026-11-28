@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import facts from "../data/facts.json";
+import Universe from "../components/Universe.astro";
 
 interface Props {
   title: string;
@@ -46,6 +47,7 @@ const linkedin = facts.links[0]!.url;
 </head>
 <body>
   <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-primary">Skip to content</a>
+  <Universe />
 
   <header class="night sticky top-0 z-40 border-b" style="border-color: var(--night-rule)">
     <div class="wrap flex items-center gap-6 h-16">
