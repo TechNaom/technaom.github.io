@@ -6,7 +6,7 @@ const view = (v) => Object.freeze({ offset: 0, dial: 0, journey: 0, opacity: 1, 
 /** Camera and network settings per view; T8 tunes the numbers. */
 export const VIEWS = Object.freeze({
   network: view({ camera: [0, 3, 22], target: [0, 0, 0], offset: 4 }),
-  dial: view({ camera: [0, 12, 10], target: [0, 0, 0], dial: 1 }),
+  dial: view({ camera: [0, 17, 14], target: [0, 0, 0], dial: 1, offset: 4.5 }),
   journey: view({ camera: [0, 2, 16], target: [0, 0, 0], journey: 1, offset: 5.5 }),
   drift: view({ camera: [0, -2, 24], target: [0, 0, 0], offset: 2, opacity: 0.7 }),
 });
@@ -34,6 +34,17 @@ export function viewFor(name, { phone = false } = {}) {
 const clamp = (x, lo, hi) => Math.min(hi, Math.max(lo, x));
 const NONE = Object.freeze({ view: "drift", labels: false, quiet: false, progress: 0 });
 
+/** The index of the section pickView chooses (innermost wins, a tie goes to the later one), or -1. */
+export function pickIndex(sections, viewportHeight) {
+  const mid = viewportHeight / 2;
+  let best = -1;
+  sections.forEach((s, i) => {
+    if (!(s.top <= mid && mid < s.bottom)) return;
+    if (best < 0 || s.bottom - s.top <= sections[best].bottom - sections[best].top) best = i;
+  });
+  return best;
+}
+
 /**
  * The section that contains the middle line of the screen wins (top <= mid < bottom); when
  * several do, the shortest (innermost) wins, and a tie goes to the later one.
@@ -42,13 +53,9 @@ const NONE = Object.freeze({ view: "drift", labels: false, quiet: false, progres
  * @returns {{view:string,labels:boolean,quiet:boolean,progress:number}}
  */
 export function pickView(sections, viewportHeight) {
-  const mid = viewportHeight / 2;
-  let best = null;
-  for (const s of sections) {
-    if (!(s.top <= mid && mid < s.bottom)) continue;
-    if (!best || s.bottom - s.top <= best.bottom - best.top) best = s;
-  }
-  if (!best) return { ...NONE };
+  const i = pickIndex(sections, viewportHeight);
+  if (i < 0) return { ...NONE };
+  const best = sections[i];
   const height = best.bottom - best.top;
   return {
     view: resolveView(best.view),

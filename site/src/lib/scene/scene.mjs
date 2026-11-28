@@ -4,12 +4,13 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color, Object3D, Group,
   InstancedMesh, IcosahedronGeometry, MeshBasicMaterial,
-  BufferGeometry, Float32BufferAttribute, LineSegments, LineBasicMaterial, Line, Mesh,
+  BufferGeometry, Float32BufferAttribute, LineSegments, LineBasicMaterial, Line, Mesh, Vector3,
 } from "three";
 import { mulberry32 } from "./rng.mjs";
 import { buildNetwork } from "./network.mjs";
-import { pickView, viewFor } from "./views.mjs";
-import { layout } from "./layout.mjs";
+import { pickView, pickIndex, viewFor } from "./views.mjs";
+import { layout, hourPoint } from "./layout.mjs";
+import { toScreen, declutter } from "./labels.mjs";
 import { journeyAt, journeyPoints } from "./journey.mjs";
 
 const MAX_PIXEL_RATIO = 1.5;
@@ -163,6 +164,82 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       journey.pulse.position.set(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t);
     };
 
+    // Stage labels (T11): copies of the stage's HTML list, placed next to their anchors on every drawn frame.
+    // The overlay is aria-hidden; the list stays in the page for screen readers and the copy gate.
+    const overlay = doc.getElementById?.("u3d-overlay") ?? null;
+    const hubIndex = new Map();
+    nodes.forEach((n, i) => n.kind === "hub" && hubIndex.set(n.team, i));
+    const stepIndex = new Map((data.journey || []).map((st, i) => [st.id, i]));
+    let labelItems = [];
+    let labelCards = []; // the stage's cards: no label may sit behind one (labels are under main)
+    let labelKey = null;
+    const anchorPoint = (anchor) => {
+      const [kind, id] = anchor.split(":");
+      if (kind === "team" && hubIndex.has(id)) { const i = hubIndex.get(id); return [positions[i * 3], positions[i * 3 + 1], positions[i * 3 + 2]]; }
+      if (kind === "hour") return hourPoint(Number(id));
+      if (kind === "step" && stepIndex.has(id)) return journey.points[stepIndex.get(id)];
+      return null;
+    };
+    const buildLabels = (stageEl, isPhone) => {
+      if (!overlay) return;
+      overlay.replaceChildren();
+      labelItems = [];
+      labelCards = [];
+      if (!stageEl) return;
+      labelCards = [...stageEl.querySelectorAll("[data-scene-card]")];
+      for (const li of stageEl.querySelectorAll("ol.u3d-labels li[data-anchor]")) {
+        const anchor = li.getAttribute("data-anchor");
+        if (isPhone && anchor.startsWith("hour:")) continue; // phones: no hour labels (architecture point 14)
+        const el = doc.createElement("div");
+        el.className = "u3d-label";
+        el.setAttribute("data-anchor", anchor);
+        const name = doc.createElement("span");
+        name.className = "lb-name";
+        name.textContent = li.querySelector(".lb-name")?.textContent ?? "";
+        el.append(name);
+        const detail = li.querySelector(".lb-detail")?.textContent;
+        if (detail && !isPhone) {
+          const d = doc.createElement("span");
+          d.className = "lb-detail";
+          d.textContent = detail;
+          el.append(d);
+        }
+        overlay.append(el);
+        labelItems.push({ el, anchor, w: el.offsetWidth, h: el.offsetHeight });
+      }
+    };
+    cleanups.push(() => overlay?.replaceChildren());
+    // Label sizes are measured when built; the web font may arrive later and widen them: build again then.
+    doc.fonts?.ready?.then(() => {
+      if (stopped) return;
+      labelKey = null;
+      needRead = true;
+      requestDraw();
+    });
+    const v3 = new Vector3();
+    const placeLabels = () => {
+      if (!labelItems.length) return;
+      const w = win.innerWidth, h = win.innerHeight;
+      const cards = labelCards.map((c) => c.getBoundingClientRect()); // read layout before any write
+      const behindCard = (b) => cards.some((r) => b.x < r.right && r.left < b.x + b.w && b.y < r.bottom && r.top < b.y + b.h);
+      world.updateMatrixWorld();
+      camera.updateMatrixWorld();
+      const boxes = labelItems.map((it) => {
+        const p = anchorPoint(it.anchor);
+        if (!p) return { x: 0, y: 0, w: it.w, h: it.h, hidden: true };
+        v3.set(p[0], p[1], p[2]).applyMatrix4(world.matrixWorld).project(camera);
+        const sc = toScreen(v3, w, h);
+        const box = { x: sc.x + 10, y: sc.y - it.h / 2, w: it.w, h: it.h };
+        return { ...box, hidden: !sc.visible || behindCard(box) }; // a hidden label takes no space
+      });
+      declutter(boxes, { step: 14, centre: { x: w / 2, y: h / 2 } }).forEach((b, i) => {
+        const inside = b.x >= 0 && b.y >= 0 && b.x + b.w <= w && b.y + b.h <= h;
+        const st = labelItems[i].el.style;
+        st.visibility = b.hidden || !inside || behindCard(b) ? "hidden" : "visible";
+        st.transform = `translate(${Math.round(b.x)}px, ${Math.round(b.y)}px)`;
+      });
+    };
+
     // Node positions now, and a writer for them (a morph between views moves nodes, then their links).
     let positions = layout(net, "network", data);
     const dummy = new Object3D();
@@ -223,6 +300,13 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
         };
       });
       const picked = pickView(sections, win.innerHeight);
+      const at = pickIndex(sections, win.innerHeight);
+      const stageEl = picked.labels && at >= 0 ? sectionEls[at] : null;
+      const key = stageEl ? `${at}:${win.innerWidth < PHONE_MAX}` : null;
+      if (key !== labelKey) {
+        labelKey = key;
+        buildLabels(stageEl, win.innerWidth < PHONE_MAX);
+      }
       const nowPhone = win.innerWidth < PHONE_MAX;
       if (picked.view !== view || nowPhone !== phone) {
         const first = view === null;
@@ -263,6 +347,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       if (rotate && last) world.rotation.y += Math.min(t - last, 50) * 0.00004;
       last = t;
       draw();
+      placeLabels();
       if ((rotate || move) && !doc.hidden) raf = win.requestAnimationFrame(frame);
     };
     const requestDraw = () => {
@@ -309,6 +394,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     readSections();
     apply();
     draw(); // a throw here (shader, context) lands in catch: the page stays static
+    placeLabels();
     // A background tab gets no animation frames; the frame above is drawn, so do not wait for one there.
     if (!doc.hidden) await nextFrame(win);
     if (gone()) throw new Error("stopped before the first frame");

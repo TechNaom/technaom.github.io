@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { VIEWS, resolveView, pickView, viewFor, PHONE_LIFT } from "../../src/lib/scene/views.mjs";
+import { VIEWS, resolveView, pickView, pickIndex, viewFor, PHONE_LIFT } from "../../src/lib/scene/views.mjs";
 
 const VH = 1000; // viewport height; the middle line is at 500
 const sec = (top, bottom, view = "network", labels = false, quiet = false) => ({ top, bottom, view, labels, quiet });
@@ -68,7 +68,7 @@ const dist = (v) => Math.hypot(...v.camera.map((c, i) => c - v.target[i]));
 test("viewFor: desktop offsets shift the network clear of the hero text; phones have none and stand back", () => {
   assert.equal(viewFor("network", {}).offset, 4);
   assert.equal(viewFor("drift", {}).offset, 2);
-  assert.equal(viewFor("dial", {}).offset, 0);
+  assert.equal(viewFor("dial", {}).offset, 4.5); // T11: the ring and its labels must clear the stage card
   assert.equal(viewFor("journey", {}).offset, 5.5); // T10 review: the step arc must clear the stage card on the left
   const desk = viewFor("network", {}), phone = viewFor("network", { phone: true });
   assert.equal(phone.offset, 0);
@@ -80,4 +80,11 @@ test("viewFor: desktop offsets shift the network clear of the hero text; phones 
   desk.camera[0] = 99; // a copy: changing it must not change the registry
   assert.notEqual(viewFor("network", {}).camera[0], 99);
   assert.ok(PHONE_LIFT > 0);
+});
+
+test("pickIndex: the index pickView's rule picks (innermost, later on a tie), or -1", () => {
+  const outer = { top: 0, bottom: 2000 }, inner = { top: 300, bottom: 700 }, twin = { top: 300, bottom: 700 };
+  assert.equal(pickIndex([outer, inner], 1000), 1);
+  assert.equal(pickIndex([outer, inner, twin], 1000), 2);
+  assert.equal(pickIndex([{ top: 600, bottom: 900 }], 1000), -1);
 });
