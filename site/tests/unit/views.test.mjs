@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { VIEWS, resolveView, pickView } from "../../src/lib/scene/views.mjs";
+import { VIEWS, resolveView, pickView, viewFor, PHONE_LIFT } from "../../src/lib/scene/views.mjs";
 
 const VH = 1000; // viewport height; the middle line is at 500
 const sec = (top, bottom, view = "network", labels = false, quiet = false) => ({ top, bottom, view, labels, quiet });
@@ -61,4 +61,22 @@ test("progress: 0 when the top is at 75% of the screen, 1 after moving up 80% of
   assert.equal(at(750 - 0.9 * h), 1); // past 80%: clamped to 1 (still contains the middle)
   // A short section whose raw progress exceeds 1 is clamped too.
   assert.equal(pickView([sec(-10, 510, "journey")], VH).progress, 1);
+});
+
+const dist = (v) => Math.hypot(...v.camera.map((c, i) => c - v.target[i]));
+
+test("viewFor: desktop offsets shift the network clear of the hero text; phones have none and stand back", () => {
+  assert.equal(viewFor("network", {}).offset, 4);
+  assert.equal(viewFor("drift", {}).offset, 2);
+  assert.equal(viewFor("dial", {}).offset, 0);
+  const desk = viewFor("network", {}), phone = viewFor("network", { phone: true });
+  assert.equal(phone.offset, 0);
+  assert.ok(Math.abs(dist(phone) / dist(desk) - 1.6) < 1e-9, "phone distance factor (T8: 1.25 left the core on the intro text)");
+  assert.deepEqual(viewFor("nope", {}), viewFor("drift", {}));
+  // Phones look higher, so the network sits below the hero text (T8 screenshot at 390x844).
+  assert.ok(Math.abs(phone.target[1] - desk.target[1] - PHONE_LIFT) < 1e-9);
+  assert.ok(Math.abs(phone.camera[1] - (desk.target[1] + (desk.camera[1] - desk.target[1]) * 1.6) - PHONE_LIFT) < 1e-9);
+  desk.camera[0] = 99; // a copy: changing it must not change the registry
+  assert.notEqual(viewFor("network", {}).camera[0], 99);
+  assert.ok(PHONE_LIFT > 0);
 });

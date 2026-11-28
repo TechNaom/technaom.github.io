@@ -1,9 +1,9 @@
 [
-  { "route": "/", "heading": "A digital workforce that runs itself", "sections": [] },
-  { "route": "/workforce", "heading": "Nobody here takes a day off", "sections": [] },
-  { "route": "/architecture", "heading": "How the workforce runs itself", "sections": [] },
-  { "route": "/growth", "heading": "The numbers, straight from LinkedIn", "sections": [] },
-  { "route": "/notebook", "heading": "What we found, entry by entry", "sections": [] },
-  { "route": "/work", "heading": "{repos} repositories. One builder.", "sections": [] },
-  { "route": "/about", "heading": "From a farming village to a digital workforce", "sections": [] }
+  {"route": "/", "heading": "A digital workforce that runs itself", "sections": [{"selector": "#hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/workforce", "heading": "Nobody here takes a day off", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/architecture", "heading": "How the workforce runs itself", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/growth", "heading": "The numbers, straight from LinkedIn", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/notebook", "heading": "What we found, entry by entry", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/work", "heading": "{repos} repositories. One builder.", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/about", "heading": "From a farming village to a digital workforce", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]}
 ]

@@ -36,6 +36,7 @@ function fakePage({ navigatorThrows = false } = {}) {
     readyState: "complete",
     documentElement: {
       setAttribute: (k, v) => (attrs[k] = v),
+      removeAttribute: (k) => delete attrs[k],
       classList: { remove: (c) => classes.delete(c), add: (c) => classes.add(c) },
     },
     getElementById: (id) => (id === "u3d-canvas" ? canvas : id === "u3d-data" ? { textContent: '{"version":1}' } : null),
@@ -82,4 +83,23 @@ test("when boot gives up on a slow start, it aborts the signal so the scene stop
   assert.equal(p.attrs["data-u3d-state"], "fallback");
   assert.ok(signal, "start received a signal");
   assert.equal(signal.aborted, true);
+});
+
+test("a fallback after the scene came on removes the tier too", async () => {
+  const p = fakePage();
+  let onLost;
+  const load = async () => ({
+    start: async (_c, _d, opts) => {
+      onLost = opts.onLost;
+      p.doc.documentElement.setAttribute("data-u3d-tier", "full");
+      p.doc.documentElement.setAttribute("data-u3d-state", "on");
+      return { stop() {} };
+    },
+  });
+  await boot(p.doc, p.win, { load, limitMs: 1000 });
+  assert.equal(typeof onLost, "function", "boot hands the scene an onLost");
+  onLost();
+  assert.equal(p.attrs["data-u3d-state"], "fallback");
+  assert.equal("data-u3d-tier" in p.attrs, false);
+  assert.equal(p.canvas().removed, true);
 });
