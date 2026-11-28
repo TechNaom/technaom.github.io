@@ -36,7 +36,7 @@ const filterCss = cats.filter((c) => c !== "All")
       {cats.map((c, i) => (
         <label class="chip cursor-pointer">
           <input type="radio" name="cat" id={id(c)} checked={i === 0} class="sr-only" />
-          <span>{c} <span class="opacity-60 num">{count(c)}</span></span>
+          <span>{c} <span class="opacity-75 num">{count(c)}</span></span>
         </label>
       ))}
     </fieldset>
@@ -61,6 +61,6 @@ const filterCss = cats.filter((c) => c !== "All")
 <style set:html={filterCss}></style>
 <style>
   .chip span { display: inline-block; padding: 8px 16px; border-radius: 999px; border: 1px solid var(--rule); font-size: 15px; }
-  .chip input:checked + span { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip input:checked + span { background: var(--ink); color: var(--paper-solid, var(--paper)); border-color: var(--ink); }
   .chip input:focus-visible + span { outline: 2px solid var(--amber); outline-offset: 2px; }
 </style>
