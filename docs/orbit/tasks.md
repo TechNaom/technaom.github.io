@@ -20,7 +20,7 @@ unless they start with `cd`.
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
-| T1 | Test harness and CI wiring | N5, N6 | `tests/unit/ci.test.mjs` reads `site-check.yml` and fails without the unit, Playwright and copy steps | `node --test tests/unit` passes; CI green on the lane branch | - | M | #1 |
+| T1 | ✅ Test harness and CI wiring (PR #21) | N5, N6 | `tests/unit/ci.test.mjs` reads `site-check.yml` and fails without the unit, Playwright and copy steps | `node --test tests/unit` passes; CI green on the lane branch | - | M | #1 |
 | T2 | Scene data from `teams.json` | R9, R13 | `tests/unit/scene-data.test.mjs`: 9 teams, 41 agents, equals `facts.json`; hours; slugs | `node --test tests/unit` passes | T1 | S | #2 |
 | T3 | View registry and `pickView` | R10, R18 | `tests/unit/views.test.mjs`: middle line, nesting, unknown name, progress | `node --test tests/unit` passes | T1 | S | #3 |
 | T4 | Dark only, tokens and layers | R16, R17 | `tests/e2e/dark.spec.mjs`: `data-theme="dark"` and axe contrast on all 7 pages with JavaScript off | `npx playwright test dark` passes | T1 | M | #4 |
@@ -95,7 +95,7 @@ Serves: N5, N6. Depends on: none. Size: M. Issue: #1
 - Change: `site/package.json` (devDependencies, scripts), `site/package-lock.json`
 - Create: `site/playwright.config.mjs`, `site/tests/screens.json`, `site/tests/unit/ci.test.mjs`,
   `site/tests/e2e/pages.spec.mjs`
-- Change: `.github/workflows/site-check.yml`
+- Change: `.github/workflows/site-check.yml`, `site/.gitignore` (`playwright-report/`, `test-results/`)
 
 **Tests that read these files:** none today (the repository has no tests; `scripts/check-copy.mjs` reads `dist/`
 only).
@@ -117,7 +117,7 @@ only).
    `git switch -c t1-test-harness`.
 1. Install, exact: `npm install --save-exact --save-dev @playwright/test@1.65.1 @axe-core/playwright@4.14.1`.
    Run `git diff --stat package-lock.json`. Expect: only additions.
-2. Write `tests/unit/ci.test.mjs`: reads the workflow resolved from the test file,
+2. Write `tests/unit/ci.test.mjs` (run unit tests as `node --test tests/unit/*.test.mjs`: the directory form fails on Windows with Node 22.12): reads the workflow resolved from the test file,
    `new URL("../../../.github/workflows/site-check.yml", import.meta.url)`, as text, and asserts it contains, in this
    order, `npx astro check`, `npx astro build`, `node --test tests/unit`, `npx playwright install --with-deps chromium`,
    `npx playwright test`, `node scripts/check-copy.mjs --grammar`, then `pages deploy`.
