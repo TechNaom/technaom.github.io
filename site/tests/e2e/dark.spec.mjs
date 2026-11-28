@@ -21,6 +21,8 @@ for (const { route } of screens) {
     const clear = /rgba\(.*,\s*0\)|transparent/;
     const backed = await page.evaluate((re) => [...document.querySelectorAll(".sticky")].map(
       (el) => !new RegExp(re).test(getComputedStyle(el).backgroundColor)), clear.source);
+    // Let the boot script settle first: a fallback removes u3d-on, and would undo the class added below.
+    await expect(page.locator("html")).toHaveAttribute("data-u3d-state", /^(on|off|fallback)$/, { timeout: 15000 });
     await page.evaluate(() => document.documentElement.classList.add("u3d-on"));
     // The scene's token rules must win over the dark theme's (specificity), or nothing turns see-through.
     const token = (name) => page.evaluate((n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim(), name);
