@@ -28,7 +28,7 @@ const badge: Record<string, string> = { Shipped: "#2e9e5b", Preliminary: "#b25a0
         ))}
       </ol>
     </nav>
-    <div class="grid gap-14">
+    <div id="entries" data-scene="drift" data-scene-quiet class="grid gap-14">
       {groups.map((g) => (
         <section id={g.month.replace(/\s/g, "-").toLowerCase()} class="grid gap-6 scroll-mt-24">
           <h2 class="display text-4xl">{longMonth(g.month)}</h2>

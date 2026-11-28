@@ -13,7 +13,7 @@ export default defineConfig({
         // It serves dist/: run `npx astro build` first (CI's Build step does).
         // 127.0.0.1, not localhost: on Node 22 localhost can resolve to ::1.
         webServer: {
-          command: "npx astro preview --host 127.0.0.1 --port 8798",
+          command: "node node_modules/astro/astro.js preview --host 127.0.0.1 --port 8798",
           port: 8798,
           reuseExistingServer: false,
         },
