@@ -43,9 +43,9 @@ for (const route of ROUTES) {
       await expect(page.locator("h1")).toBeVisible();
     });
 
-    test("a normal start hands the scene its data (until T6 builds the scene, the stub falls back)", async ({ page }) => {
+    test("a normal start hands the scene its data and the scene comes on", async ({ page }) => {
       await page.goto(`${route}?u3d=test`);
-      await expect(state(page)).toHaveAttribute("data-u3d-state", "fallback", { timeout: 15000 });
+      await expect(state(page)).toHaveAttribute("data-u3d-state", "on", { timeout: 15000 });
       const data = await page.evaluate(() => window.__u3d?.data);
       const json = JSON.parse(await page.locator("#u3d-data").textContent());
       expect(data).toEqual(json);
