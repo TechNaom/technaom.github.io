@@ -19,7 +19,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 - Fast tests: `cd site && npx astro check && npx astro build && node scripts/check-copy.mjs` (about 45 seconds on 2026-11-27, all green: 0 type errors, 7 pages, copy gate passed)
 - Full suite: the fast tests plus `node scripts/check-copy.mjs --grammar` (LanguageTool, runs in CI on branches)
 - CI: GitHub Actions; `site-check.yml` on every branch push, `deploy-cloudflare.yml` on `main`
-- Toolchain note: Node 22.12 or later. On Windows the lock file has no `@rolldown/binding-win32-x64-msvc`; install it with `npm i --no-save` so the lock file stays as CI expects.
+- Toolchain note: on Windows run Node from a `C:\` working directory (uppercase): a `c:\` one breaks `astro build` ("No cached compile metadata"). Edit files as UTF-8 (PowerShell's `Get-Content`/`Set-Content` re-encode them). Node 22.12 or later. On Windows the lock file has no `@rolldown/binding-win32-x64-msvc`; install it with `npm i --no-save` so the lock file stays as CI expects.
 
 ## Gates
 
@@ -35,10 +35,12 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## In flight
 
-- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 done (PR #21 into `site-3d-lane`, CI green). Next: T2, T3, T4 (independent).
+- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T4 PR #24 waiting on CI. Next: T5.
 - Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
 
 ## Open questions
+
+- The copy gate let mojibake (`â†’`) through on a page. Add a check for broken encoding? (blocks: nothing in the lane; a separate fix)
 
 - The site says "four posts a day", but the 8 AM and 12 PM slots have been paused on purpose since 2026-11-24. Change `facts.json`? (blocks: nothing in the 3D lane; a separate fix)
 - Which real devices does the owner use for UAT (phone model, browsers)? (blocks: test-flight of the 3D lane)
@@ -46,6 +48,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## Log
 
+- 2026-11-28 3D lane T2, T3 done (lean: built solo, one combined check, 56k agent tokens for both); T4 built, 3 fixes in review, PR #24.
 - 2026-11-28 Scope change: governance, token guard, budget guard and evals apply to the AI builders (N7 to N10). Token ledger started; lean build rules from T2.
 - 2026-11-28 3D lane T1 done: test harness and CI (PR #21, merged into the lane). Tests 0 → 3 unit + 7 browser. Five fixes made in review (JOURNAL).
 - 2026-11-27 3D lane: blueprint approved by the owner (no new vendor, account or bill; Rs 0; mockup agreed). The owner asked not to stop between stages ("No need to stop. Let's rock"); merges to `main` and the UAT still wait for the owner.
