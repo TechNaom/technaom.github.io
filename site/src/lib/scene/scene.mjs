@@ -263,6 +263,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       }
     };
     cleanups.push(() => overlay?.replaceChildren());
+    cleanups.push(() => { html.removeAttribute("data-u3d-view"); html.removeAttribute("data-u3d-quiet"); });
     // Label sizes are measured when built; the web font may arrive later and widen them: build again then.
     doc.fonts?.ready?.then(() => {
       if (stopped) return;

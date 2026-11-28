@@ -263,3 +263,17 @@ test("normal mode launches pulses along the links as frames run", async () => {
   assert.ok(p.win.__u3d.pulses > 0, `pulses launched: ${p.win.__u3d.pulses}`);
   stop();
 });
+
+test("stop() removes the view and quiet markers it put on <html>", async () => {
+  const p = fakePage();
+  const quietDrift = { getAttribute: (k) => (k === "data-scene" ? "drift" : null), hasAttribute: (k) => k === "data-scene-quiet", getBoundingClientRect: () => ({ top: 0, bottom: 900 }) };
+  p.doc.sections = [quietDrift];
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer });
+  p.flush();
+  const { stop } = await pending;
+  assert.equal(p.attrs["data-u3d-view"], "drift");
+  assert.equal(p.attrs["data-u3d-quiet"], "");
+  stop();
+  assert.equal("data-u3d-view" in p.attrs, false);
+  assert.equal("data-u3d-quiet" in p.attrs, false);
+});
