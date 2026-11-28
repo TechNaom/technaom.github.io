@@ -71,7 +71,14 @@ export async function boot(doc = document, win = window, { load = () => import("
     if (mode === "test") win.__u3d = { data, view: null, tier: "full", progress: 0 };
     const { start } = await within(load(), limitMs);
     // T6 contract: start() cleans up after itself if it fails, and sets "on" itself after the first frame.
-    await within(start(canvas, data, { mode }), limitMs);
+    // If boot stops waiting, the abort tells the scene to stop itself, so a late start never turns "on".
+    const giveUp = new AbortController();
+    try {
+      await within(start(canvas, data, { mode, signal: giveUp.signal }), limitMs);
+    } catch (err) {
+      giveUp.abort();
+      throw err;
+    }
   } catch (err) {
     if (mode !== "normal") console.warn("[u3d] fallback:", err);
     stop("fallback");

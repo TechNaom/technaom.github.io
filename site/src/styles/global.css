@@ -48,6 +48,7 @@ html.u3d-on main, html.u3d-on footer { position: relative; z-index: 2; }
    sections set their background inline, so the tokens are redefined rather than overridden; the
    selector matches the dark theme's own, so it wins. Text never uses --paper: see --paper-solid. */
 :root[data-theme="dark"].u3d-on { --paper: transparent; --card: var(--glass); }
+html.u3d-on { background-color: var(--paper-solid); } /* behind the canvas while it fades in */
 html.u3d-on body { background: transparent; }
 html.u3d-on .night { background-color: var(--veil); }
 html.u3d-on [style*="var(--card)"] { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }

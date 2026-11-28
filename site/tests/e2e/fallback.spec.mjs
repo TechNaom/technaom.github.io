@@ -43,12 +43,14 @@ for (const route of ROUTES) {
       await expect(page.locator("h1")).toBeVisible();
     });
 
-    test("a normal start hands the scene its data (until T6 builds the scene, the stub falls back)", async ({ page }) => {
+    // The scene coming on, with its data, is scene.spec.mjs. This is the path between: it loads, then fails.
+    test("the scene loads but start() throws: fallback, canvas gone, text visible", async ({ page }) => {
+      await page.route(CHUNK, (r) => r.fulfill({ contentType: "text/javascript", body: 'export async function start() { throw new Error("start failed on purpose"); }' }));
       await page.goto(`${route}?u3d=test`);
       await expect(state(page)).toHaveAttribute("data-u3d-state", "fallback", { timeout: 15000 });
-      const data = await page.evaluate(() => window.__u3d?.data);
-      const json = JSON.parse(await page.locator("#u3d-data").textContent());
-      expect(data).toEqual(json);
+      await expect(page.locator("#u3d-canvas")).toHaveCount(0);
+      await expect(state(page)).not.toHaveClass(/u3d-on/);
+      await expect(page.locator("h1")).toBeVisible();
     });
   });
 }
