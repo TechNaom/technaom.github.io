@@ -50,6 +50,8 @@ html.u3d-on main, html.u3d-on footer { position: relative; z-index: 2; }
 :root[data-theme="dark"].u3d-on { --paper: transparent; --card: var(--glass); }
 html.u3d-on { background-color: var(--paper-solid); } /* behind the canvas while it fades in */
 html.u3d-on body { background: transparent; }
+/* A stage's label list: with the scene on, the scene shows the labels; the list stays for screen readers. */
+html.u3d-on .u3d-labels { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
 html.u3d-on .night { background-color: var(--veil); }
 html.u3d-on [style*="var(--card)"] { backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 html.u3d-on .hero-frame { fill-opacity: .55; }

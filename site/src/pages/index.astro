@@ -5,6 +5,7 @@ import log from "../data/log.json";
 import metrics from "../../../data/brand-metrics.json";
 import teams from "../data/teams.json";
 import ImpressionsChart from "../components/ImpressionsChart.astro";
+import StageLabels from "../components/StageLabels.astro";
 import { shift, slug, words } from "../lib/format";
 
 const w = facts.workforce;
@@ -17,6 +18,12 @@ const proof = [
   { n: fmt(w.postsPerDay * w.platforms), label: `Posts a day across ${w.platforms === 5 ? "five" : w.platforms} platforms` },
   { n: fmt(facts.bofa.awards), label: "Awards at Bank of America, including Platinum" },
   { n: fmt(facts.bofa.hoursSaved), label: "Engineer-hours saved a year at Bank of America" },
+];
+
+// The dial stage's labels (architecture point 7): every team with its schedule, and four hours.
+const dialItems = [
+  ...teams.map((t) => ({ anchor: `team:${slug(t.name)}`, name: t.name, detail: shift(t.shift) })),
+  ...[[0, "Midnight"], [6, "6 AM"], [12, "Noon"], [18, "6 PM"]].map(([h, name]) => ({ anchor: `hour:${h}`, name: String(name) })),
 ];
 
 const at = metrics.all_time;
@@ -135,6 +142,16 @@ const next = [
         </div>
       ))}
     </div>
+  </section>
+
+  <!-- Dial stage: the teams on a 24-hour clock (R12). The labels are the HTML list; the scene shows copies. -->
+  <section id="dial-stage" data-scene="dial" data-scene-labels class="wrap py-24 grid lg:grid-cols-[minmax(0,26rem)_1fr] gap-10 items-center">
+    <div class="grid gap-4 p-8 rounded-2xl border" style="background: var(--card); border-color: var(--rule)">
+      <p class="eyebrow" style="color: var(--amber)">Around the clock</p>
+      <h2 class="display text-4xl leading-tight">Every team on a 24-hour dial</h2>
+      <p style="color: var(--muted)">Teams with a daily start time sit on the inner ring, at their hour. The others run after each post, on set weekdays or on call, and sit on the outer ring.</p>
+    </div>
+    <StageLabels for="dial" label="Teams on a 24-hour clock" items={dialItems} />
   </section>
 
   <!-- The workforce -->

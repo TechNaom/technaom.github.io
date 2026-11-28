@@ -9,6 +9,7 @@ import {
 import { mulberry32 } from "./rng.mjs";
 import { buildNetwork } from "./network.mjs";
 import { pickView, viewFor } from "./views.mjs";
+import { layout } from "./layout.mjs";
 
 const MAX_PIXEL_RATIO = 1.5;
 const FADE_MS = 600;
@@ -26,10 +27,14 @@ const LOOK = {
 
 const nextFrame = (win) => new Promise((resolve) => win.requestAnimationFrame(() => resolve()));
 
-/** One InstancedMesh per node kind: four draw calls, whatever the node count. */
+/**
+ * One InstancedMesh per node kind: four draw calls, whatever the node count.
+ * slots[i] = { mesh, k }: where node i lives, so a morph can move it.
+ */
 function nodeMeshes(nodes, disposables) {
   const group = new Group();
   const dummy = new Object3D();
+  const slots = new Array(nodes.length);
   for (const [kind, look] of Object.entries(LOOK)) {
     const mine = nodes.filter((n) => n.kind === kind);
     if (!mine.length) continue;
@@ -43,10 +48,11 @@ function nodeMeshes(nodes, disposables) {
       dummy.updateMatrix();
       mesh.setMatrixAt(i, dummy.matrix);
     });
+    nodes.forEach((n, i) => n.kind === kind && (slots[i] = { mesh, k: mine.indexOf(n) }));
     mesh.instanceMatrix.needsUpdate = true;
     group.add(mesh);
   }
-  return group;
+  return { group, slots };
 }
 
 /** Every link in one LineSegments buffer: one draw call. */
@@ -107,10 +113,42 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     scene.background = new Color(BACKGROUND);
     const camera = new PerspectiveCamera(55, 1, 0.1, 100);
 
-    const { nodes, links } = buildNetwork(data, mulberry32(data.seed ?? 2026));
+    const net = buildNetwork(data, mulberry32(data.seed ?? 2026));
+    const { nodes, links } = net;
     const world = new Group();
-    world.add(nodeMeshes(nodes, disposables), linkLines(nodes, links, disposables));
+    const { group: nodeGroup, slots } = nodeMeshes(nodes, disposables);
+    const lines = linkLines(nodes, links, disposables);
+    // Nodes move between views, so cached bounding spheres go stale: always draw (a handful of draw calls).
+    lines.frustumCulled = false;
+    nodeGroup.children.forEach((m) => (m.frustumCulled = false));
+    world.add(nodeGroup, lines);
     scene.add(world);
+
+    // Node positions now, and a writer for them (a morph between views moves nodes, then their links).
+    let positions = layout(net, "network", data);
+    const dummy = new Object3D();
+    const setPositions = (pos) => {
+      positions = pos;
+      const touched = new Set();
+      slots.forEach(({ mesh, k }, i) => {
+        dummy.position.set(pos[i * 3], pos[i * 3 + 1], pos[i * 3 + 2]);
+        dummy.updateMatrix();
+        mesh.setMatrixAt(k, dummy.matrix);
+        touched.add(mesh);
+      });
+      for (const mesh of touched) mesh.instanceMatrix.needsUpdate = true;
+      const attr = lines.geometry.attributes.position;
+      links.forEach(([a, b], j) => {
+        attr.array.set(pos.subarray(a * 3, a * 3 + 3), j * 6);
+        attr.array.set(pos.subarray(b * 3, b * 3 + 3), j * 6 + 3);
+      });
+      attr.needsUpdate = true;
+    };
+    const mix = (from, to, k) => {
+      const out = new Float32Array(from.length);
+      for (let i = 0; i < from.length; i++) out[i] = from[i] + (to[i] - from[i]) * k;
+      return out;
+    };
 
     const reduced = !!win.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const rotate = mode !== "test" && !reduced;
@@ -153,11 +191,13 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
         phone = nowPhone;
         html.setAttribute("data-u3d-view", view);
         const to = poseFor(view);
+        const target = layout(net, view, data);
         if (first || jump) {
           move = null;
           pose = to;
+          if (!first || view !== "network") setPositions(target);
         } else {
-          move = { from: pose, to, t0: null };
+          move = { from: pose, to, posFrom: positions, posTo: target, t0: null };
         }
       }
       if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move });
@@ -174,6 +214,7 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
         const k = Math.min((t - move.t0) / MOVE_MS, 1);
         const e = ease(k);
         pose = { cam: lerp(move.from.cam, move.to.cam, e), tgt: lerp(move.from.tgt, move.to.tgt, e) };
+        setPositions(k >= 1 ? move.posTo : mix(move.posFrom, move.posTo, e));
         if (k >= 1) move = null;
         if (probe) probe.moving = !!move;
       }

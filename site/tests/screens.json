@@ -1,5 +1,5 @@
 [
-  {"route": "/", "heading": "A digital workforce that runs itself", "sections": [{"selector": "#hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
+  {"route": "/", "heading": "A digital workforce that runs itself", "sections": [{"selector": "#hero", "view": "network", "labels": false, "quiet": false}, {"selector": "#dial-stage", "view": "dial", "labels": true, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
   {"route": "/workforce", "heading": "Nobody here takes a day off", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
   {"route": "/architecture", "heading": "How the workforce runs itself", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
   {"route": "/growth", "heading": "The numbers, straight from LinkedIn", "sections": [{"selector": ".page-hero", "view": "network", "labels": false, "quiet": false}, {"selector": "footer", "view": "drift", "labels": false, "quiet": false}]},
