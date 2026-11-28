@@ -7,7 +7,7 @@ const view = (v) => Object.freeze({ offset: 0, dial: 0, journey: 0, opacity: 1, 
 export const VIEWS = Object.freeze({
   network: view({ camera: [0, 3, 22], target: [0, 0, 0], offset: 4 }),
   dial: view({ camera: [0, 12, 10], target: [0, 0, 0], dial: 1 }),
-  journey: view({ camera: [0, 2, 12], target: [0, 0, 0], journey: 1 }),
+  journey: view({ camera: [0, 2, 16], target: [0, 0, 0], journey: 1, offset: 5.5 }),
   drift: view({ camera: [0, -2, 24], target: [0, 0, 0], offset: 2, opacity: 0.7 }),
 });
 

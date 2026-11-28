@@ -69,6 +69,7 @@ test("viewFor: desktop offsets shift the network clear of the hero text; phones 
   assert.equal(viewFor("network", {}).offset, 4);
   assert.equal(viewFor("drift", {}).offset, 2);
   assert.equal(viewFor("dial", {}).offset, 0);
+  assert.equal(viewFor("journey", {}).offset, 5.5); // T10 review: the step arc must clear the stage card on the left
   const desk = viewFor("network", {}), phone = viewFor("network", { phone: true });
   assert.equal(phone.offset, 0);
   assert.ok(Math.abs(dist(phone) / dist(desk) - 1.6) < 1e-9, "phone distance factor (T8: 1.25 left the core on the intro text)");
