@@ -11,6 +11,9 @@ test("debug mode: pulses run, and a view change eases the camera", async ({ page
   await page.goto("/?u3d=debug");
   await expect(page.locator("html")).toHaveAttribute("data-u3d-state", "on", { timeout: 15_000 });
   await expect.poll(() => page.evaluate(() => window.__u3d.pulses), { timeout: 10_000 }).toBeGreaterThan(0);
+  // N4: the frame-rate readout, in the probe and on screen.
+  await expect.poll(() => page.evaluate(() => window.__u3d.fps), { timeout: 10_000 }).toBeGreaterThan(0);
+  await expect(page.locator("#u3d-debug")).toContainText("fps");
   await toStage(page);
   await expect(page.locator("html")).toHaveAttribute("data-u3d-view", "dial", { timeout: 10_000 });
   // A move can start and end between two polls on a slow software renderer: count eased moves instead.

@@ -6,6 +6,7 @@ import teams from "../../src/data/teams.json" with { type: "json" };
 import journey from "../../src/data/journey.json" with { type: "json" };
 import { buildSceneData } from "../../src/lib/scene/data.mjs";
 import { start } from "../../src/lib/scene/scene.mjs";
+import { viewFor } from "../../src/lib/scene/views.mjs";
 
 const data = buildSceneData(teams, journey);
 
@@ -35,8 +36,12 @@ function fakePage({ renderThrows = false, reduced = false } = {}) {
     matchMedia: (q) => ({ matches: reduced && q.includes("reduce") }),
     addEventListener: winL.addEventListener, removeEventListener: winL.removeEventListener,
   };
+  const fakeEl = () => ({ style: {}, offsetWidth: 60, offsetHeight: 20, className: "", children: [], setAttribute() {}, append(c) { this.children.push(c); }, replaceChildren() { this.children = []; }, remove() {} });
   const doc = {
-    hidden: false, defaultView: win, sections: [],
+    hidden: false, defaultView: win, sections: [], overlay: null,
+    getElementById(id) { return id === "u3d-overlay" ? this.overlay : null; },
+    createElement: () => fakeEl(),
+    body: fakeEl(),
     querySelectorAll(sel) { return sel === "[data-scene]" ? this.sections : []; },
     documentElement: {
       setAttribute: (k, v) => (attrs[k] = v),
@@ -56,7 +61,10 @@ function fakePage({ renderThrows = false, reduced = false } = {}) {
   };
   /** Run the animation frames queued so far, once. */
   const flush = () => { const due = [...frames]; frames.clear(); due.forEach(([, fn]) => fn(16)); };
-  return { win, doc, canvas, canvasL, renderer, attrs, classes, frames, flush, winL, docL, makeRenderer: () => renderer };
+  let clock = 0;
+  /** Run the queued frames once, `dt` ms after the last call (a clock that moves). */
+  const flushAt = (dt = 16) => { clock += dt; const due = [...frames]; frames.clear(); due.forEach(([, fn]) => fn(clock)); };
+  return { win, doc, canvas, canvasL, renderer, attrs, classes, frames, flush, flushAt, winL, docL, fakeEl, makeRenderer: () => renderer };
 }
 
 const tick = () => new Promise((r) => setImmediate(r));
@@ -276,4 +284,84 @@ test("stop() removes the view and quiet markers it put on <html>", async () => {
   stop();
   assert.equal("data-u3d-view" in p.attrs, false);
   assert.equal("data-u3d-quiet" in p.attrs, false);
+});
+
+// --- T15a: frame budget ---------------------------------------------------------------------------------
+
+const sectionOf = (view, top, bottom, { labels = false, quiet = false, inner = {} } = {}) => ({
+  rect: { top, bottom },
+  getAttribute: (k) => (k === "data-scene" ? view : null),
+  hasAttribute: (k) => (k === "data-scene-labels" ? labels : k === "data-scene-quiet" ? quiet : false),
+  getBoundingClientRect() { return { ...this.rect }; },
+  querySelectorAll: (sel) => inner[sel] ?? [],
+});
+
+test("idle motion is capped at 30 frames a second: 10 ms frames draw at most every fourth time", async () => {
+  const p = fakePage();
+  p.win.__u3d = {};
+  const pending = start(p.canvas, data, { mode: "normal", makeRenderer: p.makeRenderer });
+  p.flushAt(10);
+  const { stop } = await pending;
+  const before = p.renderer.renders;
+  for (let i = 0; i < 12; i++) p.flushAt(10);
+  assert.ok(p.renderer.renders - before <= 4, `drew ${p.renderer.renders - before} of 12 frames`);
+  assert.ok(p.renderer.renders - before >= 3, "still animating");
+  stop();
+});
+
+test("a quiet section pauses idle motion: no loop, no pulses", async () => {
+  const p = fakePage();
+  p.win.__u3d = {};
+  p.doc.sections = [sectionOf("drift", 0, 900, { quiet: true })];
+  const pending = start(p.canvas, data, { mode: "normal", makeRenderer: p.makeRenderer });
+  p.flushAt(40);
+  const { stop } = await pending;
+  for (let i = 0; i < 10; i++) p.flushAt(40);
+  assert.equal(p.frames.size, 0, "no loop while quiet");
+  assert.equal(p.win.__u3d.pulses, 0);
+  stop();
+});
+
+test("a view change in the middle of a move ends at the new view's pose", async () => {
+  const p = fakePage();
+  p.win.__u3d = {};
+  const net = sectionOf("network", 0, 600), dial = sectionOf("dial", 600, 1200), jour = sectionOf("journey", 1200, 1800);
+  p.doc.sections = [net, dial, jour];
+  const pending = start(p.canvas, data, { mode: "normal", makeRenderer: p.makeRenderer });
+  p.flushAt(40);
+  const { stop } = await pending;
+  const scrollTo = (y) => { for (const [el, top] of [[net, 0], [dial, 600], [jour, 1200]]) el.rect = { top: top - y, bottom: top + 600 - y }; p.winL.fire("scroll"); };
+  scrollTo(600); // dial in the middle: a move starts
+  p.flushAt(40);
+  p.flushAt(200); // part way
+  scrollTo(1200); // journey in the middle, before the dial move ends
+  for (let i = 0; i < 30; i++) p.flushAt(100);
+  const v = viewFor("journey", { phone: p.win.innerWidth < 900 });
+  const want = [v.camera[0] - v.offset, v.camera[1], v.camera[2]];
+  assert.equal(p.win.__u3d.view, "journey");
+  assert.equal(p.win.__u3d.moving, false);
+  p.win.__u3d.camera.forEach((c, i) => assert.ok(Math.abs(c - want[i]) < 1e-6, `camera[${i}] ${c} vs ${want[i]}`));
+  stop();
+});
+
+test("stage-card positions are read on scroll, not on every idle frame", async () => {
+  const p = fakePage();
+  p.win.__u3d = {};
+  p.doc.overlay = p.fakeEl();
+  let reads = 0;
+  const card = { getBoundingClientRect: () => (reads++, { top: 0, bottom: 100, left: 0, right: 100 }) };
+  const li = { getAttribute: () => "team:nobody", querySelector: () => ({ textContent: "A label" }) };
+  p.doc.sections = [sectionOf("dial", 0, 900, { labels: true, inner: { "[data-scene-card]": [card], "ol.u3d-labels li[data-anchor]": [li] } })];
+  const pending = start(p.canvas, data, { mode: "normal", makeRenderer: p.makeRenderer });
+  p.flushAt(40);
+  const { stop } = await pending;
+  reads = 0;
+  for (let i = 0; i < 8; i++) p.flushAt(40); // idle frames, no scroll
+  assert.equal(reads, 0, "no card reads on idle frames");
+  p.winL.fire("scroll");
+  p.winL.fire("scroll");
+  p.winL.fire("scroll");
+  p.flushAt(40);
+  assert.equal(reads, 1, "one read for a burst of scroll events");
+  stop();
 });
