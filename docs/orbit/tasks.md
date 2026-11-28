@@ -37,7 +37,7 @@ unless they start with `cd`.
 | T10 ✅ | `journey` view, `journey.json`, tall stage with sticky card, scroll progress | R12, R13 | unit: progress; e2e: progress 0, 0.5, 1 screenshots | Playwright passes | T9 | M | #10 |
 | T11 ✅ | Labels overlay: projection, hide behind camera, phone layout (under 900px) | R12, R13 | e2e at 1280×800 and 390×844: labels in viewport, none overlapping | Playwright passes | T10 | M | #11 |
 | T12 ✅ | Quiet sections (`data-scene-quiet`) on workforce, architecture, notebook | R18 | e2e: opacity factor 0.4 on the named selectors | Playwright passes | T8 | S | #12 |
-| T13 | Signals and reduced motion | R11, R15 | e2e: pulses counted in test mode; with `reducedMotion: "reduce"` none, camera jumps | Playwright passes | T8 | S | #13 |
+| T13 ✅ | Signals and reduced motion | R11, R15 | e2e: pulses counted in test mode; with `reducedMotion: "reduce"` none, camera jumps | Playwright passes | T8 | S | #13 |
 | T14 | Views guide `src/lib/scene/README.md`; one page uses views with no script of its own | R10 | unit: every view named in the guide exists in the registry | `node --test tests/unit` passes | T8 | S | #14 |
 
 ### M2 conventions (all cards)
@@ -49,7 +49,7 @@ unless they start with `cd`.
   until it settles, then stops. A running loop exists only for idle motion (rotation, T13 pulses).
 - **Modes:** `?u3d=test` pins the tier, freezes idle motion (no rotation, no pulses) and makes every move a jump, so
   screenshots match on every run (architecture point 2). `?u3d=debug` runs normally (idle motion, easing) and shows
-  the frame rate. Both expose `window.__u3d` `{ data, view, tier, progress, quiet, moving, pulses }`.
+  the frame rate. Both expose `window.__u3d` `{ data, view, tier, progress, quiet, opacity, moving, eased, pulses }` (`eased` counts eased camera moves: a move can start and end between two polls on a software renderer).
 - State on `<html>`: `data-u3d-state`, `data-u3d-view`, `data-u3d-tier`, and from T12 `data-u3d-quiet` (present while
   a quiet section is in the middle).
 - Layers are fixed (architecture point 4): canvas `-1`, label overlay `1`, `main` and `footer` `2`, header `40`. Labels
