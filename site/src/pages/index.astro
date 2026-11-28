@@ -4,6 +4,7 @@ import facts from "../data/facts.json";
 import log from "../data/log.json";
 import metrics from "../../../data/brand-metrics.json";
 import teams from "../data/teams.json";
+import journey from "../data/journey.json";
 import ImpressionsChart from "../components/ImpressionsChart.astro";
 import StageLabels from "../components/StageLabels.astro";
 import { shift, slug, words } from "../lib/format";
@@ -25,6 +26,9 @@ const dialItems = [
   ...teams.map((t) => ({ anchor: `team:${slug(t.name)}`, name: t.name, detail: shift(t.shift) })),
   ...[[0, "Midnight"], [6, "6 AM"], [12, "Noon"], [18, "6 PM"]].map(([h, name]) => ({ anchor: `hour:${h}`, name: String(name) })),
 ];
+
+// The journey stage's labels: one post's path, from journey.json (the hero diagram reads the same file).
+const journeyItems = journey.map((s) => ({ anchor: `step:${s.id}`, name: s.name, detail: s.detail || undefined }));
 
 const at = metrics.all_time;
 const months = metrics.months.slice(-12);
@@ -105,10 +109,9 @@ const next = [
           <path d="M114 136 V176 M114 226 V266 M114 316 V356" class="lnA flow" />
 
           <!-- stages -->
-          <rect x="28" y="90" width="172" height="46" rx="9" class="box" /><text x="44" y="111" class="t">Clock</text><text x="44" y="127" class="tm">Four slots a day</text>
-          <rect x="28" y="180" width="172" height="46" rx="9" class="boxA" /><text x="44" y="201" class="t">Agent team</text><text x="44" y="217" class="tm">Planner, scouts, writer</text>
-          <rect x="28" y="270" width="172" height="46" rx="9" class="boxA" /><text x="44" y="291" class="t">Critic</text><text x="44" y="307" class="tm">Four judges</text>
-          <rect x="28" y="360" width="172" height="46" rx="9" class="boxA" /><text x="44" y="381" class="t">LinkedIn</text><text x="44" y="397" class="tm">Then four more platforms</text>
+          {journey.slice(0, 4).map((s, i) => (
+            <Fragment><rect x="28" y={90 + i * 90} width="172" height="46" rx="9" class={i ? "boxA" : "box"} /><text x="44" y={111 + i * 90} class="t">{s.name}</text><text x="44" y={127 + i * 90} class="tm">{s.detail}</text></Fragment>
+          ))}
 
           <!-- branches -->
           <path d="M200 113 H244" class="lnA" marker-end="url(#ha)" />
@@ -152,6 +155,18 @@ const next = [
       <p style="color: var(--muted)">Teams with a daily start time sit on the inner ring, at their hour. The others run after each post, on set weekdays or on call, and sit on the outer ring.</p>
     </div>
     <StageLabels for="dial" label="Teams on a 24-hour clock" items={dialItems} />
+  </section>
+
+  <!-- Journey stage: one post's path, played by scrolling (R12). Tall, with a sticky card that stays readable. -->
+  <section id="journey-stage" data-scene="journey" data-scene-labels class="relative" style="height: 170vh">
+    <div class="sticky top-24 wrap py-10">
+      <div class="grid gap-4 p-8 rounded-2xl border max-w-[26rem]" style="background: var(--card); border-color: var(--rule)">
+        <p class="eyebrow" style="color: var(--amber)">One post, start to finish</p>
+        <h2 class="display text-4xl leading-tight">Follow a post through the workforce</h2>
+        <p style="color: var(--muted)">A clock starts the team, the agents write, the critic checks, and the post goes to LinkedIn first, then to four more platforms.</p>
+        <StageLabels for="journey" label="The steps of one post" items={journeyItems} />
+      </div>
+    </div>
   </section>
 
   <!-- The workforce -->

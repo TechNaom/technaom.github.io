@@ -4,12 +4,13 @@
 import {
   WebGLRenderer, Scene, PerspectiveCamera, Color, Object3D, Group,
   InstancedMesh, IcosahedronGeometry, MeshBasicMaterial,
-  BufferGeometry, Float32BufferAttribute, LineSegments, LineBasicMaterial,
+  BufferGeometry, Float32BufferAttribute, LineSegments, LineBasicMaterial, Line, Mesh,
 } from "three";
 import { mulberry32 } from "./rng.mjs";
 import { buildNetwork } from "./network.mjs";
 import { pickView, viewFor } from "./views.mjs";
 import { layout } from "./layout.mjs";
+import { journeyAt, journeyPoints } from "./journey.mjs";
 
 const MAX_PIXEL_RATIO = 1.5;
 const FADE_MS = 600;
@@ -53,6 +54,37 @@ function nodeMeshes(nodes, disposables) {
     group.add(mesh);
   }
   return { group, slots };
+}
+
+/**
+ * The journey's steps (R12): small amber nodes on an arc, a line through them and a pulse that travels it.
+ * Shown only in a journey section that also has data-scene-labels (the home stage).
+ */
+function journeyParts(steps, disposables) {
+  const group = new Group();
+  group.visible = false;
+  const points = journeyPoints(steps);
+  if (!points.length) return { group, points, pulse: null };
+  const dot = new IcosahedronGeometry(0.2, 1);
+  const amber = new MeshBasicMaterial({ color: 0xf4a640 });
+  const dots = new InstancedMesh(dot, amber, points.length);
+  const dummy = new Object3D();
+  points.forEach((p, i) => {
+    dummy.position.set(p[0], p[1], p[2]);
+    dummy.updateMatrix();
+    dots.setMatrixAt(i, dummy.matrix);
+  });
+  const path = new BufferGeometry();
+  path.setAttribute("position", new Float32BufferAttribute(points.flat(), 3));
+  const pathMat = new LineBasicMaterial({ color: 0xf4a640, transparent: true, opacity: 0.5 });
+  const pulseGeo = new IcosahedronGeometry(0.32, 2);
+  const pulseMat = new MeshBasicMaterial({ color: 0x7fd0ea });
+  const pulse = new Mesh(pulseGeo, pulseMat);
+  pulse.position.set(...points[0]);
+  disposables.push(dot, amber, dots, path, pathMat, pulseGeo, pulseMat);
+  group.add(dots, new Line(path, pathMat), pulse);
+  group.traverse((o) => (o.frustumCulled = false));
+  return { group, points, pulse };
 }
 
 /** Every link in one LineSegments buffer: one draw call. */
@@ -123,6 +155,13 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     nodeGroup.children.forEach((m) => (m.frustumCulled = false));
     world.add(nodeGroup, lines);
     scene.add(world);
+    const journey = journeyParts(data.journey || [], disposables);
+    world.add(journey.group);
+    const placePulse = (progress) => {
+      const { step, t } = journeyAt(progress, journey.points.length);
+      const a = journey.points[step], b = journey.points[Math.min(step + 1, journey.points.length - 1)];
+      journey.pulse.position.set(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t);
+    };
 
     // Node positions now, and a writer for them (a morph between views moves nodes, then their links).
     let positions = layout(net, "network", data);
@@ -200,6 +239,8 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
           move = { from: pose, to, posFrom: positions, posTo: target, t0: null };
         }
       }
+      journey.group.visible = view === "journey" && picked.labels && !!journey.pulse;
+      if (journey.group.visible) placePulse(picked.progress);
       if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move });
     };
 
