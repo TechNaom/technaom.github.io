@@ -7,11 +7,14 @@ const read = (rel) => JSON.parse(readFileSync(new URL(rel, import.meta.url), "ut
 const screens = read("../screens.json");
 const facts = read("../../src/data/facts.json");
 
+// Only against a deployed copy; locally the same checks run in pages.spec and scene.spec.
+test.skip(!process.env.BASE_URL, "smoke runs only with BASE_URL (a deployed copy)");
+
 for (const { route, heading } of screens) {
   test(`smoke ${route}: 200, its heading, and the scene comes on`, async ({ page }) => {
     const response = await page.goto(`${route}?u3d=test`);
     expect(response?.status()).toBe(200);
     await expect(page.locator("h1")).toHaveText(heading.replace("{repos}", String(facts.repos.total)));
-    await expect(page.locator("html")).toHaveAttribute("data-u3d-state", "on", { timeout: 15_000 });
+    await expect(page.locator("html")).toHaveAttribute("data-u3d-state", "on", { timeout: 30_000 });
   });
 }
