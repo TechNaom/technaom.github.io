@@ -178,28 +178,31 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     let pulses = 0;
     const pulseDummy = new Object3D();
     const stepPulses = (dt) => {
-      pulseState.forEach((st, i) => {
+      if (!links.length) return;
+      for (let i = 0; i < PULSES; i++) { // a plain loop: no closures or arrays per frame
+        const st = pulseState[i];
         if (st.t >= 1) {
-          if (!links.length || pulseRand() > dt / 400) { // launch about one every 400 ms per free slot
+          if (pulseRand() > dt / 400) { // a free slot launches about once every 400 ms
             pulseDummy.position.set(0, 0, -1000);
-          } else {
-            Object.assign(st, { link: Math.floor(pulseRand() * links.length), t: 0, speed: 0.0004 + pulseRand() * 0.0006 });
-            pulses++;
+            pulseDummy.updateMatrix();
+            pulseMesh.setMatrixAt(i, pulseDummy.matrix);
+            continue;
           }
+          st.link = Math.floor(pulseRand() * links.length);
+          st.t = 0;
+          st.speed = 0.0004 + pulseRand() * 0.0006;
+          pulses++;
         }
-        if (st.t < 1) {
-          const [a, b] = links[st.link];
-          const k = st.t;
-          pulseDummy.position.set(
-            positions[a * 3] + (positions[b * 3] - positions[a * 3]) * k,
-            positions[a * 3 + 1] + (positions[b * 3 + 1] - positions[a * 3 + 1]) * k,
-            positions[a * 3 + 2] + (positions[b * 3 + 2] - positions[a * 3 + 2]) * k,
-          );
-          st.t += dt * st.speed;
-        }
+        const link = links[st.link], a = link[0] * 3, b = link[1] * 3, k = st.t;
+        pulseDummy.position.set(
+          positions[a] + (positions[b] - positions[a]) * k,
+          positions[a + 1] + (positions[b + 1] - positions[a + 1]) * k,
+          positions[a + 2] + (positions[b + 2] - positions[a + 2]) * k,
+        );
+        st.t += dt * st.speed;
         pulseDummy.updateMatrix();
         pulseMesh.setMatrixAt(i, pulseDummy.matrix);
-      });
+      }
       pulseMesh.instanceMatrix.needsUpdate = true;
       if (probe) probe.pulses = pulses;
     };
