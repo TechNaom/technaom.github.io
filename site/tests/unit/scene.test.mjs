@@ -21,6 +21,7 @@ function listeners() {
 }
 
 function fakePage({ renderThrows = false } = {}) {
+  const canvasL = listeners();
   const attrs = {};
   const classes = new Set();
   const frames = new Map();
@@ -43,7 +44,6 @@ function fakePage({ renderThrows = false } = {}) {
     },
     addEventListener: docL.addEventListener, removeEventListener: docL.removeEventListener,
   };
-  const canvasL = listeners();
   const canvas = { ownerDocument: doc, isConnected: true, style: {}, addEventListener: canvasL.addEventListener, removeEventListener: canvasL.removeEventListener };
   const renderer = {
     renders: 0, lost: 0, disposed: 0, pixelRatio: null,
@@ -51,7 +51,7 @@ function fakePage({ renderThrows = false } = {}) {
     setSize() {},
     render() { if (renderThrows) throw new Error("shader failed"); this.renders++; },
     dispose() { this.disposed++; },
-    forceContextLoss() { this.lost++; },
+    forceContextLoss() { this.lost++; canvasL.fire("webglcontextlost"); }, // a real browser fires it too
   };
   /** Run the animation frames queued so far, once. */
   const flush = () => { const due = [...frames]; frames.clear(); due.forEach(([, fn]) => fn(16)); };
@@ -143,11 +143,15 @@ test("a moving scene (normal mode) keeps a loop and pauses while the tab is hidd
   assert.equal(p.frames.size, 0);
 });
 
-const section = (view, top, bottom) => ({
-  getAttribute: (k) => (k === "data-scene" ? view : null),
-  hasAttribute: () => false,
-  getBoundingClientRect: () => ({ top, bottom }),
-});
+const section = (view, top, bottom) => {
+  const el = {
+    rect: { top, bottom },
+    getAttribute: (k) => (k === "data-scene" ? view : null),
+    hasAttribute: () => false,
+    getBoundingClientRect: () => ({ ...el.rect }),
+  };
+  return el;
+};
 
 test("losing the WebGL context stops the scene and calls onLost once", async () => {
   const p = fakePage();
@@ -169,8 +173,39 @@ test("the section in the middle of the screen sets data-u3d-view; scrolling chan
   p.flush();
   await pending;
   assert.equal(p.attrs["data-u3d-view"], "network");
-  p.doc.sections = [section("network", -700, 0), section("dial", 0, 900)];
+  // Scrolling moves the same elements up by 700 px.
+  for (const el of p.doc.sections) el.rect = { top: el.rect.top - 700, bottom: el.rect.bottom - 700 };
   p.winL.fire("scroll");
   p.flush();
   assert.equal(p.attrs["data-u3d-view"], "dial");
+});
+
+test("many scroll events in one frame read the layout once; sections are queried once", async () => {
+  const p = fakePage();
+  let reads = 0, queries = 0;
+  const s = { getAttribute: () => "network", hasAttribute: () => false, getBoundingClientRect: () => (reads++, { top: 0, bottom: 900 }) };
+  p.doc.sections = [s];
+  const q = p.doc.querySelectorAll.bind(p.doc);
+  p.doc.querySelectorAll = (sel) => (queries++, q(sel));
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer });
+  p.flush();
+  await pending;
+  reads = 0;
+  p.winL.fire("scroll");
+  p.winL.fire("scroll");
+  p.winL.fire("scroll");
+  p.flush();
+  assert.equal(reads, 1);
+  assert.equal(queries, 1);
+});
+
+test("if clean-up throws on a lost context, onLost still runs", async () => {
+  const p = fakePage();
+  let lost = 0;
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer, onLost: () => lost++ });
+  p.flush();
+  await pending;
+  p.renderer.dispose = () => { throw new Error("context gone"); };
+  assert.throws(() => p.canvasL.fire("webglcontextlost"));
+  assert.equal(lost, 1);
 });

@@ -25,7 +25,7 @@ export const PHONE_LIFT = 5;
  */
 export function viewFor(name, { phone = false } = {}) {
   const v = VIEWS[resolveView(name)];
-  if (!phone) return { ...v };
+  if (!phone) return { ...v, camera: [...v.camera], target: [...v.target] };
   const camera = v.camera.map((c, i) => v.target[i] + (c - v.target[i]) * PHONE_DISTANCE + (i === 1 ? PHONE_LIFT : 0));
   const target = v.target.map((t, i) => t + (i === 1 ? PHONE_LIFT : 0));
   return { ...v, camera, target, offset: 0 };

@@ -135,9 +135,10 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     let view = null;
     let phone = null;
     let needRead = true;
+    const sectionEls = [...doc.querySelectorAll("[data-scene]")]; // static pages: query once
     const readSections = () => {
       needRead = false;
-      const sections = [...doc.querySelectorAll("[data-scene]")].map((el) => {
+      const sections = sectionEls.map((el) => {
         const r = el.getBoundingClientRect();
         return {
           top: r.top, bottom: r.bottom, view: el.getAttribute("data-scene"),
@@ -211,11 +212,13 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     win.addEventListener("scroll", onScroll, { passive: true });
     cleanups.push(() => win.removeEventListener("scroll", onScroll));
     // The browser can take the context away (GPU reset, too many tabs): stop and let boot fall back.
-    const onContextLost = (e) => {
-      e?.preventDefault?.();
+    const onContextLost = () => {
       if (stopped) return;
-      stop();
-      onLost?.();
+      try {
+        stop();
+      } finally {
+        onLost?.(); // fall back even if clean-up fails on a dead context
+      }
     };
     canvas.addEventListener("webglcontextlost", onContextLost);
     cleanups.push(() => canvas.removeEventListener("webglcontextlost", onContextLost));

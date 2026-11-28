@@ -74,7 +74,9 @@ test("viewFor: desktop offsets shift the network clear of the hero text; phones 
   assert.ok(Math.abs(dist(phone) / dist(desk) - 1.6) < 1e-9, "phone distance factor (T8: 1.25 left the core on the intro text)");
   assert.deepEqual(viewFor("nope", {}), viewFor("drift", {}));
   // Phones look higher, so the network sits below the hero text (T8 screenshot at 390x844).
-  assert.equal(phone.target[1] - desk.target[1], PHONE_LIFT);
-  assert.equal(phone.camera[1] - (desk.target[1] + (desk.camera[1] - desk.target[1]) * 1.6), PHONE_LIFT);
+  assert.ok(Math.abs(phone.target[1] - desk.target[1] - PHONE_LIFT) < 1e-9);
+  assert.ok(Math.abs(phone.camera[1] - (desk.target[1] + (desk.camera[1] - desk.target[1]) * 1.6) - PHONE_LIFT) < 1e-9);
+  desk.camera[0] = 99; // a copy: changing it must not change the registry
+  assert.notEqual(viewFor("network", {}).camera[0], 99);
   assert.ok(PHONE_LIFT > 0);
 });
