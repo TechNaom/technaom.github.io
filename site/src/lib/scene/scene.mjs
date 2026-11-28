@@ -8,9 +8,12 @@ import {
 } from "three";
 import { mulberry32 } from "./rng.mjs";
 import { buildNetwork } from "./network.mjs";
+import { pickView, viewFor } from "./views.mjs";
 
 const MAX_PIXEL_RATIO = 1.5;
 const FADE_MS = 600;
+const MOVE_MS = 800;
+const PHONE_MAX = 900;
 const BACKGROUND = 0x0f1828; // --paper in the dark theme
 
 // Colours come from the site's dark palette (--amber, --cyan, --muted).
@@ -61,12 +64,14 @@ function linkLines(nodes, links, disposables) {
 }
 
 /**
- * start(canvas, data, { mode, signal }) → Promise<{ stop() }>.
+ * start(canvas, data, { mode, signal, onLost }) → Promise<{ stop() }>.
  * mode "test" keeps the scene still (no idle rotation), so checks and screenshots see one picture.
  * signal: boot aborts it when it stops waiting; the scene then stops itself and never turns "on".
+ * onLost: called once if the browser takes the WebGL context away later; boot falls back.
+ * The view follows the [data-scene] section in the middle of the screen (views.mjs).
  * makeRenderer exists for unit tests (Node has no WebGL).
  */
-export async function start(canvas, data, { mode = "normal", signal, makeRenderer } = {}) {
+export async function start(canvas, data, { mode = "normal", signal, onLost, makeRenderer } = {}) {
   const doc = canvas.ownerDocument;
   const win = doc.defaultView;
   const html = doc.documentElement;
@@ -101,8 +106,6 @@ export async function start(canvas, data, { mode = "normal", signal, makeRendere
     const scene = new Scene();
     scene.background = new Color(BACKGROUND);
     const camera = new PerspectiveCamera(55, 1, 0.1, 100);
-    camera.position.set(0, 3, 22);
-    camera.lookAt(0, 0, 0);
 
     const { nodes, links } = buildNetwork(data, mulberry32(data.seed ?? 2026));
     const world = new Group();
@@ -111,16 +114,73 @@ export async function start(canvas, data, { mode = "normal", signal, makeRendere
 
     const reduced = !!win.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
     const rotate = mode !== "test" && !reduced;
+    const jump = mode === "test" || reduced; // no easing: tests read a settled state, and reduced motion asks for it
+    const probe = win.__u3d; // set by boot in test and debug mode only
     let last = 0;
+
+    // Camera pose per view. The offset moves camera and target left together, so the network sits right.
+    const poseFor = (name) => {
+      const v = viewFor(name, { phone: win.innerWidth < PHONE_MAX });
+      return { cam: [v.camera[0] - v.offset, v.camera[1], v.camera[2]], tgt: [v.target[0] - v.offset, v.target[1], v.target[2]] };
+    };
+    let pose = poseFor("network");
+    let move = null; // { from, to, t0 } while easing
+    const apply = () => {
+      camera.position.set(pose.cam[0], pose.cam[1], pose.cam[2]);
+      camera.lookAt(pose.tgt[0], pose.tgt[1], pose.tgt[2]);
+    };
+    const lerp = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
+    const ease = (k) => (k < 0.5 ? 2 * k * k : 1 - (-2 * k + 2) ** 2 / 2);
+
+    let view = null;
+    let phone = null;
+    let needRead = true;
+    const readSections = () => {
+      needRead = false;
+      const sections = [...doc.querySelectorAll("[data-scene]")].map((el) => {
+        const r = el.getBoundingClientRect();
+        return {
+          top: r.top, bottom: r.bottom, view: el.getAttribute("data-scene"),
+          labels: el.hasAttribute("data-scene-labels"), quiet: el.hasAttribute("data-scene-quiet"),
+        };
+      });
+      const picked = pickView(sections, win.innerHeight);
+      const nowPhone = win.innerWidth < PHONE_MAX;
+      if (picked.view !== view || nowPhone !== phone) {
+        const first = view === null;
+        view = picked.view;
+        phone = nowPhone;
+        html.setAttribute("data-u3d-view", view);
+        const to = poseFor(view);
+        if (first || jump) {
+          move = null;
+          pose = to;
+        } else {
+          move = { from: pose, to, t0: null };
+        }
+      }
+      if (probe) Object.assign(probe, { view, progress: picked.progress, moving: !!move });
+    };
+
     const draw = () => renderer && renderer.render(scene, camera);
-    // A moving scene keeps a loop while the tab is visible; a still one draws only when something changes.
+    // A loop runs only while something moves (idle rotation, a camera move); otherwise one draw per change.
     const frame = (t) => {
       raf = 0;
       if (stopped) return;
+      if (needRead) readSections();
+      if (move) {
+        if (move.t0 === null) move.t0 = t;
+        const k = Math.min((t - move.t0) / MOVE_MS, 1);
+        const e = ease(k);
+        pose = { cam: lerp(move.from.cam, move.to.cam, e), tgt: lerp(move.from.tgt, move.to.tgt, e) };
+        if (k >= 1) move = null;
+        if (probe) probe.moving = !!move;
+      }
+      apply();
       if (rotate && last) world.rotation.y += Math.min(t - last, 50) * 0.00004;
       last = t;
       draw();
-      if (rotate && !doc.hidden) raf = win.requestAnimationFrame(frame);
+      if ((rotate || move) && !doc.hidden) raf = win.requestAnimationFrame(frame);
     };
     const requestDraw = () => {
       if (!raf && !stopped && !doc.hidden) raf = win.requestAnimationFrame(frame);
@@ -128,6 +188,7 @@ export async function start(canvas, data, { mode = "normal", signal, makeRendere
 
     const resize = () => {
       const w = win.innerWidth, h = win.innerHeight;
+      needRead = true;
       renderer.setSize(w, h, false); // clears the drawing buffer: draw again
       camera.aspect = w / Math.max(h, 1);
       camera.updateProjectionMatrix();
@@ -142,8 +203,26 @@ export async function start(canvas, data, { mode = "normal", signal, makeRendere
     };
     doc.addEventListener("visibilitychange", onVisibility);
     cleanups.push(() => doc.removeEventListener("visibilitychange", onVisibility));
+    // One layout read per animation frame, however many scroll events arrive.
+    const onScroll = () => {
+      needRead = true;
+      requestDraw();
+    };
+    win.addEventListener("scroll", onScroll, { passive: true });
+    cleanups.push(() => win.removeEventListener("scroll", onScroll));
+    // The browser can take the context away (GPU reset, too many tabs): stop and let boot fall back.
+    const onContextLost = (e) => {
+      e?.preventDefault?.();
+      if (stopped) return;
+      stop();
+      onLost?.();
+    };
+    canvas.addEventListener("webglcontextlost", onContextLost);
+    cleanups.push(() => canvas.removeEventListener("webglcontextlost", onContextLost));
 
     if (raf) win.cancelAnimationFrame(raf), (raf = 0); // the first draw below replaces resize's request
+    readSections();
+    apply();
     draw(); // a throw here (shader, context) lands in catch: the page stays static
     // A background tab gets no animation frames; the frame above is drawn, so do not wait for one there.
     if (!doc.hidden) await nextFrame(win);

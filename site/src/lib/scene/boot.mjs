@@ -51,6 +51,7 @@ export async function boot(doc = document, win = window, { load = () => import("
   const canvas = doc.getElementById("u3d-canvas");
   const stop = (s) => {
     html.classList.remove("u3d-on");
+    html.removeAttribute("data-u3d-tier");
     canvas?.remove();
     state(s);
   };
@@ -68,13 +69,13 @@ export async function boot(doc = document, win = window, { load = () => import("
     if (decision !== "start") return stop(decision);
     state("loading");
     const data = JSON.parse(dataEl.textContent || "{}");
-    if (mode === "test") win.__u3d = { data, view: null, tier: "full", progress: 0 };
+    if (mode !== "normal") win.__u3d = { data, view: null, tier: "full", progress: 0, quiet: false, moving: false, pulses: 0 };
     const { start } = await within(load(), limitMs);
     // T6 contract: start() cleans up after itself if it fails, and sets "on" itself after the first frame.
     // If boot stops waiting, the abort tells the scene to stop itself, so a late start never turns "on".
     const giveUp = new AbortController();
     try {
-      await within(start(canvas, data, { mode, signal: giveUp.signal }), limitMs);
+      await within(start(canvas, data, { mode, signal: giveUp.signal, onLost: () => stop("fallback") }), limitMs);
     } catch (err) {
       giveUp.abort();
       throw err;

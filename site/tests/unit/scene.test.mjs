@@ -35,14 +35,16 @@ function fakePage({ renderThrows = false } = {}) {
     addEventListener: winL.addEventListener, removeEventListener: winL.removeEventListener,
   };
   const doc = {
-    hidden: false, defaultView: win,
+    hidden: false, defaultView: win, sections: [],
+    querySelectorAll(sel) { return sel === "[data-scene]" ? this.sections : []; },
     documentElement: {
       setAttribute: (k, v) => (attrs[k] = v),
       classList: { add: (c) => classes.add(c), remove: (c) => classes.delete(c) },
     },
     addEventListener: docL.addEventListener, removeEventListener: docL.removeEventListener,
   };
-  const canvas = { ownerDocument: doc, isConnected: true, style: {} };
+  const canvasL = listeners();
+  const canvas = { ownerDocument: doc, isConnected: true, style: {}, addEventListener: canvasL.addEventListener, removeEventListener: canvasL.removeEventListener };
   const renderer = {
     renders: 0, lost: 0, disposed: 0, pixelRatio: null,
     setPixelRatio(r) { this.pixelRatio = r; },
@@ -53,7 +55,7 @@ function fakePage({ renderThrows = false } = {}) {
   };
   /** Run the animation frames queued so far, once. */
   const flush = () => { const due = [...frames]; frames.clear(); due.forEach(([, fn]) => fn(16)); };
-  return { win, doc, canvas, renderer, attrs, classes, frames, flush, winL, docL, makeRenderer: () => renderer };
+  return { win, doc, canvas, canvasL, renderer, attrs, classes, frames, flush, winL, docL, makeRenderer: () => renderer };
 }
 
 const tick = () => new Promise((r) => setImmediate(r));
@@ -139,4 +141,36 @@ test("a moving scene (normal mode) keeps a loop and pauses while the tab is hidd
   assert.ok(p.frames.size > 0, "resumed when visible");
   stop();
   assert.equal(p.frames.size, 0);
+});
+
+const section = (view, top, bottom) => ({
+  getAttribute: (k) => (k === "data-scene" ? view : null),
+  hasAttribute: () => false,
+  getBoundingClientRect: () => ({ top, bottom }),
+});
+
+test("losing the WebGL context stops the scene and calls onLost once", async () => {
+  const p = fakePage();
+  let lost = 0;
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer, onLost: () => lost++ });
+  p.flush();
+  await pending;
+  p.canvasL.fire("webglcontextlost");
+  assert.equal(lost, 1);
+  assert.equal(p.winL.count() + p.docL.count() + p.canvasL.count(), 0);
+  assert.equal(p.renderer.lost, 1);
+  assert.equal(p.frames.size, 0);
+});
+
+test("the section in the middle of the screen sets data-u3d-view; scrolling changes it", async () => {
+  const p = fakePage();
+  p.doc.sections = [section("network", 0, 700), section("dial", 700, 1600)];
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer });
+  p.flush();
+  await pending;
+  assert.equal(p.attrs["data-u3d-view"], "network");
+  p.doc.sections = [section("network", -700, 0), section("dial", 0, 900)];
+  p.winL.fire("scroll");
+  p.flush();
+  assert.equal(p.attrs["data-u3d-view"], "dial");
 });

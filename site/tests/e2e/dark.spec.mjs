@@ -11,7 +11,8 @@ for (const { route } of screens) {
 }
 
 // Under u3d-on, --paper and --card turn see-through; no text may vanish with them, and sticky
-// bars must keep a backing. The class is added by hand here; T5 and T6 add the real scene.
+// bars must keep a backing. The test adds the class itself once boot settles, so pages where the
+// scene falls back are checked too; scene.spec covers the real start.
 for (const { route } of screens) {
   test(`${route} keeps every text visible when the scene is on`, async ({ page }) => {
     await page.goto(route);
