@@ -35,7 +35,7 @@ unless they start with `cd`.
 | T8 ✅ | Camera per view, with `network` and `drift`; `data-scene` on every page from `screens.json` | R10 | e2e: scroll each route, `data-u3d-view` matches `screens.json` | Playwright passes | T6 | M | #8 |
 | T9 ✅ | `dial` view and `StageLabels.astro`; home dial stage | R12, R13 | e2e: dial labels in HTML and placed; copy gate reads them | Playwright and copy gate pass | T8 | M | #9 |
 | T10 ✅ | `journey` view, `journey.json`, tall stage with sticky card, scroll progress | R12, R13 | unit: progress; e2e: progress 0, 0.5, 1 screenshots | Playwright passes | T9 | M | #10 |
-| T11 | Labels overlay: projection, hide behind camera, phone layout (under 900px) | R12, R13 | e2e at 1280×800 and 390×844: labels in viewport, none overlapping | Playwright passes | T10 | M | #11 |
+| T11 ✅ | Labels overlay: projection, hide behind camera, phone layout (under 900px) | R12, R13 | e2e at 1280×800 and 390×844: labels in viewport, none overlapping | Playwright passes | T10 | M | #11 |
 | T12 | Quiet sections (`data-scene-quiet`) on workforce, architecture, notebook | R18 | e2e: opacity factor 0.4 on the named selectors | Playwright passes | T8 | S | #12 |
 | T13 | Signals and reduced motion | R11, R15 | e2e: pulses counted in test mode; with `reducedMotion: "reduce"` none, camera jumps | Playwright passes | T8 | S | #13 |
 | T14 | Views guide `src/lib/scene/README.md`; one page uses views with no script of its own | R10 | unit: every view named in the guide exists in the registry | `node --test tests/unit` passes | T8 | S | #14 |
