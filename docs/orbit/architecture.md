@@ -188,7 +188,7 @@ The answers:
    so screenshots match on every run. The fallback itself is tested with `--disable-webgl`, and with a scene chunk
    request that answers 500.
 3. **State the tests can read,** on `<html>`: `data-u3d-state` (`idle`, `loading`, `on`, `fallback` when WebGL or the chunk fails, `off` when the data saver is on), `data-u3d-view`,
-   `data-u3d-tier` (`full`, `lite`), and in debug and test mode `data-u3d-fps`. In test mode `window.__u3d` holds
+   `data-u3d-tier` (`full`, `lite`), `data-u3d-quiet` (while a quiet section is in the middle), and in debug and test mode `data-u3d-fps`. In test mode `window.__u3d` holds
    `{ data, view, tier, progress }`. Modes in Playwright: JavaScript off with `javaScriptEnabled: false`; WebGL off with
    `--disable-webgl`; reduced motion with `reducedMotion: "reduce"`; the data saver with an `addInitScript` that defines
    `navigator.connection.saveData = true`.
