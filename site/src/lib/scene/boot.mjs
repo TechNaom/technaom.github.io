@@ -34,31 +34,44 @@ function whenIdle(doc, win) {
   });
 }
 
-export async function boot(doc = document, win = window) {
+/** Rejects after ms milliseconds, so a scene that never answers cannot leave the page "loading". */
+const within = (promise, ms) => {
+  let timer;
+  const limit = new Promise((_, reject) => (timer = setTimeout(() => reject(new Error(`no answer in ${ms} ms`)), ms)));
+  return Promise.race([promise, limit]).finally(() => clearTimeout(timer));
+};
+
+/**
+ * Start the scene if this visitor and device should have it. Every path ends in a settled state:
+ * "off", "fallback", or the scene's own ("on"). `load` and `limitMs` exist for tests.
+ */
+export async function boot(doc = document, win = window, { load = () => import("./scene.mjs"), limitMs = 15000 } = {}) {
   const html = doc.documentElement;
   const state = (s) => html.setAttribute("data-u3d-state", s);
-  const mode = modeFrom(win.location.search);
   const canvas = doc.getElementById("u3d-canvas");
-  const dataEl = doc.getElementById("u3d-data");
   const stop = (s) => {
     html.classList.remove("u3d-on");
     canvas?.remove();
     state(s);
   };
-  state("idle");
-  if (!canvas || !dataEl) return stop("fallback");
-  const saveData = win.navigator.connection?.saveData === true;
-  if (saveData) return stop("off"); // the visitor's choice; costs nothing to check
-  // Creating a WebGL context is real work on weak devices: only after the page has loaded and is idle (R14).
-  await whenIdle(doc, win);
-  const decision = shouldStart({ webgl: hasWebGL2(doc, win), saveData });
-  if (decision !== "start") return stop(decision);
-  state("loading");
+  let mode = "normal";
   try {
+    mode = modeFrom(win.location.search);
+    const dataEl = doc.getElementById("u3d-data");
+    state("idle");
+    if (!canvas || !dataEl) return stop("fallback");
+    const saveData = win.navigator.connection?.saveData === true;
+    if (saveData) return stop("off"); // the visitor's choice; costs nothing to check
+    // Creating a WebGL context is real work on weak devices: only after the page has loaded and is idle (R14).
+    await whenIdle(doc, win);
+    const decision = shouldStart({ webgl: hasWebGL2(doc, win), saveData });
+    if (decision !== "start") return stop(decision);
+    state("loading");
     const data = JSON.parse(dataEl.textContent || "{}");
     if (mode === "test") win.__u3d = { data, view: null, tier: "full", progress: 0 };
-    const { start } = await import("./scene.mjs");
-    await start(canvas, data, { mode });
+    const { start } = await within(load(), limitMs);
+    // T6 contract: start() cleans up after itself if it fails, and sets "on" itself after the first frame.
+    await within(start(canvas, data, { mode }), limitMs);
   } catch (err) {
     if (mode !== "normal") console.warn("[u3d] fallback:", err);
     stop("fallback");

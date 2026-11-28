@@ -38,13 +38,12 @@ for (const route of ROUTES) {
       });
       await page.goto(route);
       await expect(state(page)).toHaveAttribute("data-u3d-state", "off");
-      await page.waitForLoadState("load");
-      await page.waitForTimeout(500); // past the idle wait, when a chunk would have been asked for
+      await page.waitForLoadState("networkidle"); // everything the page will ask for has been asked
       expect(asked).toEqual([]);
       await expect(page.locator("h1")).toBeVisible();
     });
 
-    test("a normal start reaches the scene (until T6 builds it, the stub falls back)", async ({ page }) => {
+    test("a normal start hands the scene its data (until T6 builds the scene, the stub falls back)", async ({ page }) => {
       await page.goto(`${route}?u3d=test`);
       await expect(state(page)).toHaveAttribute("data-u3d-state", "fallback", { timeout: 15000 });
       const data = await page.evaluate(() => window.__u3d?.data);
