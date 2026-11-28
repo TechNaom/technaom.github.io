@@ -28,7 +28,7 @@ unless they start with `cd`.
 | T6 ✅ | Scene chunk: the network drawn | R9, R14, N3 | `tests/e2e/scene.spec.mjs`: `data-u3d-state="on"` and `u3d-on` on all 7 pages; `window.__u3d.data` equals the JSON; size and licence checks | `npx playwright test scene` and `node --test tests/unit` pass | T3, T5 | M | #6 |
 | T7 ✅ | Lane preview and smoke test | R9, N5 | `tests/e2e/smoke.spec.mjs` run against `BASE_URL` | Smoke passes against `https://site-3d-lane.manoharpapasani.pages.dev` | T6 | S | #7 |
 
-## M2 Views and story (cards written when M2 starts)
+## M2 Views and story (cards below, written 2026-11-28 after the M1 branch review)
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
@@ -39,6 +39,217 @@ unless they start with `cd`.
 | T12 | Quiet sections (`data-scene-quiet`) on workforce, architecture, notebook | R18 | e2e: opacity factor 0.4 on the named selectors | Playwright passes | T8 | S | #12 |
 | T13 | Signals and reduced motion | R11, R15 | e2e: pulses counted in test mode; with `reducedMotion: "reduce"` none, camera jumps | Playwright passes | T8 | S | #13 |
 | T14 | Views guide `src/lib/scene/README.md`; one page uses views with no script of its own | R10 | unit: every view named in the guide exists in the registry | `node --test tests/unit` passes | T8 | S | #14 |
+
+### M2 conventions (all cards)
+
+- Work from `site/`. Node 22: `node --test tests/unit/*.test.mjs` (the folder form fails on Windows). Browser tests
+  locally with `--workers 1`; build from an uppercase `C:\` path on Windows. Edit files as UTF-8 (no PowerShell
+  `Set-Content`); edits with double backslashes go through a script file.
+- The scene is still between views: `scene.mjs` draws only when something changes (`requestDraw()`); a camera move
+  keeps requesting frames until it settles, then stops. Test mode (`?u3d=test`) has no idle rotation and no easing
+  (the camera jumps), so a test reads a settled state at once.
+- State for tests lives on `<html>`: `data-u3d-view`, and in test mode `window.__u3d` `{ data, view, tier, progress }`.
+- Every task ends with the full unit suite, the browser tests it names, and `npx astro check` with 0 errors.
+
+### T8 Camera per view; `data-scene` on every page
+
+Serves: R10. Depends on: T6. Size: M. Issue: #8
+
+**Files**
+- Change: `site/tests/screens.json` (fill `sections` for all 7 routes from the screen list in `architecture.md`),
+  the 7 pages under `site/src/pages/` (add `data-scene`, `data-scene-labels`, `data-scene-quiet` on those sections),
+  `site/src/lib/scene/views.mjs` (tune camera numbers; add `PHONE` rule), `site/src/lib/scene/scene.mjs` (watch
+  sections, move the camera), `site/src/lib/scene/boot.mjs` (fallback also removes `data-u3d-tier`)
+- Test: `site/tests/e2e/views.spec.mjs`, `site/tests/unit/views.test.mjs` (phone rule), `site/tests/unit/scene.test.mjs`
+  (context restored, section change), `site/tests/unit/boot.test.mjs` (tier removed)
+
+**Tests that read these files:** `pages.spec.mjs`, `dark.spec.mjs`, `scene.spec.mjs`, `smoke.spec.mjs`,
+`no-webgl.spec.mjs` and `fallback.spec.mjs` read `screens.json`; keep `route` and `heading` as they are.
+
+**Interfaces**
+- `screens.json` sections: `{ "selector": "<CSS selector on that page>", "view": "network|dial|journey|drift",
+  "labels": bool, "quiet": bool }`. Home's dial and journey stages are added in T9 and T10; until then home has the
+  hero `network` and the rest `drift`.
+- `viewFor(name, { phone }) → { camera, target, offset, opacity, dial, journey }` in `views.mjs`; phone (width under
+  900) has `offset: 0` and the camera 25% further back.
+- In `scene.mjs`: sections are every `[data-scene]` element; on scroll and resize (passive listeners, one
+  `requestAnimationFrame` per burst) it calls `pickView` with their `getBoundingClientRect()`, sets
+  `html[data-u3d-view]`, and eases the camera to the view (about 0.8 s; a jump in test mode and with reduced motion).
+
+**Steps**
+1. `views.spec.mjs` (`?u3d=test`, 1280×800): for each route and each section in `screens.json`, scroll the section's
+   middle to the screen's middle, then `data-u3d-view` equals the section's view; at the top of each page it is
+   `network`. Run: fails (no attribute). Fill `screens.json` and the page attributes; write the scene code. Run: passes.
+2. Unit: `viewFor("network", { phone: true })` has offset 0 and a camera further back than desktop; an unknown name
+   gives `drift`. Fails, then passes.
+3. Unit (`scene.test.mjs`, fake page): a `webglcontextrestored` event on the canvas requests a draw; the listener is
+   removed by `stop()`. Unit (`boot.test.mjs`): fallback removes `data-u3d-tier`. Each fails first (T6 re-check notes).
+4. Trim the out-of-date comment in `dark.spec.mjs` ("The class is added by hand here; T5 and T6 add the real scene").
+5. Screenshot `/` at 390×844 in test mode: the hero text must not sit on bright nodes (the T7 phone note). If it does,
+   the phone camera moves further back or the hero view lowers `opacity`; record the choice in the pull request.
+
+**Done check:** `npx astro build && node --test tests/unit/*.test.mjs && npx playwright test --workers 1`. All pass.
+
+**Watch out:** `getBoundingClientRect` on every scroll event is costly: read once per animation frame. Sections that
+nest (a stage inside `main`) resolve by `pickView`'s innermost rule. No layout change to any page: attributes only.
+
+### T9 `dial` view and `StageLabels.astro`; home dial stage
+
+Serves: R12, R13. Depends on: T8. Size: M. Issue: #9
+
+**Files**
+- Create: `site/src/components/StageLabels.astro`, `site/src/lib/scene/dial.mjs` (pure: positions on the 24-hour ring)
+- Change: `site/src/pages/index.astro` (a new stage section after the hero: `data-scene="dial" data-scene-labels`),
+  `site/tests/screens.json` (home: the dial stage), `site/src/lib/scene/scene.mjs` (move hubs to the ring in the dial
+  view), `site/src/styles/global.css` (`html.u3d-on .u3d-labels` visually hidden, still read by screen readers)
+- Test: `site/tests/unit/dial.test.mjs`, `site/tests/e2e/labels.spec.mjs`
+
+**Interfaces**
+- `dialPlace(teams) → [{ id, angle, ring: "inner"|"outer" }]`: a team with an `hour` sits on the inner ring at
+  `angle = hour / 24 * 2π` (midnight at the top, clockwise); teams with `hour: null` sit on the outer ring, evenly
+  spaced over the arc from 6 PM to 4 AM in `teams.json` order.
+- `StageLabels.astro` props: `items: { id: string, text: string, detail?: string }[]`; renders
+  `<ul class="u3d-labels" data-labels-for="<stage>">` with one `<li data-label="<id>">` per item.
+- Label texts: architecture point 7 (team name, then `shift()`; hours "Midnight", "6 AM", "Noon", "6 PM").
+
+**Steps**
+1. `dial.test.mjs`: a team at hour 6 gets angle π/2; hour 0 gets 0; null-hour teams are on the outer ring inside
+   the 6 PM to 4 AM arc, in order. Fails, then passes.
+2. `labels.spec.mjs`: on `/`, the dial stage's HTML list holds every team name from `teams.json` and the four hour
+   labels; with JavaScript off they are visible; with `?u3d=test` and the stage in the middle, `data-u3d-view` is
+   `dial`. Fails, then passes.
+3. Run the copy gate (`node scripts/check-copy.mjs --grammar`): it reads the labels in the built HTML. Expect: pass.
+
+**Done check:** units, `npx playwright test labels views --workers 1`, and the copy gate pass.
+
+**Watch out:** times are 12-hour everywhere (R13). The list is the source of the labels; T11 projects them onto the
+scene. Never type a team count into a test.
+
+### T10 `journey` view and the journey stage
+
+Serves: R12, R13. Depends on: T9. Size: M. Issue: #10
+
+**Files**
+- Change: `site/src/data/journey.json` (the one source of the journey text), `site/src/pages/index.astro` (a tall
+  stage, 170% of the screen, with a sticky card and `StageLabels`; the hero SVG's step texts come from
+  `journey.json` too), `site/tests/screens.json`, `site/src/lib/scene/scene.mjs` (a pulse moves along the steps by
+  `progress`)
+- Test: `site/tests/unit/journey.test.mjs`, `site/tests/e2e/journey.spec.mjs`
+
+**Interfaces**
+- `journeyAt(progress, steps) → { step: index, t: 0..1 }` (pure, in `views.mjs` or a new `journey.mjs`).
+- Test mode exposes `window.__u3d.progress`.
+
+**Steps**
+1. Unit: progress 0 is step 0; progress 1 is the last step; progress is clamped. Fails, then passes.
+2. Unit: every step text in `journey.json` appears in the built `dist/index.html` (skips without `dist/`), and the
+   hero SVG text and the stage labels come from that one file (the M1 review found two copies disagreeing:
+   "Starts the team" against "Four slots a day"). Architecture point 7: "Four slots a day" is not used.
+3. `journey.spec.mjs` (`?u3d=test`): scroll the stage so progress is 0, 0.5 and 1 (read `__u3d.progress`, within
+   0.05); take a screenshot at each, at 1280×800 and 390×844, attached to the pull request.
+
+**Done check:** units and `npx playwright test journey --workers 1` pass; the copy gate passes.
+
+**Watch out:** the sticky card must keep its backing under `u3d-on` (the T4 sticky rule). The tall stage must not
+leave a blank screen with the scene off (R17): the card is readable in the fallback too.
+
+### T11 Labels overlay: projection, phone layout
+
+Serves: R12, R13. Depends on: T10. Size: M. Issue: #11
+
+**Files**
+- Create: `site/src/lib/scene/labels.mjs` (pure projection helpers)
+- Change: `site/src/lib/scene/scene.mjs` (copy each `<li>` into `#u3d-overlay`, move it every drawn frame),
+  `site/src/styles/global.css` (label style; overlay above the canvas and below the text it must not cover: decide
+  the z-order and record it here)
+- Test: `site/tests/unit/labels.test.mjs`, `site/tests/e2e/overlay.spec.mjs`
+
+**Interfaces**
+- `toScreen(ndc, width, height) → { x, y, visible }`; `visible` is false behind the camera (`ndc.z > 1`) or outside
+  the screen. `overlaps(boxes) → [[i, j]]` for a layout check.
+- Phone (under 900): dial labels show the team name only and hour labels are hidden; journey labels show names only
+  (architecture point 14).
+
+**Steps**
+1. Unit: a point at the centre maps to the middle of the screen; behind the camera is not visible; `overlaps` finds
+   two boxes that touch. Fails, then passes.
+2. `overlay.spec.mjs` at 1280×800 and 390×844 (`?u3d=test`): in the dial and journey stages every visible label is
+   inside the viewport and no two overlap; the labels are `aria-hidden` copies (the HTML list stays for screen readers).
+
+**Done check:** units and `npx playwright test overlay --workers 1` pass.
+
+**Watch out:** the overlay is `aria-hidden` and `pointer-events: none`. Labels follow the camera only on drawn frames;
+a still scene does not move them.
+
+### T12 Quiet sections
+
+Serves: R18. Depends on: T8. Size: S. Issue: #12
+
+**Files**
+- Change: `site/src/pages/workforce.astro`, `architecture.astro`, `notebook.astro` (`data-scene-quiet` on the
+  sections named in the screen list), `site/tests/screens.json`, `site/src/lib/scene/scene.mjs` (quiet: the scene's
+  opacity factor 0.4)
+- Test: `site/tests/e2e/quiet.spec.mjs`
+
+**Steps**
+1. `quiet.spec.mjs` (`?u3d=test`): with a quiet section in the middle, `html[data-u3d-quiet]` is present and the
+   canvas style opacity is 0.4; outside it, 1. Fails, then passes.
+
+**Done check:** `npx playwright test quiet views --workers 1` passes.
+
+### T13 Signals and reduced motion
+
+Serves: R11, R15. Depends on: T8. Size: S. Issue: #13
+
+**Files**
+- Change: `site/src/lib/scene/scene.mjs` (pulses: small points moving along random links, a fixed pool, seeded),
+  `site/src/lib/scene/network.mjs` if a helper is needed
+- Test: `site/tests/unit/scene.test.mjs`, `site/tests/e2e/motion.spec.mjs`
+
+**Interfaces**
+- Test mode exposes `window.__u3d.pulses` (count launched so far). Test mode still has no rotation; pulses run in
+  test mode so they can be counted.
+
+**Steps**
+1. `motion.spec.mjs`: with `?u3d=test`, after 3 seconds `__u3d.pulses` is above 0. With
+   `reducedMotion: "reduce"` it stays 0, and scrolling from the hero to another section changes `data-u3d-view` with
+   no easing (the next frame is already settled). Fails, then passes.
+2. Unit: under reduced motion the loop is not queued while nothing changes (the T6 still-scene rule).
+
+**Done check:** units and `npx playwright test motion --workers 1` pass.
+
+**Watch out:** pulses mean a loop is running: keep it off while the tab is hidden, and cap the pool (no allocation
+per frame).
+
+### T14 Views guide
+
+Serves: R10. Depends on: T8. Size: S. Issue: #14
+
+**Files**
+- Create: `site/src/lib/scene/README.md`
+- Test: `site/tests/unit/guide.test.mjs`
+
+**Steps**
+1. `guide.test.mjs`: every view named in the guide's table exists in `VIEWS`, and every `VIEWS` name is in the guide;
+   the guide names `data-scene`, `data-scene-labels` and `data-scene-quiet`; one page (`growth.astro`) uses views
+   and has no `<script>` of its own. Fails, then passes.
+2. Write the guide: what each view does, the three attributes, an example section, how to add a view.
+
+**Free-worker trial (owner's ask, 2026-11-28):** draft the guide with the free-worker router (`delegate_to_worker`,
+tier `context`), sending only `views.mjs` and the attribute list (public code, no secrets). Claude reviews and edits
+the draft before it is written. Record in the pull request: tokens sent and returned (router log), the edits Claude
+had to make, and whether the review found problems. The token meter compares it with the other S tasks.
+
+**Done check:** `node --test tests/unit/*.test.mjs` passes.
+
+## M2 notes from the M1 branch review, for M3 cards
+
+- T15: the lite tier drops `backdrop-filter` blur on cards; keep the `{ stop }` that `start()` returns and call it on
+  `pagehide` and context loss.
+- T17: **MUST before T19:** contrast of body text with the scene running (axe cannot read canvas pixels): sample the
+  pixels behind text boxes in `?u3d=test` screenshots for 4.5:1, or give text sections a `--veil` backing.
+- T20: the lane-to-main pull request runs site-check (pull requests into `main` now run it), and the live smoke test
+  runs after the merge, because `deploy-cloudflare.yml` deploys main after only the build and the copy gate.
 
 ## M3 Hardening and release (cards written when M3 starts)
 
