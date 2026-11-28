@@ -209,6 +209,13 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
       }
     };
     cleanups.push(() => overlay?.replaceChildren());
+    // Label sizes are measured when built; the web font may arrive later and widen them: build again then.
+    doc.fonts?.ready?.then(() => {
+      if (stopped) return;
+      labelKey = null;
+      needRead = true;
+      requestDraw();
+    });
     const v3 = new Vector3();
     const placeLabels = () => {
       if (!labelItems.length) return;

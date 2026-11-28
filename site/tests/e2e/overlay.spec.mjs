@@ -37,8 +37,9 @@ for (const [w, h] of SIZES) {
       expect(card, "the stage card is marked").not.toBeNull();
       const under = boxes.filter((b) => card && b.left < card.x + card.width && card.x < b.right && b.top < card.y + card.height && card.y < b.bottom);
       expect(under, "labels behind the stage card").toEqual([]);
-      // The HTML list is still there for screen readers.
-      await expect(page.locator(`${stage} ol.u3d-labels`)).toHaveCount(1);
+      // The HTML list is still in the accessibility tree, for screen readers.
+      const name = stage === "#dial-stage" ? "Teams on a 24-hour clock" : "The steps of one post";
+      await expect(page.getByRole("list", { name })).toHaveCount(1);
     });
   }
 }
@@ -49,6 +50,7 @@ test("on a phone the dial shows team names only, and no hour labels", async ({ p
   await expect(page.locator("html")).toHaveAttribute("data-u3d-state", "on", { timeout: 15_000 });
   await page.locator("#dial-stage").evaluate((el) => { const r = el.getBoundingClientRect(); scrollBy({ top: r.top + Math.min(r.height, innerHeight * 1.2) / 2 - innerHeight / 2, behavior: "instant" }); });
   await expect(page.locator("html")).toHaveAttribute("data-u3d-view", "dial");
+  expect(await page.locator('#u3d-overlay .u3d-label[data-anchor^="team:"]').count()).toBeGreaterThan(0);
   await expect(page.locator('#u3d-overlay .u3d-label[data-anchor^="hour:"]')).toHaveCount(0);
   await expect(page.locator("#u3d-overlay .u3d-label .lb-detail")).toHaveCount(0);
 });

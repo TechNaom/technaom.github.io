@@ -42,6 +42,7 @@
 /* The 3D layers (architecture point 4): canvas behind, labels above it, content above both. */
 #u3d-canvas { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
 #u3d-overlay { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
+html:not(.u3d-on) #u3d-overlay { visibility: hidden; } /* no labels next to the HTML list before the scene is on */
 /* Stage labels on the scene (T11): small glass tags, placed by the scene with a transform. */
 .u3d-label { position: absolute; left: 0; top: 0; display: grid; gap: 1px; padding: 4px 9px; border-radius: 8px;
   background: var(--glass); color: var(--ink); font-size: 12px; line-height: 1.3; white-space: nowrap; will-change: transform; }
