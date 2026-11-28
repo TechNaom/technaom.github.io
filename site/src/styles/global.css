@@ -42,7 +42,9 @@
 /* The 3D layers (architecture point 4): canvas behind, labels above it, content above both. */
 #u3d-canvas { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; }
 #u3d-overlay { position: fixed; inset: 0; z-index: 1; pointer-events: none; }
-html:not(.u3d-on) #u3d-overlay { visibility: hidden; } /* no labels next to the HTML list before the scene is on */
+html:not(.u3d-on) #u3d-overlay { visibility: hidden; }
+/* ?u3d=debug: frame rate, tier and view (N4), bottom left, out of the way. */
+#u3d-debug { position: fixed; left: 8px; bottom: 8px; z-index: 50; padding: 4px 8px; border-radius: 6px; font: 12px/1.3 ui-monospace, monospace; color: #e8edf5; background: rgba(12, 20, 34, .9); pointer-events: none; } /* no labels next to the HTML list before the scene is on */
 /* Stage labels on the scene (T11): small glass tags, placed by the scene with a transform. */
 .u3d-label { position: absolute; left: 0; top: 0; display: grid; gap: 1px; padding: 4px 9px; border-radius: 8px;
   background: rgba(20, 32, 52, .92); color: var(--ink); font-size: 12px; /* near solid: labels sit beside bright nodes (R16) */ line-height: 1.3; white-space: nowrap; will-change: transform; }
