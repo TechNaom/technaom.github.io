@@ -16,7 +16,9 @@ test("the guide exists and its view table lists exactly the registry's views", (
 
 test("the guide names the three attributes", () => {
   const guide = readFileSync(guideUrl, "utf8");
-  for (const attr of ["data-scene", "data-scene-labels", "data-scene-quiet"]) assert.ok(guide.includes(attr), attr);
+  // Whole names in backticks, so "data-scene" is not satisfied by "data-scene-labels".
+  for (const attr of ["data-scene", "data-scene-labels", "data-scene-quiet", "data-scene-card"])
+    assert.match(guide, new RegExp("`" + attr + "(=[^`]*)?`"), attr);
 });
 
 test("guard: the growth page has no script of its own and gets its view from PageHero", () => {
