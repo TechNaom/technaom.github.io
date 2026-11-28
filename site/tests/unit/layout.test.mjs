@@ -64,7 +64,7 @@ test("dial layout: hubs on their ring point, agents keep their distance to their
   });
 });
 
-test("network and drift layouts are the T6 positions", () => {
+test("network, drift and journey layouts are the T6 positions", () => {
   for (const view of ["network", "drift", "journey"]) {
     const pos = layout(net, view, data);
     net.nodes.forEach((n, i) => assert.ok(Math.hypot(pos[i * 3] - n.pos[0], pos[i * 3 + 1] - n.pos[1], pos[i * 3 + 2] - n.pos[2]) < 1e-5));

@@ -5,7 +5,7 @@ interface Item { anchor: string; name: string; detail?: string }
 interface Props { for: "dial" | "journey"; label: string; items: Item[] }
 const { for: stage, label, items } = Astro.props;
 ---
-<ol class="u3d-labels grid gap-3 sm:grid-cols-2" data-for={stage} aria-label={label}>
+<ol role="list" class="u3d-labels grid gap-3 sm:grid-cols-2" data-for={stage} aria-label={label}>
   {items.map((it) => (
     <li data-anchor={it.anchor} class="grid gap-0.5">
       <p class="lb-name font-semibold">{it.name}</p>

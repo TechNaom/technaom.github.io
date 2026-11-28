@@ -118,6 +118,9 @@ export async function start(canvas, data, { mode = "normal", signal, onLost, mak
     const world = new Group();
     const { group: nodeGroup, slots } = nodeMeshes(nodes, disposables);
     const lines = linkLines(nodes, links, disposables);
+    // Nodes move between views, so cached bounding spheres go stale: always draw (a handful of draw calls).
+    lines.frustumCulled = false;
+    nodeGroup.children.forEach((m) => (m.frustumCulled = false));
     world.add(nodeGroup, lines);
     scene.add(world);
 

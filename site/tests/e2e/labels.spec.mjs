@@ -1,6 +1,11 @@
 // R12, R13: the dial stage's labels live in the page's HTML (read by the copy gate and screen readers).
 import { test, expect } from "@playwright/test";
 import teams from "../../src/data/teams.json" with { type: "json" };
+import { shift, slug } from "../../src/lib/scene/data.mjs";
+
+// The first team with a daily time, from the data (no names typed into the test).
+const daily = teams.find((t) => /^\d{2}:\d{2} IST/.test(t.shift));
+const anchor = `team:${slug(daily.name)}`;
 
 const HOURS = ["Midnight", "6 AM", "Noon", "6 PM"];
 
@@ -12,7 +17,7 @@ test("the dial list holds every team and the four hours, with the team's schedul
   for (const t of teams) expect(names).toContain(t.name);
   for (const h of HOURS) expect(names).toContain(h);
   expect(names.length).toBe(teams.length + HOURS.length);
-  await expect(list.locator('li[data-anchor="team:leadership"] .lb-detail')).toHaveText("Daily, 8:00 AM IST");
+  await expect(list.locator(`li[data-anchor="${anchor}"] .lb-detail`)).toHaveText(shift(daily.shift));
   await expect(list.locator('li[data-anchor="hour:0"] .lb-detail')).toHaveCount(0);
 });
 
@@ -20,7 +25,7 @@ test("with JavaScript off the labels are visible", async ({ browser }) => {
   const ctx = await browser.newContext({ javaScriptEnabled: false });
   const page = await ctx.newPage();
   await page.goto("/");
-  await expect(page.locator('#dial-stage li[data-anchor="team:leadership"] .lb-name')).toBeVisible();
+  await expect(page.locator(`#dial-stage li[data-anchor="${anchor}"] .lb-name`)).toBeVisible();
   await ctx.close();
 });
 
