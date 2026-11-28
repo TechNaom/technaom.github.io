@@ -318,7 +318,7 @@ had to make, and whether the review found problems. The token meter compares it 
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
-| T15a | Scene split into modules and frame budget (30 fps idle cap, pause in quiet, fps readout) | N4, R15 | unit: meter, cap, pause, morph buffers | Tests pass | T14 | M | #21 |
+| T15a | Scene split into modules and frame budget (30 fps idle cap, pause in quiet, fps readout) | N4, R15 | unit: meter, cap, pause, morph buffers | Tests pass | T14 | M | #37 |
 | T15 | Quality tiers, lite switch, stop on slow, context lost | N4, R17 | unit: tier rule (36 ms over 2 s, after 1 s, not hidden); e2e: forced slow frames fall back | Tests pass | T13 | M | #15 |
 | T16 | Lighthouse CI with N4 assertions (warn until the owner confirms) | N4 | CI-file test for the `lhci` step | `npx lhci autorun` report in CI | T7 | S | #16 |
 | T17 | Network check (only our origin and Google Fonts) and screenshots of the 7 routes | N3, R12 | e2e network log and screenshot baseline | Playwright passes | T11 | S | #17 |
@@ -338,7 +338,7 @@ had to make, and whether the review found problems. The token meter compares it 
 
 ### T15a Scene split and frame budget
 
-Serves: N4, R15. Depends on: T14. Size: M. Issue: #21
+Serves: N4, R15. Depends on: T14. Size: M. Issue: #37
 
 **Why:** the M2 branch review found `scene.mjs` is one closure of about 360 lines whose parts read state declared
 later, and per-frame work that N4 cannot afford on phones.
