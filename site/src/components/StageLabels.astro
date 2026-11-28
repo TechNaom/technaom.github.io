@@ -1,0 +1,15 @@
+---
+// The labels of a 3D stage, as an HTML list (architecture Interfaces): the copy gate and screen readers
+// read them here. With the scene on, the list is visually hidden and the scene shows copies (T11).
+interface Item { anchor: string; name: string; detail?: string }
+interface Props { for: "dial" | "journey"; label: string; items: Item[] }
+const { for: stage, label, items } = Astro.props;
+---
+<ol class="u3d-labels grid gap-3 sm:grid-cols-2" data-for={stage} aria-label={label}>
+  {items.map((it) => (
+    <li data-anchor={it.anchor} class="grid gap-0.5">
+      <p class="lb-name font-semibold">{it.name}</p>
+      {it.detail && <p class="lb-detail text-sm" style="color: var(--muted)">{it.detail}</p>}
+    </li>
+  ))}
+</ol>
