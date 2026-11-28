@@ -24,7 +24,7 @@ unless they start with `cd`.
 | T2 | ✅ Scene data from `teams.json` (PR #22) | R9, R13 | `tests/unit/scene-data.test.mjs`: 9 teams, 41 agents, equals `facts.json`; hours; slugs | `node --test tests/unit` passes | T1 | S | #2 |
 | T3 | ✅ View registry and `pickView` (PR #23) | R10, R18 | `tests/unit/views.test.mjs`: middle line, nesting, unknown name, progress | `node --test tests/unit` passes | T1 | S | #3 |
 | T4 | ✅ Dark only, tokens and layers (PR #24) | R16, R17 | `tests/e2e/dark.spec.mjs`: `data-theme="dark"` and axe contrast on all 7 pages with JavaScript off | `npx playwright test dark` passes | T1 | M | #4 |
-| T5 | `Universe.astro` and `boot.js`: decide, wait, load, fall back | R14, R17, N2, N3 | `tests/e2e/fallback.spec.mjs`: JavaScript off, WebGL off, chunk 500, data saver: state, no `u3d-on`, text visible | `npx playwright test fallback` passes | T2, T4 | M | #5 |
+| T5 | ✅ `Universe.astro` and `boot.js`: decide, wait, load, fall back (PR #25) | R14, R17, N2, N3 | `tests/e2e/fallback.spec.mjs`: JavaScript off, WebGL off, chunk 500, data saver: state, no `u3d-on`, text visible | `npx playwright test fallback` passes | T2, T4 | M | #5 |
 | T6 | Scene chunk: the network drawn | R9, R14, N3 | `tests/e2e/scene.spec.mjs`: `data-u3d-state="on"` and `u3d-on` on all 7 pages; `window.__u3d.data` equals the JSON; size and licence checks | `npx playwright test scene` and `node --test tests/unit` pass | T3, T5 | M | #6 |
 | T7 | Lane preview and smoke test | R9, N5 | `tests/e2e/smoke.spec.mjs` run against `BASE_URL` | Smoke passes against `https://site-3d-lane.manoharpapasani.pages.dev` | T6 | S | #7 |
 
@@ -350,6 +350,8 @@ one assertion in this task).
    the pull request.
 
 **Done check:** `npx astro build && node --test tests/unit && npx playwright test`. Expect: all pass.
+
+**Contract from T5's review:** `start()` cleans up after itself when it fails (stops its loop, removes its listeners, loses its WebGL context) and returns `{ stop }`; it sets `data-u3d-state="on"` itself after the first frame; `boot()` gives it 15 seconds. `bundle.test.mjs` also checks that the boot script does not contain three.js.
 
 **Watch out:** Swiftshader in CI is slow: no frame-rate rule runs in test mode (ADR 0006). `u3d-on` comes only after
 the first frame, so a throw during build leaves the page in fallback, never half-drawn. Read three.js 0.187 docs for

@@ -35,7 +35,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## In flight
 
-- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T4 done (PR #24). Next: T5.
+- Feature lane: **3D neural network website** (R9 to R18 in `prd.md`). Ignite approved 2026-11-27 ("Then proceed, go ahead"). Blueprint approved 2026-11-27 ("Yeah, that should be fine. We are not depending on any vendor... proceed. No need to stop."): mockup agreed, no new vendor, account or bill, Rs 0. Step: **assemble** done: `tasks.md` (3 milestones, 20 tasks, M1 cards), cold read answered (12 points, fixed on the cards). Assemble approved under the owner's standing "no need to stop". Issues #1 to #20 created. Step: **build**. T1 to T3 done (PRs #21 to #23 into `site-3d-lane`); T5 done (PR #25). Next: T6, the scene itself.
 - Spike: local branch `site-3d`, commit `a68df31` (a space-universe 3D background on all 7 pages; check, build and copy gate pass). Reference only, never merged; paused until the lane reaches Build.
 
 ## Open questions
@@ -48,6 +48,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## Log
 
+- 2026-11-28 3D lane T5 done (PR #25): boot decides, waits for idle, probes WebGL after idle, loads the lazy chunk, and every failure ends in fallback. 24 unit + 37 browser tests.
 - 2026-11-28 3D lane T2, T3 done (lean: built solo, one combined check, 56k agent tokens for both); T4 built, 3 fixes in review, PR #24.
 - 2026-11-28 Scope change: governance, token guard, budget guard and evals apply to the AI builders (N7 to N10). Token ledger started; lean build rules from T2.
 - 2026-11-28 3D lane T1 done: test harness and CI (PR #21, merged into the lane). Tests 0 → 3 unit + 7 browser. Five fixes made in review (JOURNAL).
