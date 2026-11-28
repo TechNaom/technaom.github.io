@@ -1,39 +1,45 @@
 # Token ledger: the AI builders of the 3D lane
 
-Every agent run (N8), with its result (N10). Tokens are the run's own count as the harness
-reports it. Budgets *(proposed)*: S task 60k, M task 150k, all agents together.
+Measured by `token_meter.py` (Idea to Orbit 0.10) from this session's Claude Code logs on
+2026-11-28, subagents included. It replaces the hand-copied numbers, which were the harness's own
+per-agent figures and left out the main session. **Budgets count fresh tokens** (input, output,
+cache writes); cache reads re-read the conversation at a far lower price and are shown apart.
 
-| Date | Stage | Task | Role | Model | Tokens | Result |
-|---|---|---|---|---|---|---|
-| 2026-11-27 | blueprint | - | design cold read | main model | not recorded | 20 gaps, 9 important |
-| 2026-11-27 | assemble | M1 cards | card cold read | main model | 104,547 | 12 gaps, 6 important |
-| 2026-11-28 | build | T1 (M) | builder, first run | small model | not recorded (stopped by the usage limit) | stopped at step 4 |
-| 2026-11-28 | build | T1 (M) | builder, resumed | small model | 73,110 | done with doubts |
-| 2026-11-28 | build | T1 (M) | task check | small model | 56,215 | pass, 4 minor deviations |
-| 2026-11-28 | build | T1 (M) | code check | small model | 52,946 | 5 fixes in review |
-| 2026-11-28 | build | T2 (S), T3 (S) | built solo by the supervisor (lean) | main model | in the supervisor's count | done |
-| 2026-11-28 | build | T2 + T3 | one combined check for both | small model | 56,560 | both pass, nits only |
-| 2026-11-28 | build | T4 (M, UI) | built solo by the supervisor | main model | in the supervisor's count | done |
-| 2026-11-28 | build | T4 | task check | small model | 49,726 | pass |
-| 2026-11-28 | build | T4 | code check | small model | 53,586 | 1 must fix (it uncovered a second, deeper bug), 2 should fix |
+## What the numbers say
 
-## Per task
+- 96% of all tokens were cache reads. Fresh tokens: about 2.0M.
+- The **main session (the supervisor) used 75% of the fresh tokens**, more than all subagents
+  together. A solo build moves cost to the supervisor; it is not free. The biggest saving is a leaner
+  main session: shorter replies, fewer re-reads of large files, compacting earlier.
+- Per task (agent fresh tokens): T1 178k (full loop, 19% over its 150k budget); T2 and T3 17k each
+  (lean, one shared check); T4 105k (two checks). Supervisor tokens are not yet split by task.
 
-| Task | Size | Agent tokens | Budget | First-pass task check | Fixes in review |
-|---|---|---|---|---|---|
-| T1 | M | 182,271 (+ the stopped first run) | 150k | yes | 5 |
-| T2 | S | 28,280 (half the shared check) | 60k | yes | 0 |
-| T3 | S | 28,280 (half the shared check) | 60k | yes | 0 |
-| T4 | M | 103,312 | 150k | yes | 3 (text on --paper; token specificity; sticky backing) |
+## Report
 
-Lean mode (from T2): agent tokens per task fell from 182k (T1) to 28k (S) and 103k (M), with the
-checks still finding real bugs (T4). Building solo moves cost into the supervisor's own count, which is
-not broken out per task.
+Agents: 10. Tokens: 48,819,141 (input 664, output 334,375, cache write 1,711,530, cache read 46,772,572).
+Fresh tokens (input, output and cache writes): 2,046,569. Served from the prompt cache: 46,772,572 (96% of all; budgets count fresh tokens).
+Cost: tokens only (no prices file given).
+
+| Agent | Role | Tasks | Model | Fresh tokens | All tokens |
+|---|---|---|---|---|---|
+| main | supervisor | - | claude-opus-5-5 | 1,535,486 | 45,345,952 |
+| a43d1c6dc0e2c78a8 | builder | T1 | claude-sonnet-5-5 | 115,246 | 1,687,959 |
+| a950b4dffd267f397 | check | - | claude-opus-5-5 | 90,486 | 452,581 |
+| aaef36d120f2150d4 | check | - | claude-opus-5-5 | 65,035 | 385,660 |
+| aebf962d6bd68b33e | check | T4 | claude-sonnet-5-5 | 54,946 | 245,513 |
+| a0c5d715eacde0051 | check | T4 | claude-sonnet-5-5 | 49,847 | 91,980 |
+| a6dc79730143f87db | other | - | claude-haiku-5-5 | 39,101 | 57,538 |
+| af0bf035e4a3def10 | check | T1 | claude-sonnet-5-5 | 33,776 | 206,265 |
+| af7bca2653a27b20c | check | T2, T3 | claude-sonnet-5-5 | 33,330 | 153,804 |
+| a1f8e372a49bdec40 | check | T1 | claude-sonnet-5-5 | 29,316 | 191,889 |
+
+| Task | Agent fresh tokens | Budget | Saved vs full loop |
+|---|---|---|---|
+| T1 | 178,338 | over: 119% of 150,000 | - |
+| T2 | 16,665 | ok | - |
+| T3 | 16,665 | ok | - |
+| T4 | 104,793 | ok | - |
+## Budgets *(proposed)*
 
-T1 went over budget: the first build was cut off and resumed, and both checks ran in full.
-From T2, the lean rules in N8 apply.
-
-## Milestone estimate (N9)
-
-M1, the 6 tasks left (T2 to T7): 3 S tasks at up to 60k = 180k, 3 M tasks at up to 150k = 450k;
-about 630k agent tokens *(proposed)*, plus the supervisor's own.
+S task 60k, M task 150k agent fresh tokens. Next: split the supervisor's tokens by task (by time
+window between task commits), so solo builds show their full cost.
