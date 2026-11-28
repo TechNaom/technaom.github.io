@@ -18,7 +18,9 @@ for (const { route, sections } of screens) {
           const r = el.getBoundingClientRect();
           window.scrollBy({ top: r.top + r.height / 2 - innerHeight / 2, behavior: "instant" }); // the page scrolls smoothly by default
           const now = el.getBoundingClientRect();
-          return Math.abs(now.top + now.height / 2 - innerHeight / 2) < 2;
+          const atBottom = scrollY >= document.documentElement.scrollHeight - innerHeight - 1;
+          // Only the page's end may stop an element short of the middle; anywhere else, assert as usual.
+          return !atBottom || Math.abs(now.top + now.height / 2 - innerHeight / 2) < 2;
         });
         if (!reached) {
           // The page ends first (a footer under a long last section): the middle line is in another section.

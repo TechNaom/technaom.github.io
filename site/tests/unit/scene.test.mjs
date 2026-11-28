@@ -227,3 +227,14 @@ test("a quiet drift section dims the materials to 0.7 x 0.4; the network view is
   assert.ok(Math.abs(p.win.__u3d.opacity - 0.7) < 1e-9);
   assert.equal("data-u3d-quiet" in p.attrs, false);
 });
+
+test("the network view is at full strength", async () => {
+  const p = fakePage();
+  p.win.__u3d = {};
+  p.doc.sections = [{ getAttribute: (k) => (k === "data-scene" ? "network" : null), hasAttribute: () => false, getBoundingClientRect: () => ({ top: 0, bottom: 900 }) }];
+  const pending = start(p.canvas, data, { mode: "test", makeRenderer: p.makeRenderer });
+  p.flush();
+  await pending;
+  assert.equal(p.win.__u3d.opacity, 1);
+  assert.equal("data-u3d-quiet" in p.attrs, false);
+});
