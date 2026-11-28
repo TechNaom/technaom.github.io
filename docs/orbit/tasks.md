@@ -25,7 +25,7 @@ unless they start with `cd`.
 | T3 | ✅ View registry and `pickView` (PR #23) | R10, R18 | `tests/unit/views.test.mjs`: middle line, nesting, unknown name, progress | `node --test tests/unit` passes | T1 | S | #3 |
 | T4 | ✅ Dark only, tokens and layers (PR #24) | R16, R17 | `tests/e2e/dark.spec.mjs`: `data-theme="dark"` and axe contrast on all 7 pages with JavaScript off | `npx playwright test dark` passes | T1 | M | #4 |
 | T5 | ✅ `Universe.astro` and `boot.js`: decide, wait, load, fall back (PR #25) | R14, R17, N2, N3 | `tests/e2e/fallback.spec.mjs`: JavaScript off, WebGL off, chunk 500, data saver: state, no `u3d-on`, text visible | `npx playwright test fallback` passes | T2, T4 | M | #5 |
-| T6 | Scene chunk: the network drawn | R9, R14, N3 | `tests/e2e/scene.spec.mjs`: `data-u3d-state="on"` and `u3d-on` on all 7 pages; `window.__u3d.data` equals the JSON; size and licence checks | `npx playwright test scene` and `node --test tests/unit` pass | T3, T5 | M | #6 |
+| T6 ✅ | Scene chunk: the network drawn | R9, R14, N3 | `tests/e2e/scene.spec.mjs`: `data-u3d-state="on"` and `u3d-on` on all 7 pages; `window.__u3d.data` equals the JSON; size and licence checks | `npx playwright test scene` and `node --test tests/unit` pass | T3, T5 | M | #6 |
 | T7 | Lane preview and smoke test | R9, N5 | `tests/e2e/smoke.spec.mjs` run against `BASE_URL` | Smoke passes against `https://site-3d-lane.manoharpapasani.pages.dev` | T6 | S | #7 |
 
 ## M2 Views and story (cards written when M2 starts)
