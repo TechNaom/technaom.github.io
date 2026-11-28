@@ -46,6 +46,7 @@ Started: 2026-11-27 (joined Idea to Orbit as an existing, live product; the site
 
 ## Log
 
+- 2026-11-28 Scope change: governance, token guard, budget guard and evals apply to the AI builders (N7 to N10). Token ledger started; lean build rules from T2.
 - 2026-11-28 3D lane T1 done: test harness and CI (PR #21, merged into the lane). Tests 0 → 3 unit + 7 browser. Five fixes made in review (JOURNAL).
 - 2026-11-27 3D lane: blueprint approved by the owner (no new vendor, account or bill; Rs 0; mockup agreed). The owner asked not to stop between stages ("No need to stop. Let's rock"); merges to `main` and the UAT still wait for the owner.
 

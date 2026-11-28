@@ -175,7 +175,7 @@ Spending cap: not applicable, nothing is billed. At ten times the visitors the c
 | N4 | ADR 0006 tiers; Lighthouse CI; frame rate in debug mode |
 | N5 | Lane branch, preview, backup tag, revert |
 | N6 | The copy gate unchanged and blocking |
-| N7, N8 | Not needed (PRD) |
+| N7 to N10 | The build process: agent rules, `token-ledger.md`, milestone estimates (PRD) |
 
 ## Implementation decisions (answers to the cold read, 2026-11-27)
 

@@ -49,9 +49,10 @@ Numbers marked *(proposed)* are suggestions for the owner to change.
 | N4 | Performance | Mid-range phone: page text within 2.5 seconds (Largest Contentful Paint) *(proposed)*; Lighthouse mobile performance 80 or more on the home page *(proposed)*; at least 30 frames a second on a mid-range phone and 50 on a laptop *(proposed)*; the scene pauses when the tab is hidden | Lighthouse in CI or by hand on the preview; a frame-rate readout in a debug mode |
 | N5 | Release | Built on a lane branch; the preview gets the owner's UAT; a backup tag on `main` before the merge; rollback is reverting the merge commit | Tag exists; revert rehearsed on a branch |
 | N6 | Guardrails | The 3D never hides or replaces content that the copy gate checks; the gate stays blocking | Gate output on the merge commit |
-| N7 | Governance | Not needed: a static site with no runtime controls; changes go through git and the owner's UAT | - |
-| N8 | Token guard | Not needed: the site calls no model | - |
-| N9 | Budget guard | Not needed: nothing is billed (N1) | - |
+| N7 | Governance (of the AI builders) | The site calls no model, but AI agents build it. Agents never merge to `main`, deploy production, read secrets, add a vendor or account, or weaken a test; every agent's work lands as a commit and a pull request; the owner's yes gates the merge to `main` and every new vendor or bill | Branch protection and the PR history; `JOURNAL.md` has no unrecorded fix or skipped rule |
+| N8 | Token guard (of the build) | Every agent run is logged in `token-ledger.md` (stage, task, role, model, tokens, result). Budget per task *(proposed)*: S 60k tokens, M 150k, all agents together. Lean by default: S tasks with pure code are built solo and get one combined fresh check on a smaller model; M tasks, CI, security and UI changes keep the two separate checks; briefs point to the card instead of pasting documents; a cold read runs once per stage | The ledger: no task over budget without a recorded reason |
+| N9 | Budget guard (of the build) | Money: the site stays Rs 0 (N1); the building runs on the owner's Claude plan, inside its usage limits. Before each milestone, a written estimate of its tokens; when the plan's limit is reached, work stops cleanly with everything saved and resumes after the reset; paid eval runs only with the owner's yes. A paid Cloudflare plan only by its own yes | Estimates and stops in the ledger and `STATE.md` |
+| N10 | Evals (of the build) | The build process is measured like a model: per task, first-pass task check (yes or no), fixes in review, tokens; per milestone, the totals. The plugin's eval cases cover the rules this lane taught | The ledger's milestone totals; the plugin's eval results |
 
 ## Out of scope (feature lane)
 - A light version of the site (owner: dark only).
@@ -80,6 +81,7 @@ Numbers marked *(proposed)* are suggestions for the owner to change.
 ## Scope changes
 | Date | Change | Requirement IDs | Owner's words |
 |---|---|---|---|
+| 2026-11-28 | Governance, token guard, budget guard and evals apply to the AI builders | N7 to N9 changed, N10 added | "We need to follow token optimization techniques... AI governance and then cost optimizations, cost guarding, token guard and then budget guard... an end-to-end AI-centric build" |
 | 2026-11-27 | 3D website lane added | R9 to R18, N1 to N9; R8 changed by R16 | "Can you build the complete full 3D based website for me?"; "Living neural network"; "Dark only" |
 
 ## Open questions
