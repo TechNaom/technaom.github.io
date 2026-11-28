@@ -63,6 +63,8 @@ Serves: R10. Depends on: T6. Size: M. Issue: #8
 **Files**
 - Change: `site/src/components/PageHero.astro` (the `<section>` gets `class="night page-hero" data-scene="network"`),
   `site/src/pages/index.astro` (hero `<section class="night">` gets `id="hero" data-scene="network"`),
+  `site/src/pages/architecture.astro` (its hand-written hero `<section class="night">` gets
+  `class="night page-hero" data-scene="network"`; it does not use `PageHero`),
   `site/tests/screens.json`, `site/src/lib/scene/views.mjs` (`viewFor`, desktop offsets), `site/src/lib/scene/scene.mjs`
   (watch sections, move the camera, context lost), `site/src/lib/scene/boot.mjs` (pass `onLost`; fallback also removes
   `data-u3d-tier`)
@@ -75,8 +77,9 @@ Serves: R10. Depends on: T6. Size: M. Issue: #8
 **Interfaces**
 - `screens.json` sections use the page's own classes and ids, never `[data-scene...]` (so the test is not circular):
   every page except home `{ "selector": ".page-hero", "view": "network" }`; home `{ "selector": "#hero", "view":
-  "network" }`; plus one `drift` section per page: the first `section` after the hero (selector `main > section:nth-of-type(2)`).
-  A selector may match several elements; the test checks each match. T9, T10 and T12 add their sections.
+  "network" }`; plus `{ "selector": "footer", "view": "drift" }` on every page (the footer has no `data-scene`, so it
+  proves the default). A selector may match several elements; the test asserts at least one match and checks each.
+  T9, T10 and T12 add their sections.
 - `viewFor(name, { phone }) → { camera, target, offset, opacity, dial, journey }` in `views.mjs`. Desktop offsets in
   world units along x (the network shifts right, clear of left-aligned hero text): `network` 4, `dial` 0, `journey` 0,
   `drift` 2. Phone (`width < 900`): `offset` 0 and the camera moved away from the target so the distance is 1.25 times
@@ -167,6 +170,8 @@ Serves: R12, R13. Depends on: T9. Size: M. Issue: #10
   show only in the `journey` view (scale 0 elsewhere). `buildNetwork` is unchanged.
 - `journeyAt(progress, count) → { step, t }`: `step` is the index the pulse has reached and `t` the fraction to the
   next; progress 0 is step 0, progress 1 is the last step; clamped.
+- Step nodes, the step line and the pulse show only in a `journey` section that also has `data-scene-labels` (the
+  home stage). The architecture page's quiet `journey` sections (T12) use the journey camera only, with no steps.
 - `pickView` picks the stage only once its top reaches the screen's middle, so `progress` starts near 0.18 there and
   reaches 1 near the stage's end; this is expected (architecture point 12).
 
