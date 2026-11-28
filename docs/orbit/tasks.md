@@ -314,16 +314,207 @@ had to make, and whether the review found problems. The token meter compares it 
   phone visitor never sees team times. Keep, or show the schedule on tap?
 - CI time: fold the quiet checks into the views loop (one scene start per route instead of two).
 
-## M3 Hardening and release (cards written when M3 starts)
+## M3 Hardening and release (cards below, written 2026-11-29 after the M2 branch review)
 
 | ID | Task | Serves | Test (written first) | Done check | Depends on | Size | Issue |
 |---|---|---|---|---|---|---|---|
+| T15a | Scene split into modules and frame budget (30 fps idle cap, pause in quiet, fps readout) | N4, R15 | unit: meter, cap, pause, morph buffers | Tests pass | T14 | M | #21 |
 | T15 | Quality tiers, lite switch, stop on slow, context lost | N4, R17 | unit: tier rule (36 ms over 2 s, after 1 s, not hidden); e2e: forced slow frames fall back | Tests pass | T13 | M | #15 |
 | T16 | Lighthouse CI with N4 assertions (warn until the owner confirms) | N4 | CI-file test for the `lhci` step | `npx lhci autorun` report in CI | T7 | S | #16 |
 | T17 | Network check (only our origin and Google Fonts) and screenshots of the 7 routes | N3, R12 | e2e network log and screenshot baseline | Playwright passes | T11 | S | #17 |
 | T18 | Release rehearsal: backup tag on `main`, revert rehearsed on a scratch branch | N5 | Script checks the tag exists and the revert builds | Rehearsal log in `JOURNAL.md` | T15-T17 | S | #18 |
 | T19 | Test flight and owner UAT on the lane preview | all | The test-flight checklist | Owner's go | T18 | S | #19 |
 | T20 | Merge, live smoke test, and a metrics commit deploys after the merge | N2, N6 | Smoke spec against the live URL; the next analytics commit's run | Both green | T19 | S | #20 |
+
+### M3 conventions (all cards)
+
+- The M2 conventions still hold (modes, probe, layers, one heavy job at a time on the laptop, `--workers 1`).
+- **Toolchain:** run the site's tools through `node node_modules/...` (the portable npm in the session scratchpad
+  lost files to Windows temp cleanup). T16 installs a dependency, so it first moves Node to a durable folder
+  (`C:\Users\HP\tools\node-v22.12.0-win-x64`, downloaded from nodejs.org, SHA-256 checked against `SHASUMS256.txt`)
+  and records it under **Toolchain** in `STATE.md`.
+- Production (`main`, the live site) changes only in T20, after the owner's yes in T19. T18's backup tag is the only
+  thing written to `main` before then.
+
+### T15a Scene split and frame budget
+
+Serves: N4, R15. Depends on: T14. Size: M. Issue: #21
+
+**Why:** the M2 branch review found `scene.mjs` is one closure of about 360 lines whose parts read state declared
+later, and per-frame work that N4 cannot afford on phones.
+
+**Files**
+- Create: `site/src/lib/scene/camera.mjs` (pose per view, easing, morph with two scratch buffers),
+  `site/src/lib/scene/pulses.mjs` (the pulse pool), `site/src/lib/scene/overlay.mjs` (stage labels: build, place),
+  `site/src/lib/scene/fps.mjs` (pure: a rolling frame-time meter)
+- Change: `site/src/lib/scene/scene.mjs` (state declared at the top; wires the modules; one loop)
+- Test: `site/tests/unit/fps.test.mjs`, `site/tests/unit/scene.test.mjs`, `site/tests/e2e/motion.spec.mjs`
+
+**Interfaces**
+- `createMeter(windowMs = 2000) → { add(dtMs), average() → ms, reset() }` in `fps.mjs`.
+- Idle motion (rotation, pulses) runs at most 30 frames a second (a frame is skipped when less than 33 ms passed),
+  and pauses while a quiet section is in the middle. Scroll-driven redraws are not capped.
+- Stage-card rects are read in `readSections` (on scroll and resize), never per frame.
+- The morph writes into one of two scratch `Float32Array`s and swaps them; a move interrupted halfway starts from the
+  last written buffer, never from one it is writing.
+- Debug and test mode: `__u3d.fps` (frames a second from the meter) and `html[data-u3d-fps]`; debug mode also shows
+  the frame rate, tier and view in a small fixed box (`#u3d-debug`, aria-hidden).
+
+**Steps**
+1. `fps.test.mjs`: a meter fed 60 frames of 16 ms averages 16; frames older than the window drop out; `reset` empties
+   it. Fails (no module), then passes.
+2. `scene.test.mjs`: in normal mode with timestamps 10 ms apart, idle work runs on at most every fourth call (30 fps
+   cap); with a quiet section in the middle, no pulses launch and rotation does not change; a view change in the
+   middle of a move ends at the new view's pose (the review's missing test); 3 scroll events read card rects once.
+   Each fails first.
+3. Move code into the modules with every existing unit and browser test still green (a refactor: no new behaviour
+   beyond steps 1 and 2).
+4. `motion.spec.mjs`: in debug mode `__u3d.fps` is a number above 0 and `#u3d-debug` shows it.
+
+**Done check:** units, `node node_modules/@playwright/test/cli.js test --workers 1`, and `astro check` with 0 errors.
+
+**Watch out:** no behaviour change for visitors beyond the 30 fps idle cap and the pause in quiet sections. Keep
+`start()`'s contract with `boot()` exactly (signal, onLost, `{ stop }`, "on" after the first frame).
+
+### T15 Quality tiers, lite switch, stop on slow
+
+Serves: N4, R17. Depends on: T15a. Size: M. Issue: #15
+
+**Files**
+- Change: `site/src/lib/scene/scene.mjs` (tiers), `site/src/lib/scene/boot.mjs` (keep `{ stop }`, call it on
+  `pagehide`), `site/src/styles/global.css` (lite: no blur, opaque-enough glass)
+- Create: `site/src/lib/scene/tier.mjs` (pure: the tier rule)
+- Test: `site/tests/unit/tier.test.mjs`, `site/tests/unit/boot.test.mjs`, `site/tests/e2e/tiers.spec.mjs`
+
+**Interfaces**
+- `nextTier({ tier, averageMs, sinceStartMs, hidden }) → "full" | "lite" | "stop"` (ADR 0006): measured only after the
+  first 1000 ms and never while hidden; full → lite when the 2-second average passes 36 ms; lite → stop when it passes
+  36 ms again after at least 2 more seconds on lite. Test mode pins the tier (`?u3d=test` never changes it).
+- Lite: half the field nodes hidden (`FIELD_NODES / 2`), no pulses, pixel ratio 1; `html[data-u3d-tier="lite"]`.
+  CSS under `[data-u3d-tier="lite"]`: no `backdrop-filter`, and `--glass` at .92 alpha (the M2 review: without blur,
+  muted text on .78 glass falls short of 4.5:1).
+- Stop: the scene stops itself and calls `onLost()` (boot falls back: the page keeps its normal dark design, R17).
+- `data-u3d-tier` is set by the tier logic, never hard-coded; tier changes that alter opacity go through
+  `applyOpacity`.
+- `boot()` keeps the `{ stop }` that `start()` returns and calls it on `pagehide` (back-forward cache).
+- A test-only URL switch `?u3d=test&u3d-slow=1` adds 60 ms of busy work per drawn frame and lets the tier rule run in
+  test mode, so a browser test can force the slow path.
+
+**Steps**
+1. `tier.test.mjs`: no change in the first second or while hidden; 40 ms average after 1 s turns full into lite;
+   lite then slow for 2 s more turns into stop; 20 ms keeps full. Fails, then passes.
+2. `boot.test.mjs`: `pagehide` calls the stop that `start()` returned. Fails, then passes.
+3. `tiers.spec.mjs`: with `?u3d=test&u3d-slow=1`, `data-u3d-tier` becomes `lite`, then `data-u3d-state` becomes
+   `fallback`, the canvas is gone and the `h1` is visible; without the switch the tier stays `full`. Fails, then passes.
+
+**Done check:** units and the full browser suite pass; `astro check` 0 errors.
+
+**Watch out:** a phone capped at 30 fps in low-power mode averages 33 ms: it must stay on full (the 36 ms threshold).
+Never decide while the tab is hidden; reset the meter on `visibilitychange`.
+
+### T16 Lighthouse CI with N4 assertions
+
+Serves: N4. Depends on: T7. Size: S. Issue: #16
+
+**Files**
+- Create: `site/lighthouserc.json`
+- Change: `site/package.json` and `site/package-lock.json` (`@lhci/cli@0.16.1`, devDependency, exact),
+  `.github/workflows/site-check.yml` (a Lighthouse step after the browser tests, before the copy gate),
+  `docs/orbit/STATE.md` (Toolchain: the durable Node folder)
+- Test: `site/tests/unit/ci.test.mjs`
+
+**Interfaces**
+- `lighthouserc.json`: collect from `dist` with `staticDistDir` for `/`, `/workforce` and `/architecture`, 1 run each,
+  mobile preset; assertions **warn** (not error) while N4 is proposed: `largest-contentful-paint` at most 2500 ms,
+  `categories:performance` at least 0.8; upload to `temporary-public-storage` is off (`upload.target: "filesystem"`,
+  report saved as a CI artifact).
+
+**Steps**
+1. `ci.test.mjs`: the workflow has a step running `lhci autorun` after `npx playwright test` and before the copy gate;
+   `lighthouserc.json` exists with `"warn"` assertions for both N4 numbers and `upload.target` `"filesystem"`. Fails,
+   then passes.
+2. Move Node to `C:\Users\HP\tools` (see M3 conventions), then `npm install --save-exact --save-dev @lhci/cli@0.16.1`;
+   check the lock diff only adds `@lhci/cli` and its own dependencies.
+3. Push; CI shows the Lighthouse report artifact. Record the three scores in the pull request.
+
+**Done check:** the CI run is green with a Lighthouse report artifact.
+
+**Watch out:** Lighthouse in CI has no graphics card, like Playwright: the 3D falls back there, so the scores measure
+the page and the boot cost, not the scene's frame rate (the frame rate is checked on real devices in T19).
+
+### T17 Network check, screenshots and contrast with the scene running
+
+Serves: N3, R12, R16. Depends on: T15. Size: S. Issue: #17
+
+**Files**
+- Create: `site/tests/e2e/network.spec.mjs`, `site/tests/e2e/screens.spec.mjs`, `site/tests/unit/contrast.test.mjs`
+- Change: `site/src/styles/global.css` only if the contrast test fails
+
+**Interfaces**
+- Brightest scene colour: `#e8f6fc` (pulses and agents). A backing of colour `c` and alpha `a` over it gives
+  `a·c + (1 − a)·#e8f6fc`; text must keep 4.5:1 against that (WCAG relative luminance).
+- Backings that sit over the scene under `u3d-on`: `--glass` (.78, with blur: judged as is), lite glass (.92), the
+  label backing (.92), `--veil` on night bands (.5), and `--paper` sections (transparent: text sits on the scene).
+
+**Steps**
+1. `contrast.test.mjs`: for each backing above and each text colour used on it (`--ink`, `--muted`, `--amber`), the
+   worst case against `#e8f6fc` is at least 4.5:1. Expected to fail for `--veil` and transparent sections; fix in CSS
+   by giving text blocks in those sections a backing of at least the alpha the test computes as needed (record the
+   number), or by keeping bright nodes out of text bands. Re-run: passes.
+2. `network.spec.mjs`: for each route in `screens.json`, load with `?u3d=test`, wait for `on`, scroll to the bottom;
+   every request's origin is our own or `fonts.googleapis.com` / `fonts.gstatic.com`. Fails if one is added.
+3. `screens.spec.mjs`: screenshots of the 7 routes at 1280×800 and 390×844, and of the journey at progress 0, 0.5 and 1
+   on both sizes, saved under `test-results/screens/` and uploaded with the CI artifacts (not compared: baselines
+   differ between Windows and Linux).
+
+**Done check:** units and the three specs pass; the CI artifact holds the screenshots.
+
+### T18 Release rehearsal
+
+Serves: N5. Depends on: T15, T16, T17. Size: S. Issue: #18
+
+**Files**
+- Create: `scripts/rehearse-release.sh`
+- Change: `docs/orbit/JOURNAL.md` (the rehearsal log)
+
+**Steps**
+1. The script, run from the repository root: checks the tag `pre-3d-<YYYY-MM-DD>` exists on `main`'s current commit;
+   creates a scratch branch `rehearsal-3d` from `main`, merges `site-3d-lane` with `--no-ff`, builds and runs the unit
+   tests; then `git revert -m 1 HEAD`, builds again and checks that `site/dist/index.html` has no `u3d-canvas` (the
+   site is back to today's); deletes the scratch branch locally. It never pushes. Exit 0 only if every step passed.
+2. Tag `main` (`git tag pre-3d-<date> origin/main && git push origin pre-3d-<date>`): a tag does not deploy.
+3. Run the script; paste its output into a `JOURNAL.md` row.
+
+**Done check:** the script exits 0 and the log is in the journal.
+
+### T19 Test flight and owner UAT
+
+Serves: all. Depends on: T18. Size: S. Issue: #19
+
+**Steps**
+1. Run the test-flight skill against the lane preview: every requirement R9 to R18 and N1 to N10 with its evidence
+   (test, CI run, screenshot), the security and secrets check, the cost (Rs 0), the rollback (T18).
+2. Give the owner a checklist for their own devices: each route on a phone and a laptop; the dial and journey stages;
+   reduced motion on; data saver on; the frame rate in `?u3d=debug` (N4: 30 on a mid-range phone, 50 on a laptop).
+3. Ask the open questions: confirm the N4 numbers (Lighthouse assertions turn from warn to error once confirmed);
+   the phone dial shows names only (keep, or show the schedule on tap?).
+4. Record the owner's go or no-go in `STATE.md` with their words.
+
+**Done check:** the owner's explicit go recorded.
+
+### T20 Merge, live smoke test, and the next metrics deploy
+
+Serves: N2, N6. Depends on: T19. Size: S. Issue: #20
+
+**Steps**
+1. Open the pull request `site-3d-lane` into `main`; site-check runs (pull requests into `main` run it). Merge only
+   with the owner's go from T19 and CI green on that commit.
+2. After `deploy-cloudflare.yml` deploys: `BASE_URL=https://manoharpapasani.pages.dev` smoke test, all 7 routes pass.
+3. Watch the next analytics commit on `main` (it deploys by itself): its run is green and the live smoke test passes
+   again.
+4. If either fails: `git revert -m 1` of the merge, rehearsed in T18, and an RCA.
+
+**Done check:** both smoke runs green; STATE and the journal record the release.
 
 ## Coverage
 
